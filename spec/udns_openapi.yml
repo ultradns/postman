@@ -1,0 +1,940 @@
+openapi: 3.0.3
+info:
+  title: UDNS
+  description: "This collection contains requests for the UDNS API. The folders mostly represent the different base resources,
+    i.e. \"zones\" which contains all the various zone operations and \"reports\" which has the reporting operations.\n\n\
+    At the collection level, there is a pre-request script which handles your authentication and has some basic utility functions.
+    The script will generate a bearer token and, when it expires, refresh it.\n\nThe utilities are an object defined globalls
+    in the scope of the pre-request script, which makes it available to the individual requests. Simply call:\n\n``` javascript\n\
+    utils.functionName()\n\n ```\n\nThe username and password variables must be set in your environment for the collection
+    pre-request to run."
+  version: 1.0.0
+  contact: {}
+servers:
+- url: https://api.ultradns.com
+  description: Primary UltraDNS API
+paths:
+  /v3/zones/{zones_zoneName}/rrsets/SOA:
+    get:
+      tags:
+      - Zones
+      summary: List Zone SOA
+      description: List Zone SOA
+      operationId: listZoneSoa
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /v3/zones/{zones_zoneName}/rrsets/NS:
+    get:
+      tags:
+      - Zones
+      summary: List Zone NS
+      description: List Zone NS
+      operationId: listZoneNs
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /v3/zones/{zones_zoneName}:
+    get:
+      tags:
+      - Zones
+      summary: List Zone Properties
+      description: List Zone Properties
+      operationId: listZoneProperties
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /v3/zones/{zones_zoneName}/rrsets:
+    get:
+      tags:
+      - Zones
+      summary: List Zone Pools
+      description: List Zone Pools
+      operationId: listZonePools
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+          example: kind:POOLS
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /v3/zones:
+    get:
+      tags:
+      - Zones
+      summary: List Zones
+      description: List Zones
+      operationId: listZones
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+      - Zones
+      summary: Create Zone
+      description: Create Zone
+      operationId: createZone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                changeComment:
+                  type: string
+                  example: Create zone as agreed
+                primaryCreateInfo:
+                  type: object
+                  properties:
+                    createType:
+                      type: string
+                      example: NEW
+                    forceImport:
+                      type: boolean
+                      example: true
+                properties:
+                  type: object
+                  properties:
+                    accountName:
+                      type: string
+                      example: '{{username}}'
+                    name:
+                      type: string
+                      example: '{{zones_zoneName}}'
+                    type:
+                      type: string
+                      example: PRIMARY
+            examples:
+              Create Zone:
+                value:
+                  changeComment: Create zone as agreed
+                  primaryCreateInfo:
+                    createType: NEW
+                    forceImport: true
+                  properties:
+                    accountName: '{{username}}'
+                    name: '{{zones_zoneName}}'
+                    type: PRIMARY
+      responses:
+        '200':
+          description: ''
+  /v3/zones/{zones_zoneName}/webforwards:
+    get:
+      tags:
+      - Zones
+      summary: List Zone Web Forwards
+      description: List Zone Web Forwards
+      operationId: listZoneWebForwards
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /v3/zones/export:
+    post:
+      tags:
+      - Zones
+      summary: Initiate Zone(s) Export
+      description: Initiate Zone(s) Export
+      operationId: initiateZoneSExport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                zoneNames:
+                  type: array
+                  items:
+                    type: string
+                    example: '{{zones_zoneName}}'
+                  example:
+                  - '{{zones_zoneName}}'
+            examples:
+              Initiate Zone(s) Export:
+                value:
+                  zoneNames:
+                  - '{{zones_zoneName}}'
+      responses:
+        '200':
+          description: ''
+  /v1/zones/{zones_zoneName}/snapshot:
+    post:
+      tags:
+      - Zones
+      summary: Create Snapshot
+      description: Create Snapshot
+      operationId: createSnapshot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              Create Snapshot:
+                value: {}
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /v1/zones/{zones_zoneName}/restore:
+    post:
+      tags:
+      - Zones
+      summary: Restore Snapshot
+      description: Restore Snapshot
+      operationId: restoreSnapshot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              Restore Snapshot:
+                value: {}
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /zones/{zones_zoneName}/transfer:
+    post:
+      tags:
+      - Zones
+      summary: Request Zone Transfer
+      description: Request Zone Transfer
+      operationId: requestZoneTransfer
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /zones/{records_zoneName}/rrsets:
+    get:
+      tags:
+      - Records
+      summary: List RRset
+      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
+        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
+        name of the domain whose RRsets you want to return.
+      operationId: listRrset
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: records_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /zones/{records_zoneName}/rrsets/{records_type}/{records_ownerName}:
+    put:
+      tags:
+      - Records
+      summary: Update RRset
+      description: "This call allows you to update a set of resource records of a particular type (an RRSet) for a  \nspecified
+        domain owner. Be sure to specify the TTL and ALL the record information. Any resource records not included will be
+        removed from the RRSet, and the TTL value specified at the account level for the record type (or global TTL value)
+        will be used."
+      operationId: updateRrset
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Update RRset:
+                value: '{{requestBody}}'
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+      - Records
+      summary: Create RRset
+      description: "The Create RRSet for an Owner call requires you to send an RRSet DTO with the call. However, the  \nownerName
+        and rrtype fields are not required because they are specified in the URI. If the DTO you  \nsend does include them,
+        they will be ignored."
+      operationId: createRrset
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create RRset:
+                value: '{{requestBody}}'
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+      - Records
+      summary: Delete RRset
+      description: "This call allows you to delete all resource records of a particular type (an RRSet) for a specified  \n\
+        domain owner."
+      operationId: deleteRrset
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: records_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: records_type
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: records_ownerName
+      in: path
+      required: true
+      schema:
+        type: string
+  /zones/{zones_zoneName}/rrsets/{sb_rrType}/{sb_ownerName}:
+    post:
+      tags:
+      - Traffic Management
+      - SiteBacker
+      summary: Create SiteBacker Pool
+      description: Create SiteBacker Pool
+      operationId: createSitebackerPool
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create SiteBacker Pool:
+                value: "// NOTE: Update the body below as follows: \r\n// - Add an entry to rdata array for each IP that will
+                  be part of the pool\r\n// - For each IP entered, add an object to the rdataInfo array that includes:\r\n\
+                  // -- state: NORMAL, Force Active, Force Fail\r\n// -- runProbes: true, false\r\n// -- priority: Positive
+                  Integer\r\n// -- failoverDelay: 0, or Positive Integer\r\n// -- threshold: Positive Integer\r\n// -- availableToServe:
+                  true, false\r\n// - Add an entry to the backupRecords array that includes:\r\n// -- rdata: String (IP address)\r\
+                  \n// -- failoverDelay: 0 or Positive Integer\r\n{\r\n    \"ttl\": 300,\r\n    \"rdata\": [\r\n        \"\
+                  1.1.1.1\",\r\n        \"2.2.2.2\",\r\n        \"3.3.3.3\",\r\n        \"4.4.4.4\"\r\n    ],\r\n    \"profile\"\
+                  : {\r\n        \"@context\": \"http://schemas.ultradns.com/SBPool.jsonschema\",\r\n        \"description\"\
+                  : \"Test SiteBacker Pool\",\r\n        \"runProbes\": true,\r\n        \"actOnProbes\": true,\r\n      \
+                  \  \"order\": \"FIXED\",\r\n        \"maxActive\": 1,\r\n        \"failureThreshold\": 0,\r\n        \"\
+                  maxServed\": 1,\r\n        \"rdataInfo\": [{\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\"\
+                  : true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\"\
+                  : 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n\
+                  \            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\
+                  \n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n          \
+                  \  \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n      \
+                  \      \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\
+                  \n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n           \
+                  \ \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n           \
+                  \ \"availableToServe\": true\r\n        }],\r\n        \"backupRecords\": [{\r\n            \"rdata\": \"\
+                  9.9.9.9\",\r\n            \"failoverDelay\":0\r\n        }]\r\n    }\r\n}"
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+      - Traffic Management
+      - SiteBacker
+      summary: Record Priority Update
+      description: Record Priority Update
+      operationId: recordPriorityUpdate
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Record Priority Update:
+                value: "// This PATCH command is intended for a SiteBacker pool consisting of two records and the use case
+                  is\r\n// to allow for switching the priority of the two records.  The PATCH command 'path' value is used
+                  to\r\n// determine which record the update is applied.  A path with '0' in it is referring to the first\r\
+                  \n// record listed in the UI and will be the record with the lowest priority.  A path with '1' in it is\r\
+                  \n// referring to the second record listed in the UI and will be the record with next lowest priority.\r\
+                  \n//\r\n// For a simple use case where you're switching the priority of two records you can run the request\r\
+                  \n// without adjusting any values.  But, in a use case where you have multiple records, you'll need to \r\
+                  \n// account for the change in relative record order from previous priority record adjustments.\r\n//\r\n\
+                  // NOTE: This assumes the first record has a priority value of 1 and the other record has priority\r\n//
+                  value of 101.\r\n[\r\n    // JSON DTO (pool record with lowest value for priority field.\r\n    {\r\n  \
+                  \      \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/0/priority\",\r\n        \"value\"\
+                  : \"101\"\r\n    },\r\n    // JSON DTO (pool record with the next highest value for priority field.\r\n\
+                  \    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/1/priority\",\r\n     \
+                  \   \"value\": \"1\"\r\n    }\r\n]"
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: sb_rrType
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: sb_ownerName
+      in: path
+      required: true
+      schema:
+        type: string
+  /tasks/{currentTask}:
+    get:
+      tags:
+      - Tasks
+      summary: Check Task
+      description: Check Task
+      operationId: checkTask
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: currentTask
+      in: path
+      required: true
+      schema:
+        type: string
+  /tasks/{currentTask}/result:
+    get:
+      tags:
+      - Tasks
+      summary: Task Result
+      description: Task Result
+      operationId: taskResult
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: currentTask
+      in: path
+      required: true
+      schema:
+        type: string
+  /v1/requests/{reports_requestId}:
+    get:
+      tags:
+      - Reports
+      summary: Request Report
+      description: Request Report
+      operationId: requestReport
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: reports_requestId
+      in: path
+      required: true
+      schema:
+        type: string
+  /v1/reports/dns_resolution/query_volume/host:
+    post:
+      tags:
+      - Reports
+      summary: Create NXDomain Report
+      description: Create NXDomain Report
+      operationId: createNxdomainReport
+      parameters:
+      - name: advance
+        in: query
+        schema:
+          type: string
+          example: 'true'
+      - name: reportType
+        in: query
+        schema:
+          type: string
+          example: ADVANCED_NXDOMAINS
+      - name: limit
+        in: query
+        schema:
+          type: string
+          example: '100000'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hostQueryVolume:
+                  type: object
+                  properties:
+                    endDate:
+                      type: string
+                      example: '{{reports_endDate}}'
+                    startDate:
+                      type: string
+                      example: '{{reports_startDate}}'
+                    zoneNames:
+                      type: array
+                      items:
+                        type: string
+                        example: '{{zones_zoneName}}'
+                      example:
+                      - '{{zones_zoneName}}'
+                sortFields:
+                  type: object
+                  properties:
+                    nxdomainCount:
+                      type: string
+                      example: DESC
+            examples:
+              Create NXDomain Report:
+                value:
+                  hostQueryVolume:
+                    endDate: '{{reports_endDate}}'
+                    startDate: '{{reports_startDate}}'
+                    zoneNames:
+                    - '{{zones_zoneName}}'
+                  sortFields:
+                    nxdomainCount: DESC
+      responses:
+        '200':
+          description: ''
+  /reports/dns_resolution/query_volume/zone/no_queries:
+    post:
+      tags:
+      - Reports
+      summary: Zero Query Report
+      description: Zero Query Report
+      operationId: zeroQueryReport
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                zeroZoneQueryVolume:
+                  type: object
+                  properties:
+                    accountName:
+                      type: string
+                      example: '{{subaccounts_accountName}}'
+                    reportEndDate:
+                      type: string
+                      example: '{{reports_endDate}}'
+                    reportStartDate:
+                      type: string
+                      example: '{{reports_startDate}}'
+                    wrap:
+                      type: boolean
+                      example: true
+            examples:
+              Zero Query Report:
+                value:
+                  zeroZoneQueryVolume:
+                    accountName: '{{subaccounts_accountName}}'
+                    reportEndDate: '{{reports_endDate}}'
+                    reportStartDate: '{{reports_startDate}}'
+                    wrap: true
+      responses:
+        '200':
+          description: ''
+  /accounts/{username}/telemetryWebhook/test/{webhook_telemetryId}:
+    get:
+      tags:
+      - Webhook
+      summary: Verify
+      description: Verify
+      operationId: verify
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: username
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: webhook_telemetryId
+      in: path
+      required: true
+      schema:
+        type: string
+  /accounts/{username}/telemetryWebhook/test:
+    post:
+      tags:
+      - Webhook
+      summary: Test Endpoint
+      description: Test Endpoint
+      operationId: testEndpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: TEST_TELEMETRY_WEBHOOK
+                url:
+                  type: string
+                  example: '{{webhook_endpointUrl}}'
+            examples:
+              Test Endpoint:
+                value:
+                  type: TEST_TELEMETRY_WEBHOOK
+                  url: '{{webhook_endpointUrl}}'
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: username
+      in: path
+      required: true
+      schema:
+        type: string
+  /accounts/{username}/settings/PUSH_NOTIFICATIONS:
+    post:
+      tags:
+      - Webhook
+      summary: Create
+      description: Create
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                webhooks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      enable:
+                        type: boolean
+                        example: true
+                      include:
+                        type: object
+                        properties:
+                          ALL_CHANGES:
+                            type: boolean
+                            example: true
+                      url:
+                        type: string
+                        example: '{{webhook_endpointUrl}}'
+                  example:
+                  - enable: true
+                    include:
+                      ALL_CHANGES: true
+                    url: '{{webhook_endpointUrl}}'
+            examples:
+              Create:
+                value:
+                  webhooks:
+                  - enable: true
+                    include:
+                      ALL_CHANGES: true
+                    url: '{{webhook_endpointUrl}}'
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: username
+      in: path
+      required: true
+      schema:
+        type: string
+  /subaccounts:
+    get:
+      tags:
+      - Subaccounts
+      summary: List Subaccounts
+      description: List Subaccounts
+      operationId: listSubaccounts
+      responses:
+        '200':
+          description: ''
+  /subaccounts/zones:
+    get:
+      tags:
+      - Subaccounts
+      summary: List Subaccounts Zones
+      description: List Subaccounts Zones
+      operationId: listSubaccountsZones
+      responses:
+        '200':
+          description: ''
+  /subaccounts/{subaccounts_accountName}/token:
+    post:
+      tags:
+      - Subaccounts
+      summary: Subaccount Authorization
+      description: Subaccount Authorization
+      operationId: subaccountAuthorization
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: subaccounts_accountName
+      in: path
+      required: true
+      schema:
+        type: string
+  /accounts/{username}/settings/DNSSEC_SETTINGS:
+    put:
+      tags:
+      - DNSSEC Multi-Signer
+      summary: Update DNSSEC Settings Copy
+      description: "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations
+        are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds,
+        used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800
+        seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing
+        responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value
+        preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover,
+        and resigning action on every zone in the account.\n\nNOTE: Use the Initialize (POST) API call to initially set these
+        values and the Remove (DELETE) API call to delete them."
+      operationId: updateDnssecSettingsCopy
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Update DNSSEC Settings Copy:
+                value: "{\r\n    \"dnssecSettings\": {\r\n        \"dnskeyTtl\": {{dnssec_dnskey_ttl}},\r\n        \"rrsigValidity\"\
+                  : {{dnssec_rrsig_validity}} \r\n    }\r\n}"
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+      - DNSSEC Multi-Signer
+      summary: Initialize DNSSEC Settings
+      description: "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations
+        are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds,
+        used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800
+        seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing
+        responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value
+        preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover,
+        and resigning action on every zone in the account.\n\nNOTE: If you have previously set these values with a call to
+        this API then you will need to use the Update (PUT) API call to update them and the Remove (DELETE) API call to delete
+        them."
+      operationId: initializeDnssecSettings
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Initialize DNSSEC Settings:
+                value: "{\r\n    \"dnssecSettings\": {\r\n        \"dnskeyTtl\": {{dnssec_dnskey_ttl}},\r\n        \"rrsigValidity\"\
+                  : {{dnssec_rrsig_validity}} \r\n    }\r\n}"
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+      - DNSSEC Multi-Signer
+      summary: Remove DNSSEC Settings
+      description: "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations
+        are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds,
+        used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800
+        seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing
+        responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value
+        preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover,
+        and resigning action on every zone in the account.\n\nNOTE: Use the Initialize (POST) API call to initially set these
+        values and the Update (PUT) API call to update them."
+      operationId: removeDnssecSettings
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: username
+      in: path
+      required: true
+      schema:
+        type: string
+  /zones/{zones_zoneName}/dnssec:
+    get:
+      tags:
+      - DNSSEC Multi-Signer
+      summary: Get DS Records
+      description: Provides detailed information regarding the current DNSSEC status of a zone. This API call can be 
+        used to get the DS (Designated Signer) records for the zone that can be used by the parent zone to establish a 
+        chain-of-trust for the zone.
+      operationId: getDsRecords
+      responses:
+        '200':
+          description: ''
+    put:
+      tags:
+      - DNSSEC Multi-Signer
+      summary: Update External Signer
+      description: "Configure external signer keys (KSK and ZSK) for a DNSSEC signed zone. KSK and ZSK DNSKEY records are
+        formatted as follows:\n\n```\n<FLAGS> <PROTOCOL_VALUE> <ALGORITHM> <BASE64_ENCODED_PUBLIC_KEY>\n\n ```\n\nNOTE: For
+        an unsigned zone you can change the method to POST and set the value of _externalKeys_ to both DNSSEC sign a zone
+        and install the DNSKEY records from an external provider."
+      operationId: updateExternalSigner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                externalKeys:
+                  type: array
+                  items: {}
+                  example: []
+            examples:
+              Remove External Signer:
+                value:
+                  externalKeys: []
+              Update External Signer:
+                value:
+                  externalKeys:
+                  - ksk:
+                    - '{{dnssec_extkey_ksk}}'
+                    zsk:
+                    - '{{dnssec_extkey_zsk}}'
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+      - DNSSEC Multi-Signer
+      summary: DNSSEC Sign Zone
+      description: "This API is used to DNSSEC sign a zone on UltraDNS and can be used on both primary and secondary zones.\n\
+        \nIf you have external signer DNSKEY information you can include that as an _externalKeys_ element in the JSON payload
+        (see [Update External Signer](https://go.postman.co/workspace/My-Workspace~44d8667f-697e-43dd-8c23-aea1d7afb89c/documentation/269716-96acc28c-c730-4484-9a15-43f2bb753d3a?entity=request-09c10a66-1e56-4e2f-8504-9f15c8dd7766)),
+        otherwise the payload is empty."
+      operationId: dnssecSignZone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples:
+              DNSSEC Sign Zone:
+                value: {}
+      responses:
+        '200':
+          description: ''
+    delete:
+      tags:
+      - DNSSEC Multi-Signer
+      summary: DNSSEC Un-Sign Zone
+      description: This API call will unsign a DNSSEC signed zone, removing all DNSKEY information (including external 
+        keys).
+      operationId: dnssecUnSignZone
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+- bearerAuth: []
+tags:
+- name: Zones
+  description: "In this folder are operations pertaining to the zones (DNS configuration).\n\nAt the time which I'm writing
+    this, the v3 endpoint has the latest zone resources, though not every resource is available in the v3 endpoint. Some aren't
+    even available in v2. The snapshot/restore functionality only works with v1, for instance."
+- name: Records
+  description: "In this folder are operations pertaining to the records of a zone.\n\nThe basic unit for resource record manipulation
+    in the REST API is the RRSet. An RRSet contains  \nthe data for all resource records present at the same owner name (label),
+    and with the same type  \nand class (all records in UltraDNS have IN class). Rather than trying to specify a custom structure
+    for each different resource record type, the data for all resource records is represented by an _rdata_ field. This field's
+    contents map to the data supplied in the BIND presentation format for a resource record.\n\nIn order to simplify configuration
+    of environment variables, the API calls in this folder contain pre-request scripts that can be used to modify variables/parameters
+    used in the API call. Please use these scripts to setup variables and the environment before making calls."
+- name: Traffic Management
+- name: SiteBacker
+- name: Tasks
+  description: "Some endpoints return background tasks. The zone snapshot and export zone file endpoints, for example. In
+    this instance, the API responds with a status code 202 ('Accepted') and the headers will contain an x-task-id value. You
+    use the task ID to check on the status and result of your operation.\n\nThe endpoints that I've added to this collection
+    which return tasks IDs will store it under the \"currentTask\" collection variable. The endpoints in this folder will
+    use that variable, by default. Note that running another request that generates a new task will overwrite this value."
+- name: Reports
+  description: "These are the APIs for reporting. In a fashion similar-to-but-different-than tasks, the reports will return
+    an ID. However, the ID, in this instance, is in the JSON body of the response. You use the \"requests\" endpoint along
+    with your ID to get the result.\n\nAfter you create a report, it's ID automatically gets saved to a collection variable
+    which will then get passed to the requests endpoint. Note that generating a new report writes over this value."
+- name: Webhook
+  description: "These requests pertain to UDNS's push notification feature. The test endpoint will poll your webhook with
+    a telemetry event for testing. The verify endpoint validates the success of said request, using the event ID. The \"create\"\
+    \ request will create the push notification config. Note that, unlike the UI, you don't _have to_ validate your webhook
+    functionality before creating it, though, realistically, you should.\n\nThe telemetry event ID will get stored automatically
+    as a collection variable when performing the test."
+- name: Subaccounts
+  description: "Endpoints specifically for accounts that have subaccounts (resellers, mostly). You can list the accounts and
+    all their zones directly using the primary account's credentials.\n\nFor more granular subaccount operations, the primary
+    account owner has the ability to \"masquerade\" as a subaccount user using the subaccount auth endpoint. This generates
+    a set of bearer and refresh tokens with access to the subaccount.\n\nThis particular functionality of the collection could
+    be more robust, admittedly. I don't have subaccounts in my test account and don't particularly care to set one up for
+    testing, at least not at this time."
+- name: DNSSEC Multi-Signer
+  description: "UltraDNS API endpoints that support [multi-signer DNSSEC](https://ultra-portalstatic.ultradns.com/static/console/docs/DNSSEC-Multi_Signer-Guide.pdf).\n\
+    \nUltraDNS DNSSEC uses _online_ (also known as _on-the-fly_) signing in generating signed responses to queries. UltraDNS
+    supports DNSSEC algorithm 13 only for this process. Implementers of multi-signer can add DNSKEY details for external signers
+    using other algorithms as needed, but all UltraDNS generated key information uses algorithm 13 (ECDSA).\n\nAdditionally,
+    UltraDNS signers generate a unique KSK and ZSK for every zone. This approach gives flexibility for zone owners to roll
+    their KSK without impacting other zones that share the KSK information and allows the ZSK to be automatically rolled at
+    regular intervals. The implementation of multi-signer follows the methods described in [RFC 8901 model 2](https://www.rfc-editor.org/rfc/rfc8901.html#name-model-2-unique-ksk-set-and-)
+    where each signer maintains its own unique KSK and ZSK.\n\nSupport of DNSSEC Multi-Signer is derived from, and supports
+    portions of the following RFCs:\n\n- [RFC 8901](https://www.rfc-editor.org/rfc/rfc8901.html) - Multi-Signer DNSSEC Models.\n\
+    \    \n- [RFC 7344](https://www.rfc-editor.org/rfc/rfc7344) - Automating DNSSEC Delegation Trust Maintenance.\n    \n\
+    - [RFC 8078](https://www.rfc-editor.org/rfc/rfc8078) - Managing DS Records from the Parent via CDS/CDNSKEY.\n    \n- [RFC
+    6781](https://www.rfc-editor.org/rfc/rfc6781.html) - DNSSEC Operational Practices, Version 2."
