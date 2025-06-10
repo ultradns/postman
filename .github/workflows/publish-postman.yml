@@ -1,0 +1,88 @@
+name: Publish Postman Collection & Environment
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Update collection version
+        run: |
+          # Read the collection file
+          COLLECTION=$(cat src/UDNS.postman_collection.json)
+          
+          # Update the version in the info object
+          UPDATED_COLLECTION=$(echo "$COLLECTION" | jq --arg version "${{ github.event.release.tag_name }}" '.info.version = $version')
+          
+          # Write back to file
+          echo "$UPDATED_COLLECTION" > src/UDNS.postman_collection.json
+
+      - name: Publish collection to Postman
+        run: |
+          # Read the collection file
+          COLLECTION=$(cat src/UDNS.postman_collection.json)
+          
+          # Add workspace ID to the collection
+          COLLECTION_WITH_WORKSPACE=$(echo "$COLLECTION" | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" '. + {workspace: $workspace}')
+          
+          # Send to Postman API
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X PUT \
+            -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "$COLLECTION_WITH_WORKSPACE" \
+            "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}")
+          
+          # Split response into body and status code
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          # Check if the request was successful
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "Collection published successfully"
+            echo "Response: $BODY"
+          else
+            echo "Failed to publish collection. Status code: $HTTP_CODE"
+            echo "Response: $BODY"
+            exit 1
+          fi
+
+      - name: Publish environment to Postman
+        run: |
+          # Read the environment file
+          ENVIRONMENT=$(cat src/UDNS.postman_environment.json)
+          
+          # Add workspace ID to the environment
+          ENVIRONMENT_WITH_WORKSPACE=$(echo "$ENVIRONMENT" | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" '. + {workspace: $workspace}')
+          
+          # Send to Postman API
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X PUT \
+            -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "$ENVIRONMENT_WITH_WORKSPACE" \
+            "https://api.getpostman.com/environments/${{ secrets.POSTMAN_ENVIRONMENT_ID }}")
+          
+          # Split response into body and status code
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          # Check if the request was successful
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "Environment published successfully"
+            echo "Response: $BODY"
+          else
+            echo "Failed to publish environment. Status code: $HTTP_CODE"
+            echo "Response: $BODY"
+            exit 1
+          fi 
