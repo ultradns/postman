@@ -631,6 +631,57 @@
 					"response": []
 				},
 				{
+					"name": "List CNAME Records",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var query_params = {\r",
+									"    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
+									"    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
+									"    //  * owner:String (partial match of owner name)\r",
+									"    //  * value:String (partial match of rdata, RECORDS kind only)\r",
+									"    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
+									"    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
+									"    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
+									"    //'offset':                   '0',\r",
+									"    //'limit':                    '100',\r",
+									"    //'sort':                     'OWNER',\r",
+									"    //'reverse':                  'false',\r",
+									"    //'systemGeneratedStatus':    'true',\r",
+									"}\r",
+									"\r",
+									"for (let key in query_params) {\r",
+									"    console.log(key, query_params[key])\r",
+									"    pm.request.url.query.add({key: key, value: query_params[key]})\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/A",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets",
+								"A"
+							]
+						},
+						"description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
+					},
+					"response": []
+				},
+				{
 					"name": "Create RRset",
 					"event": [
 						{
