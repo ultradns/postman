@@ -42,8 +42,8 @@ jobs:
 
       - name: Commit and push CHANGELOG.md
         run: |
-          # Checkout master branch
-          git checkout master
+          # Checkout main branch
+          git checkout main
           
           # Configure git
           git config --local user.email "action@github.com"
@@ -52,7 +52,7 @@ jobs:
           # Commit and push
           git add CHANGELOG.md
           git commit -m "chore: bump changelog for ${{ steps.changelog.outputs.version }}"
-          git push origin master
+          git push origin main
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
