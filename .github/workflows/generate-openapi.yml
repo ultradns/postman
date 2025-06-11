@@ -81,5 +81,5 @@ jobs:
         run: |
           TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | sed 's/^v//')
           git add spec/udns_openapi.yml
-          git commit -m "Update OpenAPI spec for version $TAG"
+          git commit -m "chore: update OpenAPI spec for version $TAG"
           git push 

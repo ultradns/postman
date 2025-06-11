@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update CHANGELOG.md
+        id: changelog
+        run: |
+          # Get version from tag (remove refs/tags/ prefix)
+          VERSION=${GITHUB_REF#refs/tags/}
+          TODAY=$(date +%Y-%m-%d)
+          
+          # Create temporary file
+          TMP_FILE=$(mktemp)
+          
+          # Extract the unreleased content for the release notes
+          sed -n '/^## \[Unreleased\]/,/^## \[/p' CHANGELOG.md | sed '1d' | sed '$d' > release_notes.txt
+          
+          # Update the changelog - just change the headers
+          sed -e "0,/^## \[Unreleased\]/s/^## \[Unreleased\]/## [Unreleased]\\n\\n## [$VERSION] - $TODAY/" CHANGELOG.md > "$TMP_FILE"
+          
+          # Move temporary file to CHANGELOG.md
+          mv "$TMP_FILE" CHANGELOG.md
+          
+          # Set outputs for later steps
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Commit and push CHANGELOG.md
+        run: |
+          # Checkout master branch
+          git checkout master
+          
+          # Configure git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Commit and push
+          git add CHANGELOG.md
+          git commit -m "chore: bump changelog for ${{ steps.changelog.outputs.version }}"
+          git push origin master
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "v${{ steps.changelog.outputs.version }}"
+          body_path: release_notes.txt
+          draft: false
+          prerelease: false 
