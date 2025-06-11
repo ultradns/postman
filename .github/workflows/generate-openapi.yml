@@ -79,6 +79,6 @@ jobs:
 
       - name: Commit and push OpenAPI spec
         run: |
-          git add openapi.yaml
+          git add spec/udns_openapi.yml
           git commit -m "Update OpenAPI spec for version ${GITHUB_REF#refs/tags/}"
           git push 
