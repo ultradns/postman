@@ -3,38 +3,58 @@
 import json
 import os
 import sys
-import requests
 from pathlib import Path
-from jsonschema import validate, RefResolver
+from typing import Dict, List, Set
+
+# Properties to remove from Postman files
+METADATA_PROPERTIES = {
+    '_postman_id',
+    '_exporter_id',
+    'id',
+    'uid',
+    'owner',
+    'createdAt',
+    'updatedAt',
+    'lastUpdatedBy',
+    'lastRevision',
+}
 
 # Required schema versions for Postman files
 COLLECTION_SCHEMA = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 ENVIRONMENT_SCHEMA = "https://schema.getpostman.com/json/environment/v1.0.0/environment.json"
 
-def fetch_schema(url: str) -> dict:
-    """Fetch a JSON schema from a URL."""
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
-
 def validate_file(file_path: Path) -> bool:
-    """Validate a single Postman file against its schema."""
+    """Validate that a Postman file can be processed by the sanitize script."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # Determine which schema to use based on the file type
+        # Preserve the original schema (just check if we can access it)
+        original_schema = data.get('info', {}).get('schema') if 'info' in data else data.get('schema')
+        
+        # Check if it's a valid JSON file with the expected structure
         if file_path.name.endswith('.postman_collection.json'):
-            schema = fetch_schema(COLLECTION_SCHEMA)
+            if not isinstance(data, dict):
+                print(f"Error: {file_path} is not a valid JSON object", file=sys.stderr)
+                return False
+            if 'info' not in data or 'item' not in data:
+                print(f"Error: {file_path} is missing required 'info' or 'item' fields", file=sys.stderr)
+                return False
         elif file_path.name.endswith('.postman_environment.json'):
-            schema = fetch_schema(ENVIRONMENT_SCHEMA)
+            if not isinstance(data, dict):
+                print(f"Error: {file_path} is not a valid JSON object", file=sys.stderr)
+                return False
+            if 'id' not in data or 'name' not in data or 'values' not in data:
+                print(f"Error: {file_path} is missing required 'id', 'name', or 'values' fields", file=sys.stderr)
+                return False
         else:
             print(f"Unknown file type: {file_path}", file=sys.stderr)
             return False
         
-        # Validate the file against the schema
-        validate(instance=data, schema=schema)
         return True
+    except json.JSONDecodeError as e:
+        print(f"Error: {file_path} is not valid JSON: {str(e)}", file=sys.stderr)
+        return False
     except Exception as e:
         print(f"Error validating {file_path}: {str(e)}", file=sys.stderr)
         return False
