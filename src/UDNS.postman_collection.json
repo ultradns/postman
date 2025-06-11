@@ -1,1934 +1,1987 @@
 {
-  "info": {
-    "name": "API Documentation",
-    "description": "This collection contains requests for the UDNS API. The folders mostly represent the different base resources, i.e. \"zones\" which contains all the various zone operations and \"reports\" which has the reporting operations.\n\nAt the collection level, there is a pre-request script which handles your authentication and has some basic utility functions. The script will generate a bearer token and, when it expires, refresh it.\n\nThe utilities are an object defined globalls in the scope of the pre-request script, which makes it available to the individual requests. Simply call:\n\n``` javascript\nutils.functionName()\n\n ```\n\nThe username and password variables must be set in your environment for the collection pre-request to run.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Zones",
-      "item": [
-        {
-          "name": "List Zone SOA",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets/SOA",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones",
-                "{{zones_zoneName}}",
-                "rrsets",
-                "SOA"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "List Zone NS",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets/NS",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones",
-                "{{zones_zoneName}}",
-                "rrsets",
-                "NS"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "List Zone Properties",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones",
-                "{{zones_zoneName}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "List Zone Pools",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets?q=kind:POOLS",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones",
-                "{{zones_zoneName}}",
-                "rrsets"
-              ],
-              "query": [
-                {
-                  "key": "q",
-                  "value": "kind:POOLS"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "List Zones",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Zone",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"username\",\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n   \"properties\":{\n      \"name\":\"{{zones_zoneName}}\",\n      \"accountName\":\"{{username}}\",\n      \"type\":\"PRIMARY\"\n   },\n   \"primaryCreateInfo\":{\n      \"forceImport\":true,\n      \"createType\":\"NEW\"\n   },\n   \"changeComment\":\"Create zone as agreed\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "List Zone Web Forwards",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/webforwards",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones",
-                "{{zones_zoneName}}",
-                "webforwards"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "List Zone RRSets",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones",
-                "{{zones_zoneName}}",
-                "rrsets"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Initiate Zone(s) Export",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"zoneNames\": [\n        \"{{zones_zoneName}}\"\n    ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v3/zones/export",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v3",
-                "zones",
-                "export"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create Snapshot",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v1/zones/{{zones_zoneName}}/snapshot",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "zones",
-                "{{zones_zoneName}}",
-                "snapshot"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Restore Snapshot",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v1/zones/{{zones_zoneName}}/restore",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "zones",
-                "{{zones_zoneName}}",
-                "restore"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Request Zone Transfer",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "url": {
-              "raw": "https://api.ultradns.com/zones/{{zones_zoneName}}/transfer",
-              "protocol": "https",
-              "host": [
-                "api",
-                "ultradns",
-                "com"
-              ],
-              "path": [
-                "zones",
-                "{{zones_zoneName}}",
-                "transfer"
-              ]
-            }
-          },
-          "response": []
-        }
-      ],
-      "description": "In this folder are operations pertaining to the zones (DNS configuration).\n\nAt the time which I'm writing this, the v3 endpoint has the latest zone resources, though not every resource is available in the v3 endpoint. Some aren't even available in v2. The snapshot/restore functionality only works with v1, for instance.",
-      "event": [
-        {
-          "listen": "prerequest",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              ""
-            ]
-          }
-        },
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              ""
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Records",
-      "item": [
-        {
-          "name": "List RRset",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "var query_params = {\r",
-                  "    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
-                  "    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
-                  "    //  * owner:String (partial match of owner name)\r",
-                  "    //  * value:String (partial match of rdata, RECORDS kind only)\r",
-                  "    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
-                  "    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
-                  "    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
-                  "    //'offset':                   '0',\r",
-                  "    //'limit':                    '100',\r",
-                  "    //'sort':                     'OWNER',\r",
-                  "    //'reverse':                  'false',\r",
-                  "    //'systemGeneratedStatus':    'true',\r",
-                  "}\r",
-                  "\r",
-                  "for (let key in query_params) {\r",
-                  "    console.log(key, query_params[key])\r",
-                  "    pm.request.url.query.add({key: key, value: query_params[key]})\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{records_zoneName}}",
-                "rrsets"
-              ]
-            },
-            "description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
-          },
-          "response": []
-        },
-        {
-          "name": "List A Records",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "var query_params = {\r",
-                  "    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
-                  "    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
-                  "    //  * owner:String (partial match of owner name)\r",
-                  "    //  * value:String (partial match of rdata, RECORDS kind only)\r",
-                  "    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
-                  "    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
-                  "    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
-                  "    //'offset':                   '0',\r",
-                  "    //'limit':                    '100',\r",
-                  "    //'sort':                     'OWNER',\r",
-                  "    //'reverse':                  'false',\r",
-                  "    //'systemGeneratedStatus':    'true',\r",
-                  "}\r",
-                  "\r",
-                  "for (let key in query_params) {\r",
-                  "    console.log(key, query_params[key])\r",
-                  "    pm.request.url.query.add({key: key, value: query_params[key]})\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/A",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{records_zoneName}}",
-                "rrsets",
-                "A"
-              ]
-            },
-            "description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
-          },
-          "response": []
-        },
-        {
-          "name": "List CNAME Records",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "var query_params = {\r",
-                  "    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
-                  "    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
-                  "    //  * owner:String (partial match of owner name)\r",
-                  "    //  * value:String (partial match of rdata, RECORDS kind only)\r",
-                  "    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
-                  "    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
-                  "    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
-                  "    //'offset':                   '0',\r",
-                  "    //'limit':                    '100',\r",
-                  "    //'sort':                     'OWNER',\r",
-                  "    //'reverse':                  'false',\r",
-                  "    //'systemGeneratedStatus':    'true',\r",
-                  "}\r",
-                  "\r",
-                  "for (let key in query_params) {\r",
-                  "    console.log(key, query_params[key])\r",
-                  "    pm.request.url.query.add({key: key, value: query_params[key]})\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/A",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{records_zoneName}}",
-                "rrsets",
-                "A"
-              ]
-            },
-            "description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
-          },
-          "response": []
-        },
-        {
-          "name": "Create RRset",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "// Variables to control record creation.  This is much easier than switching back and forth\r",
-                  "// to the environment in order to update these parameters: \r",
-                  "//\r",
-                  "// * TODO: Specify values for ownerName, recordType, recordTtl, and recordRdata\r",
-                  "\r",
-                  "const ownerName     = '<OWNER_NAME>';\r",
-                  "const recordType    = 'A';\r",
-                  "const recordTtl     = '300';\r",
-                  "\r",
-                  "// Examples of recordRdata:\r",
-                  "// * A:         1.1.1.1\r",
-                  "// * CNAME:     www.example.com\r",
-                  "// * MX:        10 mail.example.com\r",
-                  "// * MX (NULL): 0 .\r",
-                  "\r",
-                  "const recordRdata   = '1.1.1.1';\r",
-                  "\r",
-                  "const bodyContent = {\r",
-                  "    'ttl': recordTtl,\r",
-                  "    'rdata': [\r",
-                  "        recordRdata\r",
-                  "    ]\r",
-                  "}\r",
-                  "\r",
-                  "// Convert the JavaScript object to a JSON string\r",
-                  "const bodyContentString = JSON.stringify(bodyContent);\r",
-                  "\r",
-                  "// Set the environment variable with the JSON string\r",
-                  "pm.environment.set(\"requestBody\", bodyContentString);\r",
-                  "\r",
-                  "// Update environment variables to reflect record being configured\r",
-                  "pm.environment.set('records_ownerName', ownerName);\r",
-                  "pm.environment.set('records_type', recordType);"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{{requestBody}}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/{{records_type}}/{{records_ownerName}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{records_zoneName}}",
-                "rrsets",
-                "{{records_type}}",
-                "{{records_ownerName}}"
-              ]
-            },
-            "description": "The Create RRSet for an Owner call requires you to send an RRSet DTO with the call. However, the  \nownerName and rrtype fields are not required because they are specified in the URI. If the DTO you  \nsend does include them, they will be ignored."
-          },
-          "response": []
-        },
-        {
-          "name": "Delete RRset",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code == '204') {\r",
-                  "    console.log(\"Delete happened immediately!\");\r",
-                  "} else if (pm.response.code == '202') {\r",
-                  "    console.log(\"Delete happened in background!\");\r",
-                  "    console.log(\"X-Task-ID: \" + pm.response.headers.get('X-Task-ID'));\r",
-                  "} else {\r",
-                  "    console.log(\"Delete Response (status code == \" + pm.response.code + \")!\");\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            },
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "pm.environment.set('records_type', 'A');\r",
-                  "pm.environment.set('records_ownerName', '<OWNER_NAME>');"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/{{records_type}}/{{records_ownerName}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{records_zoneName}}",
-                "rrsets",
-                "{{records_type}}",
-                "{{records_ownerName}}"
-              ]
-            },
-            "description": "This call allows you to delete all resource records of a particular type (an RRSet) for a specified  \ndomain owner."
-          },
-          "response": []
-        },
-        {
-          "name": "Update RRset",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "if (pm.response.code == '200') {\r",
-                  "    console.log(\"Update happened immediately!\");\r",
-                  "} else if (pm.response.code == '202') {\r",
-                  "    console.log(\"Update happened in background!\");\r",
-                  "    console.log(\"X-Task-ID: \" + pm.response.headers.get('X-Task-ID'));\r",
-                  "} else {\r",
-                  "    console.log(\"Update Response (status code == \" + pm.response.code + \")!\");\r",
-                  "}"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            },
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "// NOTE: You must provide ALL record information.  \r",
-                  "// Any resource records not included will be removed from the RRSet.\r",
-                  "// It is recommended that you call \"List RRset\" first to get an RRset DTO that you\r",
-                  "// can modify and then send to this \"Update RRset\" API.\r",
-                  "//  \r",
-                  "// Variables to control record update.  This is much easier than switching back and forth\r",
-                  "// to the environment in order to update these parameters: \r",
-                  "//\r",
-                  "// * TODO: Specify values for ownerName, recordType, recordTtl, and recordRdata\r",
-                  "\r",
-                  "const ownerName     = '<OWNER_NAME>';\r",
-                  "const recordType    = 'A';\r",
-                  "const recordTtl     = '300';\r",
-                  "\r",
-                  "// Examples of recordRdata:\r",
-                  "// * A:         1.1.1.1\r",
-                  "// * CNAME:     www.example.com\r",
-                  "// * MX:        10 mail.example.com\r",
-                  "// * MX (NULL): 0 .\r",
-                  "\r",
-                  "const recordRdata   = '1.1.1.1';\r",
-                  "\r",
-                  "const bodyContent = {\r",
-                  "    'ttl': recordTtl,\r",
-                  "    'rdata': [\r",
-                  "        recordRdata\r",
-                  "    ]\r",
-                  "}\r",
-                  "\r",
-                  "// Convert the JavaScript object to a JSON string\r",
-                  "const bodyContentString = JSON.stringify(bodyContent);\r",
-                  "\r",
-                  "// Set the environment variable with the JSON string\r",
-                  "pm.environment.set(\"requestBody\", bodyContentString);\r",
-                  "\r",
-                  "// Update environment variables to reflect record being configured\r",
-                  "pm.environment.set('records_ownerName', ownerName);\r",
-                  "pm.environment.set('records_type', recordType);"
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{{requestBody}}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/{{records_type}}/{{records_ownerName}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{records_zoneName}}",
-                "rrsets",
-                "{{records_type}}",
-                "{{records_ownerName}}"
-              ]
-            },
-            "description": "This call allows you to update a set of resource records of a particular type (an RRSet) for a  \nspecified domain owner. Be sure to specify the TTL and ALL the record information. Any resource records not included will be removed from the RRSet, and the TTL value specified at the account level for the record type (or global TTL value) will be used."
-          },
-          "response": []
-        }
-      ],
-      "description": "In this folder are operations pertaining to the records of a zone.\n\nThe basic unit for resource record manipulation in the REST API is the RRSet. An RRSet contains  \nthe data for all resource records present at the same owner name (label), and with the same type  \nand class (all records in UltraDNS have IN class). Rather than trying to specify a custom structure for each different resource record type, the data for all resource records is represented by an _rdata_ field. This field's contents map to the data supplied in the BIND presentation format for a resource record.\n\nIn order to simplify configuration of environment variables, the API calls in this folder contain pre-request scripts that can be used to modify variables/parameters used in the API call. Please use these scripts to setup variables and the environment before making calls."
-    },
-    {
-      "name": "Tasks",
-      "item": [
-        {
-          "name": "Check Task",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"currentTask\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/tasks/{{currentTask}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tasks",
-                "{{currentTask}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Task Result",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"currentTask\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/tasks/{{currentTask}}/result",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "tasks",
-                "{{currentTask}}",
-                "result"
-              ]
-            }
-          },
-          "response": []
-        }
-      ],
-      "description": "Some endpoints return background tasks. The zone snapshot and export zone file endpoints, for example. In this instance, the API responds with a status code 202 ('Accepted') and the headers will contain an x-task-id value. You use the task ID to check on the status and result of your operation.\n\nThe endpoints that I've added to this collection which return tasks IDs will store it under the \"currentTask\" collection variable. The endpoints in this folder will use that variable, by default. Note that running another request that generates a new task will overwrite this value."
-    },
-    {
-      "name": "Reports",
-      "item": [
-        {
-          "name": "Request Report",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"reports_requestId\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/v1/requests/{{reports_requestId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "requests",
-                "{{reports_requestId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create NXDomain Report",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "if (utils.isNotSet(pm.environment.get(\"reports_startDate\")) && utils.isNotSet(pm.environment.get(\"reports_endDate\"))) {",
-                  "    // If either value isn't set then use a default of the last 30 days",
-                  "    const reportDates = utils.lastXDays(30);",
-                  "",
-                  "    pm.environment.set(\"reports_startDate\", reportDates[\"start\"]);",
-                  "    pm.environment.set(\"reports_endDate\", reportDates[\"end\"]);",
-                  "}",
-                  "",
-                  "const requiredVariables = [\"zones_zoneName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"hostQueryVolume\": {\n    \"startDate\": \"{{reports_startDate}}\",\n    \"endDate\": \"{{reports_endDate}}\",\n    \"zoneNames\": [\n        \"{{zones_zoneName}}\"\n    ]\n  },\n  \"sortFields\": {\n    \"nxdomainCount\": \"DESC\"\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/v1/reports/dns_resolution/query_volume/host?advance=true&reportType=ADVANCED_NXDOMAINS&limit=100000",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "v1",
-                "reports",
-                "dns_resolution",
-                "query_volume",
-                "host"
-              ],
-              "query": [
-                {
-                  "key": "advance",
-                  "value": "true"
-                },
-                {
-                  "key": "reportType",
-                  "value": "ADVANCED_NXDOMAINS"
-                },
-                {
-                  "key": "limit",
-                  "value": "100000"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Zero Query Report",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"zeroZoneQueryVolume\": {\r\n        \"accountName\": \"{{subaccounts_accountName}}\",\r\n        \"reportStartDate\": \"{{reports_startDate}}\",\r\n        \"reportEndDate\": \"{{reports_endDate}}\",\r\n        \"wrap\": true\r\n    }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/reports/dns_resolution/query_volume/zone/no_queries",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "reports",
-                "dns_resolution",
-                "query_volume",
-                "zone",
-                "no_queries"
-              ]
-            }
-          },
-          "response": []
-        }
-      ],
-      "description": "These are the APIs for reporting. In a fashion similar-to-but-different-than tasks, the reports will return an ID. However, the ID, in this instance, is in the JSON body of the response. You use the \"requests\" endpoint along with your ID to get the result.\n\nAfter you create a report, it's ID automatically gets saved to a collection variable which will then get passed to the requests endpoint. Note that generating a new report writes over this value."
-    },
-    {
-      "name": "Webhook",
-      "item": [
-        {
-          "name": "Verify",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"username\", \"webhook_telemetryId\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/accounts/{{username}}/telemetryWebhook/test/{{webhook_telemetryId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "{{username}}",
-                "telemetryWebhook",
-                "test",
-                "{{webhook_telemetryId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Test Endpoint",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"username\", \"webhook_endpointUrl\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "// Parse the response body",
-                  "let resp = pm.response.json();",
-                  "",
-                  "// Check if \"telemetryEventId\" exists in the response",
-                  "if (resp.hasOwnProperty(\"telemetryEventId\")) {",
-                  "    // Set the \"webhook_telemetryId\" collection variable",
-                  "    pm.environment.set(\"webhook_telemetryId\", resp.telemetryEventId);",
-                  "    console.log(`Telemetry ID saved: ${resp.telemetryEventId}`);",
-                  "} else {",
-                  "    console.error(\"Error: 'telemetryEventId' not found in the response body.\");",
-                  "}"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"url\": \"{{webhook_endpointUrl}}\",\r\n    \"type\": \"TEST_TELEMETRY_WEBHOOK\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/accounts/{{username}}/telemetryWebhook/test",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "{{username}}",
-                "telemetryWebhook",
-                "test"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"username\", \"webhook_endpointUrl\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"webhooks\": [\r\n        {\r\n            \"enable\": true,\r\n            \"url\": \"{{webhook_endpointUrl}}\",\r\n            \"include\": {\r\n                \"ALL_CHANGES\": true\r\n            }\r\n        }\r\n    ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/accounts/{{username}}/settings/PUSH_NOTIFICATIONS",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "{{username}}",
-                "settings",
-                "PUSH_NOTIFICATIONS"
-              ]
-            }
-          },
-          "response": []
-        }
-      ],
-      "description": "These requests pertain to UDNS's push notification feature. The test endpoint will poll your webhook with a telemetry event for testing. The verify endpoint validates the success of said request, using the event ID. The \"create\" request will create the push notification config. Note that, unlike the UI, you don't _have to_ validate your webhook functionality before creating it, though, realistically, you should.\n\nThe telemetry event ID will get stored automatically as a collection variable when performing the test."
-    },
-    {
-      "name": "Subaccounts",
-      "item": [
-        {
-          "name": "List Subaccounts",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/subaccounts",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subaccounts"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "List Subaccounts Zones",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/subaccounts/zones",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subaccounts",
-                "zones"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Subaccount Authorization",
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "const requiredVariables = [\"subaccounts_accountName\"];  ",
-                  "utils.checkVars(requiredVariables, true);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/subaccounts/{{subaccounts_accountName}}/token",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subaccounts",
-                "{{subaccounts_accountName}}",
-                "token"
-              ]
-            }
-          },
-          "response": []
-        }
-      ],
-      "description": "Endpoints specifically for accounts that have subaccounts (resellers, mostly). You can list the accounts and all their zones directly using the primary account's credentials.\n\nFor more granular subaccount operations, the primary account owner has the ability to \"masquerade\" as a subaccount user using the subaccount auth endpoint. This generates a set of bearer and refresh tokens with access to the subaccount.\n\nThis particular functionality of the collection could be more robust, admittedly. I don't have subaccounts in my test account and don't particularly care to set one up for testing, at least not at this time."
-    },
-    {
-      "name": "DNSSEC Multi-Signer",
-      "item": [
-        {
-          "name": "Initialize DNSSEC Settings",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"dnssecSettings\": {\r\n        \"dnskeyTtl\": {{dnssec_dnskey_ttl}},\r\n        \"rrsigValidity\": {{dnssec_rrsig_validity}} \r\n    }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/accounts/{{username}}/settings/DNSSEC_SETTINGS",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "{{username}}",
-                "settings",
-                "DNSSEC_SETTINGS"
-              ]
-            },
-            "description": "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds, used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800 seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover, and resigning action on every zone in the account.\n\nNOTE: If you have previously set these values with a call to this API then you will need to use the Update (PUT) API call to update them and the Remove (DELETE) API call to delete them."
-          },
-          "response": []
-        },
-        {
-          "name": "Update DNSSEC Settings Copy",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"dnssecSettings\": {\r\n        \"dnskeyTtl\": {{dnssec_dnskey_ttl}},\r\n        \"rrsigValidity\": {{dnssec_rrsig_validity}} \r\n    }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/accounts/{{username}}/settings/DNSSEC_SETTINGS",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "{{username}}",
-                "settings",
-                "DNSSEC_SETTINGS"
-              ]
-            },
-            "description": "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds, used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800 seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover, and resigning action on every zone in the account.\n\nNOTE: Use the Initialize (POST) API call to initially set these values and the Remove (DELETE) API call to delete them."
-          },
-          "response": []
-        },
-        {
-          "name": "Remove DNSSEC Settings",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {}
-              }
-            }
-          ],
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/accounts/{{username}}/settings/DNSSEC_SETTINGS",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "accounts",
-                "{{username}}",
-                "settings",
-                "DNSSEC_SETTINGS"
-              ]
-            },
-            "description": "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds, used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800 seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover, and resigning action on every zone in the account.\n\nNOTE: Use the Initialize (POST) API call to initially set these values and the Update (PUT) API call to update them."
-          },
-          "response": []
-        },
-        {
-          "name": "DNSSEC Sign Zone",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{zones_zoneName}}",
-                "dnssec"
-              ]
-            },
-            "description": "This API is used to DNSSEC sign a zone on UltraDNS and can be used on both primary and secondary zones.\n\nIf you have external signer DNSKEY information you can include that as an _externalKeys_ element in the JSON payload (see [Update External Signer](https://go.postman.co/workspace/My-Workspace~44d8667f-697e-43dd-8c23-aea1d7afb89c/documentation/269716-96acc28c-c730-4484-9a15-43f2bb753d3a?entity=request-09c10a66-1e56-4e2f-8504-9f15c8dd7766)), otherwise the payload is empty."
-          },
-          "response": []
-        },
-        {
-          "name": "DNSSEC Un-Sign Zone",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{zones_zoneName}}",
-                "dnssec"
-              ]
-            },
-            "description": "This API call will unsign a DNSSEC signed zone, removing all DNSKEY information (including external keys)."
-          },
-          "response": []
-        },
-        {
-          "name": "Get DS Records",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
-          "request": {
-            "method": "GET",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{zones_zoneName}}",
-                "dnssec"
-              ]
-            },
-            "description": "Provides detailed information regarding the current DNSSEC status of a zone. This API call can be used to get the DS (Designated Signer) records for the zone that can be used by the parent zone to establish a chain-of-trust for the zone."
-          },
-          "response": []
-        },
-        {
-          "name": "Update External Signer",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"externalKeys\":[\r\n        {\r\n            \"ksk\":[\"{{dnssec_extkey_ksk}}\"],\r\n            \"zsk\":[\"{{dnssec_extkey_zsk}}\"]\r\n        }\r\n    ]\r\n} ",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{zones_zoneName}}",
-                "dnssec"
-              ]
-            },
-            "description": "Configure external signer keys (KSK and ZSK) for a DNSSEC signed zone. KSK and ZSK DNSKEY records are formatted as follows:\n\n```\n<FLAGS> <PROTOCOL_VALUE> <ALGORITHM> <BASE64_ENCODED_PUBLIC_KEY>\n\n ```\n\nNOTE: For an unsigned zone you can change the method to POST and set the value of _externalKeys_ to both DNSSEC sign a zone and install the DNSKEY records from an external provider."
-          },
-          "response": []
-        },
-        {
-          "name": "Remove External Signer",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"externalKeys\":[]\r\n} ",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "zones",
-                "{{zones_zoneName}}",
-                "dnssec"
-              ]
-            },
-            "description": "Remove DNSKEY records for external signer from a DNSSEC signed zone.\n\nNOTE: External keys will not show up in the UltraDNS portal. Run a _dig_ command against the zone for DNSKEY records to verify the external keys were added. For example:\n\n_\\>> dig @udns1.ultradns.com example.com DNSKEY_"
-          },
-          "response": []
-        }
-      ],
-      "description": "UltraDNS API endpoints that support [multi-signer DNSSEC](https://ultra-portalstatic.ultradns.com/static/console/docs/DNSSEC-Multi_Signer-Guide.pdf).\n\nUltraDNS DNSSEC uses _online_ (also known as _on-the-fly_) signing in generating signed responses to queries. UltraDNS supports DNSSEC algorithm 13 only for this process. Implementers of multi-signer can add DNSKEY details for external signers using other algorithms as needed, but all UltraDNS generated key information uses algorithm 13 (ECDSA).\n\nAdditionally, UltraDNS signers generate a unique KSK and ZSK for every zone. This approach gives flexibility for zone owners to roll their KSK without impacting other zones that share the KSK information and allows the ZSK to be automatically rolled at regular intervals. The implementation of multi-signer follows the methods described in [RFC 8901 model 2](https://www.rfc-editor.org/rfc/rfc8901.html#name-model-2-unique-ksk-set-and-) where each signer maintains its own unique KSK and ZSK.\n\nSupport of DNSSEC Multi-Signer is derived from, and supports portions of the following RFCs:\n\n- [RFC 8901](https://www.rfc-editor.org/rfc/rfc8901.html) - Multi-Signer DNSSEC Models.\n    \n- [RFC 7344](https://www.rfc-editor.org/rfc/rfc7344) - Automating DNSSEC Delegation Trust Maintenance.\n    \n- [RFC 8078](https://www.rfc-editor.org/rfc/rfc8078) - Managing DS Records from the Parent via CDS/CDNSKEY.\n    \n- [RFC 6781](https://www.rfc-editor.org/rfc/rfc6781.html) - DNSSEC Operational Practices, Version 2."
-    },
-    {
-      "name": "Traffic Management",
-      "item": [
-        {
-          "name": "SiteBacker",
-          "item": [
-            {
-              "name": "Record Priority Update",
-              "request": {
-                "method": "PATCH",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json-patch+json",
-                    "type": "text"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "// This PATCH command is intended for a SiteBacker pool consisting of two records and the use case is\r\n// to allow for switching the priority of the two records.  The PATCH command 'path' value is used to\r\n// determine which record the update is applied.  A path with '0' in it is referring to the first\r\n// record listed in the UI and will be the record with the lowest priority.  A path with '1' in it is\r\n// referring to the second record listed in the UI and will be the record with next lowest priority.\r\n//\r\n// For a simple use case where you're switching the priority of two records you can run the request\r\n// without adjusting any values.  But, in a use case where you have multiple records, you'll need to \r\n// account for the change in relative record order from previous priority record adjustments.\r\n//\r\n// NOTE: This assumes the first record has a priority value of 1 and the other record has priority\r\n// value of 101.\r\n[\r\n    // JSON DTO (pool record with lowest value for priority field.\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/0/priority\",\r\n        \"value\": \"101\"\r\n    },\r\n    // JSON DTO (pool record with the next highest value for priority field.\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/1/priority\",\r\n        \"value\": \"1\"\r\n    }\r\n]",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/rrsets/{{sb_rrType}}/{{sb_ownerName}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "zones",
-                    "{{zones_zoneName}}",
-                    "rrsets",
-                    "{{sb_rrType}}",
-                    "{{sb_ownerName}}"
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
-              "name": "Create SiteBacker Pool",
-              "event": [
-                {
-                  "listen": "prerequest",
-                  "script": {
-                    "exec": [
-                      ""
-                    ],
-                    "type": "text/javascript",
-                    "packages": {}
-                  }
-                }
-              ],
-              "request": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "// NOTE: Update the body below as follows: \r\n// - Add an entry to rdata array for each IP that will be part of the pool\r\n// - For each IP entered, add an object to the rdataInfo array that includes:\r\n// -- state: NORMAL, Force Active, Force Fail\r\n// -- runProbes: true, false\r\n// -- priority: Positive Integer\r\n// -- failoverDelay: 0, or Positive Integer\r\n// -- threshold: Positive Integer\r\n// -- availableToServe: true, false\r\n// - Add an entry to the backupRecords array that includes:\r\n// -- rdata: String (IP address)\r\n// -- failoverDelay: 0 or Positive Integer\r\n{\r\n    \"ttl\": 300,\r\n    \"rdata\": [\r\n        \"1.1.1.1\",\r\n        \"2.2.2.2\",\r\n        \"3.3.3.3\",\r\n        \"4.4.4.4\"\r\n    ],\r\n    \"profile\": {\r\n        \"@context\": \"http://schemas.ultradns.com/SBPool.jsonschema\",\r\n        \"description\": \"Test SiteBacker Pool\",\r\n        \"runProbes\": true,\r\n        \"actOnProbes\": true,\r\n        \"order\": \"FIXED\",\r\n        \"maxActive\": 1,\r\n        \"failureThreshold\": 0,\r\n        \"maxServed\": 1,\r\n        \"rdataInfo\": [{\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }],\r\n        \"backupRecords\": [{\r\n            \"rdata\": \"9.9.9.9\",\r\n            \"failoverDelay\":0\r\n        }]\r\n    }\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/rrsets/{{sb_rrType}}/{{sb_ownerName}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "zones",
-                    "{{zones_zoneName}}",
-                    "rrsets",
-                    "{{sb_rrType}}",
-                    "{{sb_ownerName}}"
-                  ]
-                }
-              },
-              "response": []
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "auth": {
-    "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{accessToken}}",
-        "type": "string"
-      }
-    ]
-  },
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [
-          "if (!pm.environment.name) {",
-          "    throw new Error(\"MissingEnvironment: No environment selected. Please select an environment before running the request.\");",
-          "}",
-          "",
-          "utils = {",
-          "  isNotSet: function(val) {",
-          "    const empty = [null, undefined, \"\", \"null\", \"undefined\"];",
-          "    const placeholders = [\"HASH\", \"PASSWORD\", \"UNIX_TIMESTAMP\", \"GUID\"];",
-          "    return empty.includes(val) || placeholders.includes(val);",
-          "  },",
-          "  checkVars: function(values, checkEnv=false) {",
-          "    values.forEach((varName) => {",
-          "        let value, errorType;",
-          "        if (checkEnv) {",
-          "            value = pm.environment.get(varName);",
-          "            errorType = \"MissingEnvironmentVariable\";",
-          "        } else {",
-          "            value = pm.collectionVariables.get(varName);",
-          "            errorType = \"MissingCollectionVariable\";",
-          "        }",
-          "        if (utils.isNotSet(value)) {",
-          "            throw new Error(`${errorType}: The variable \"${varName}\" is not set or is null. Please set a valid value before proceeding.`);",
-          "        }",
-          "    });",
-          "  },",
-          "  lastXDays: function(days) {",
-          "    if (days > 30) {",
-          "      throw new Error(`You specified ${days.toString()} days but the max is 30.`);",
-          "    }",
-          "    const yesterday = new Date();",
-          "    yesterday.setDate(yesterday.getDate() - 1);",
-          "    const startDate = new Date();",
-          "    startDate.setDate(yesterday.getDate() - days);",
-          "    return {",
-          "      \"start\": startDate.toISOString().split('T')[0],",
-          "      \"end\": yesterday.toISOString().split('T')[0]",
-          "    }",
-          "  }",
-          "};",
-          "",
-          "utils.checkVars([\"username\", \"password\"], true);",
-          "",
-          "const username = pm.environment.get(\"username\");",
-          "const password = pm.environment.get(\"password\");",
-          "",
-          "utils.checkVars([\"baseUrl\"]);",
-          "const baseUrl = pm.collectionVariables.get('baseUrl');",
-          "",
-          "const currentAccessToken = pm.environment.get('accessToken');",
-          "const currentRefreshToken = pm.environment.get('refreshToken');",
-          "const tokenTimestamp = pm.environment.get('tokenTimestamp');",
-          "",
-          "function setTokens(accessToken, refreshToken) {",
-          "    const now = Date.now();",
-          "    pm.environment.set('accessToken', accessToken);",
-          "    pm.environment.set('refreshToken', refreshToken);",
-          "    pm.environment.set('tokenTimestamp', now.toString());",
-          "}",
-          "",
-          "function getNewTokens(un, pw) {",
-          "    const payload = {",
-          "        grant_type: 'password',",
-          "        username: un,",
-          "        password: pw",
-          "    };",
-          "",
-          "    pm.sendRequest({",
-          "        url: `${baseUrl}/authorization/token`,",
-          "        method: 'POST',",
-          "        header: 'Content-Type:application/x-www-form-urlencoded',",
-          "        body: {",
-          "            mode: 'urlencoded',",
-          "            urlencoded: Object.keys(payload).map(key => ({key, value: payload[key]}))",
-          "        }",
-          "    }, (err, res) => {",
-          "        if (err) {",
-          "            console.error(`AuthFailed: ${err}`);",
-          "        } else {",
-          "            setTokens(res.json().accessToken, res.json().refreshToken);",
-          "        }",
-          "    });",
-          "}",
-          "",
-          "if (utils.isNotSet(currentAccessToken) || utils.isNotSet(tokenTimestamp)) {",
-          "    getNewTokens(username, password);",
-          "} else {",
-          "    const fiftyFiveMinutes = 55 * 60 * 1000;  // milliseconds",
-          "    const now = Date.now();",
-          "    const timePassed = now - parseInt(tokenTimestamp, 10);",
-          "",
-          "    // If more than 55min has passed, we try to refresh the token",
-          "    if (timePassed > fiftyFiveMinutes) {",
-          "        if (currentRefreshToken) {",
-          "            const payload = {",
-          "                grant_type: 'refresh_token',",
-          "                refresh_token: currentRefreshToken",
-          "            };",
-          "",
-          "            pm.sendRequest({",
-          "                url: `${baseUrl}/authorization/token`,",
-          "                method: 'POST',",
-          "                header: 'Content-Type:application/x-www-form-urlencoded',",
-          "                body: {",
-          "                    mode: 'urlencoded',",
-          "                    urlencoded: Object.keys(payload).map(key => ({key, value: payload[key]}))",
-          "                }",
-          "            }, (err, res) => {",
-          "                if (err || res.code !== 200) {",
-          "                    // If there's an error or the refresh token is stale",
-          "                    console.log(`RefreshFailed: Bad refresh token, re-authenticating: ${err}`)",
-          "                    getNewTokens(username, password);",
-          "                } else {",
-          "                    setTokens(res.json().accessToken, res.json().refreshToken);",
-          "                }",
-          "            });",
-          "        } else {",
-          "            getNewTokens(username, password);",
-          "        }",
-          "    }",
-          "}"
-        ]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [
-          "// Check if the x-task-id header is present in the response",
-          "let taskId = pm.response.headers.get(\"x-task-id\");",
-          "",
-          "if (taskId) {",
-          "    pm.environment.set(\"currentTask\", taskId);",
-          "    console.log(`Saved x-task-id: ${taskId} to currentTask collection variable.`);",
-          "}",
-          "",
-          "// Check if there's a response body and if the response can be parsed as JSON",
-          "if (pm.response.text() && pm.response.headers.get('Content-Type').includes('application/json')) {",
-          "    try {",
-          "        let resp = pm.response.json();",
-          "        ",
-          "        // Check if \"requestId\" exists in the response",
-          "        if (resp.hasOwnProperty(\"requestId\")) {",
-          "            // Set the \"requestId\" collection variable",
-          "            pm.environment.set(\"reports_requestId\", resp.requestId);",
-          "            console.log(`Request ID saved: ${resp.requestId}`);",
-          "        }",
-          "    } catch (e) {",
-          "        // This will catch any errors in parsing the JSON, but do nothing",
-          "        // Just in case, so it doesn't somehow cause non-JSON responses to error",
-          "    }",
-          "}",
-          ""
-        ]
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "https://api.ultradns.com",
-      "type": "string"
-    }
-  ]
+	"info": {
+		"_postman_id": "c69eeace-9cfb-4b4a-87ef-720d3eb9cb4e",
+		"name": "API Documentation v0.1.1",
+		"description": "This collection contains requests for the UDNS API. The folders mostly represent the different base resources, i.e. \"zones\" which contains all the various zone operations and \"reports\" which has the reporting operations.\n\nAt the collection level, there is a pre-request script which handles your authentication and has some basic utility functions. The script will generate a bearer token and, when it expires, refresh it.\n\nThe utilities are an object defined globalls in the scope of the pre-request script, which makes it available to the individual requests. Simply call:\n\n``` javascript\nutils.functionName()\n\n ```\n\nThe username and password variables must be set in your environment for the collection pre-request to run.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2146434"
+	},
+	"item": [
+		{
+			"name": "Zones",
+			"item": [
+				{
+					"name": "List Zone SOA",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets/SOA",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones",
+								"{{zones_zoneName}}",
+								"rrsets",
+								"SOA"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Zone NS",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets/NS",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones",
+								"{{zones_zoneName}}",
+								"rrsets",
+								"NS"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Zone Properties",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones",
+								"{{zones_zoneName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Zone Pools",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets?q=kind:POOLS",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones",
+								"{{zones_zoneName}}",
+								"rrsets"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "kind:POOLS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Zones",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Zone",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"username\",\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"properties\":{\n      \"name\":\"{{zones_zoneName}}\",\n      \"accountName\":\"{{username}}\",\n      \"type\":\"PRIMARY\"\n   },\n   \"primaryCreateInfo\":{\n      \"forceImport\":true,\n      \"createType\":\"NEW\"\n   },\n   \"changeComment\":\"Create zone as agreed\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Zone Web Forwards",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/webforwards",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones",
+								"{{zones_zoneName}}",
+								"webforwards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Zone RRSets",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones/{{zones_zoneName}}/rrsets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones",
+								"{{zones_zoneName}}",
+								"rrsets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Initiate Zone(s) Export",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"zoneNames\": [\n        \"{{zones_zoneName}}\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v3/zones/export",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v3",
+								"zones",
+								"export"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Snapshot",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/zones/{{zones_zoneName}}/snapshot",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"zones",
+								"{{zones_zoneName}}",
+								"snapshot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Restore Snapshot",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/zones/{{zones_zoneName}}/restore",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"zones",
+								"{{zones_zoneName}}",
+								"restore"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Zone Transfer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://api.ultradns.com/zones/{{zones_zoneName}}/transfer",
+							"protocol": "https",
+							"host": [
+								"api",
+								"ultradns",
+								"com"
+							],
+							"path": [
+								"zones",
+								"{{zones_zoneName}}",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "In this folder are operations pertaining to the zones (DNS configuration).\n\nAt the time which I'm writing this, the v3 endpoint has the latest zone resources, though not every resource is available in the v3 endpoint. Some aren't even available in v2. The snapshot/restore functionality only works with v1, for instance.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Records",
+			"item": [
+				{
+					"name": "List RRset",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var query_params = {\r",
+									"    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
+									"    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
+									"    //  * owner:String (partial match of owner name)\r",
+									"    //  * value:String (partial match of rdata, RECORDS kind only)\r",
+									"    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
+									"    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
+									"    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
+									"    //'offset':                   '0',\r",
+									"    //'limit':                    '100',\r",
+									"    //'sort':                     'OWNER',\r",
+									"    //'reverse':                  'false',\r",
+									"    //'systemGeneratedStatus':    'true',\r",
+									"}\r",
+									"\r",
+									"for (let key in query_params) {\r",
+									"    console.log(key, query_params[key])\r",
+									"    pm.request.url.query.add({key: key, value: query_params[key]})\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets"
+							]
+						},
+						"description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
+					},
+					"response": []
+				},
+				{
+					"name": "List A Records",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var query_params = {\r",
+									"    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
+									"    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
+									"    //  * owner:String (partial match of owner name)\r",
+									"    //  * value:String (partial match of rdata, RECORDS kind only)\r",
+									"    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
+									"    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
+									"    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
+									"    //'offset':                   '0',\r",
+									"    //'limit':                    '100',\r",
+									"    //'sort':                     'OWNER',\r",
+									"    //'reverse':                  'false',\r",
+									"    //'systemGeneratedStatus':    'true',\r",
+									"}\r",
+									"\r",
+									"for (let key in query_params) {\r",
+									"    console.log(key, query_params[key])\r",
+									"    pm.request.url.query.add({key: key, value: query_params[key]})\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/A",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets",
+								"A"
+							]
+						},
+						"description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
+					},
+					"response": []
+				},
+				{
+					"name": "List CNAME Records",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var query_params = {\r",
+									"    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
+									"    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
+									"    //  * owner:String (partial match of owner name)\r",
+									"    //  * value:String (partial match of rdata, RECORDS kind only)\r",
+									"    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
+									"    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
+									"    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
+									"    //'offset':                   '0',\r",
+									"    //'limit':                    '100',\r",
+									"    //'sort':                     'OWNER',\r",
+									"    //'reverse':                  'false',\r",
+									"    //'systemGeneratedStatus':    'true',\r",
+									"}\r",
+									"\r",
+									"for (let key in query_params) {\r",
+									"    console.log(key, query_params[key])\r",
+									"    pm.request.url.query.add({key: key, value: query_params[key]})\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/CNAME",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets",
+								"CNAME"
+							]
+						},
+						"description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
+					},
+					"response": []
+				},
+				{
+					"name": "List SOA Record",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var query_params = {\r",
+									"    // Query will look something like this: q=ttl:300+kind:RECORDS.  Potential values:\r",
+									"    //  * ttl:String (number >= 0. Only valid for kind=RECORDS)\r",
+									"    //  * owner:String (partial match of owner name)\r",
+									"    //  * value:String (partial match of rdata, RECORDS kind only)\r",
+									"    //  * kind:ALL|RECORDS|POOLS|RD_POOLS|DIR_POOLS|SB_POOLS|TC_POOLS\r",
+									"    // This value for q will query for all regular records with TTL of 300 and owner name containing \"www\":\r",
+									"    //'q':                        'ttl:300+kind:RECORDS+owner:www',\r",
+									"    //'offset':                   '0',\r",
+									"    //'limit':                    '100',\r",
+									"    //'sort':                     'OWNER',\r",
+									"    //'reverse':                  'false',\r",
+									"    //'systemGeneratedStatus':    'true',\r",
+									"}\r",
+									"\r",
+									"for (let key in query_params) {\r",
+									"    console.log(key, query_params[key])\r",
+									"    pm.request.url.query.add({key: key, value: query_params[key]})\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/SOA",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets",
+								"SOA"
+							]
+						},
+						"description": "This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the name of the domain whose RRsets you want to return."
+					},
+					"response": []
+				},
+				{
+					"name": "Create RRset",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Variables to control record creation.  This is much easier than switching back and forth\r",
+									"// to the environment in order to update these parameters: \r",
+									"//\r",
+									"// * TODO: Specify values for ownerName, recordType, recordTtl, and recordRdata\r",
+									"\r",
+									"const ownerName     = '<OWNER_NAME>';\r",
+									"const recordType    = 'A';\r",
+									"const recordTtl     = '300';\r",
+									"\r",
+									"// Examples of recordRdata:\r",
+									"// * A:         1.1.1.1\r",
+									"// * CNAME:     www.example.com\r",
+									"// * MX:        10 mail.example.com\r",
+									"// * MX (NULL): 0 .\r",
+									"\r",
+									"const recordRdata   = '1.1.1.1';\r",
+									"\r",
+									"const bodyContent = {\r",
+									"    'ttl': recordTtl,\r",
+									"    'rdata': [\r",
+									"        recordRdata\r",
+									"    ]\r",
+									"}\r",
+									"\r",
+									"// Convert the JavaScript object to a JSON string\r",
+									"const bodyContentString = JSON.stringify(bodyContent);\r",
+									"\r",
+									"// Set the environment variable with the JSON string\r",
+									"pm.environment.set(\"requestBody\", bodyContentString);\r",
+									"\r",
+									"// Update environment variables to reflect record being configured\r",
+									"pm.environment.set('records_ownerName', ownerName);\r",
+									"pm.environment.set('records_type', recordType);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/{{records_type}}/{{records_ownerName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets",
+								"{{records_type}}",
+								"{{records_ownerName}}"
+							]
+						},
+						"description": "The Create RRSet for an Owner call requires you to send an RRSet DTO with the call. However, the  \nownerName and rrtype fields are not required because they are specified in the URI. If the DTO you  \nsend does include them, they will be ignored."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete RRset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code == '204') {\r",
+									"    console.log(\"Delete happened immediately!\");\r",
+									"} else if (pm.response.code == '202') {\r",
+									"    console.log(\"Delete happened in background!\");\r",
+									"    console.log(\"X-Task-ID: \" + pm.response.headers.get('X-Task-ID'));\r",
+									"} else {\r",
+									"    console.log(\"Delete Response (status code == \" + pm.response.code + \")!\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set('records_type', 'A');\r",
+									"pm.environment.set('records_ownerName', '<OWNER_NAME>');"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/{{records_type}}/{{records_ownerName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets",
+								"{{records_type}}",
+								"{{records_ownerName}}"
+							]
+						},
+						"description": "This call allows you to delete all resource records of a particular type (an RRSet) for a specified  \ndomain owner."
+					},
+					"response": []
+				},
+				{
+					"name": "Update RRset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code == '200') {\r",
+									"    console.log(\"Update happened immediately!\");\r",
+									"} else if (pm.response.code == '202') {\r",
+									"    console.log(\"Update happened in background!\");\r",
+									"    console.log(\"X-Task-ID: \" + pm.response.headers.get('X-Task-ID'));\r",
+									"} else {\r",
+									"    console.log(\"Update Response (status code == \" + pm.response.code + \")!\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// NOTE: You must provide ALL record information.  \r",
+									"// Any resource records not included will be removed from the RRSet.\r",
+									"// It is recommended that you call \"List RRset\" first to get an RRset DTO that you\r",
+									"// can modify and then send to this \"Update RRset\" API.\r",
+									"//  \r",
+									"// Variables to control record update.  This is much easier than switching back and forth\r",
+									"// to the environment in order to update these parameters: \r",
+									"//\r",
+									"// * TODO: Specify values for ownerName, recordType, recordTtl, and recordRdata\r",
+									"\r",
+									"const ownerName     = '<OWNER_NAME>';\r",
+									"const recordType    = 'A';\r",
+									"const recordTtl     = '300';\r",
+									"\r",
+									"// Examples of recordRdata:\r",
+									"// * A:         1.1.1.1\r",
+									"// * CNAME:     www.example.com\r",
+									"// * MX:        10 mail.example.com\r",
+									"// * MX (NULL): 0 .\r",
+									"\r",
+									"const recordRdata   = '1.1.1.1';\r",
+									"\r",
+									"const bodyContent = {\r",
+									"    'ttl': recordTtl,\r",
+									"    'rdata': [\r",
+									"        recordRdata\r",
+									"    ]\r",
+									"}\r",
+									"\r",
+									"// Convert the JavaScript object to a JSON string\r",
+									"const bodyContentString = JSON.stringify(bodyContent);\r",
+									"\r",
+									"// Set the environment variable with the JSON string\r",
+									"pm.environment.set(\"requestBody\", bodyContentString);\r",
+									"\r",
+									"// Update environment variables to reflect record being configured\r",
+									"pm.environment.set('records_ownerName', ownerName);\r",
+									"pm.environment.set('records_type', recordType);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBody}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{records_zoneName}}/rrsets/{{records_type}}/{{records_ownerName}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{records_zoneName}}",
+								"rrsets",
+								"{{records_type}}",
+								"{{records_ownerName}}"
+							]
+						},
+						"description": "This call allows you to update a set of resource records of a particular type (an RRSet) for a  \nspecified domain owner. Be sure to specify the TTL and ALL the record information. Any resource records not included will be removed from the RRSet, and the TTL value specified at the account level for the record type (or global TTL value) will be used."
+					},
+					"response": []
+				}
+			],
+			"description": "In this folder are operations pertaining to the records of a zone.\n\nThe basic unit for resource record manipulation in the REST API is the RRSet. An RRSet contains  \nthe data for all resource records present at the same owner name (label), and with the same type  \nand class (all records in UltraDNS have IN class). Rather than trying to specify a custom structure for each different resource record type, the data for all resource records is represented by an _rdata_ field. This field's contents map to the data supplied in the BIND presentation format for a resource record.\n\nIn order to simplify configuration of environment variables, the API calls in this folder contain pre-request scripts that can be used to modify variables/parameters used in the API call. Please use these scripts to setup variables and the environment before making calls."
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Check Task",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"currentTask\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tasks/{{currentTask}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tasks",
+								"{{currentTask}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Task Result",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"currentTask\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tasks/{{currentTask}}/result",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tasks",
+								"{{currentTask}}",
+								"result"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Some endpoints return background tasks. The zone snapshot and export zone file endpoints, for example. In this instance, the API responds with a status code 202 ('Accepted') and the headers will contain an x-task-id value. You use the task ID to check on the status and result of your operation.\n\nThe endpoints that I've added to this collection which return tasks IDs will store it under the \"currentTask\" collection variable. The endpoints in this folder will use that variable, by default. Note that running another request that generates a new task will overwrite this value."
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Request Report",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"reports_requestId\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/v1/requests/{{reports_requestId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"requests",
+								"{{reports_requestId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create NXDomain Report",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if (utils.isNotSet(pm.environment.get(\"reports_startDate\")) && utils.isNotSet(pm.environment.get(\"reports_endDate\"))) {",
+									"    // If either value isn't set then use a default of the last 30 days",
+									"    const reportDates = utils.lastXDays(30);",
+									"",
+									"    pm.environment.set(\"reports_startDate\", reportDates[\"start\"]);",
+									"    pm.environment.set(\"reports_endDate\", reportDates[\"end\"]);",
+									"}",
+									"",
+									"const requiredVariables = [\"zones_zoneName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hostQueryVolume\": {\n    \"startDate\": \"{{reports_startDate}}\",\n    \"endDate\": \"{{reports_endDate}}\",\n    \"zoneNames\": [\n        \"{{zones_zoneName}}\"\n    ]\n  },\n  \"sortFields\": {\n    \"nxdomainCount\": \"DESC\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/reports/dns_resolution/query_volume/host?advance=true&reportType=ADVANCED_NXDOMAINS&limit=100000",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"reports",
+								"dns_resolution",
+								"query_volume",
+								"host"
+							],
+							"query": [
+								{
+									"key": "advance",
+									"value": "true"
+								},
+								{
+									"key": "reportType",
+									"value": "ADVANCED_NXDOMAINS"
+								},
+								{
+									"key": "limit",
+									"value": "100000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Zero Query Report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"zeroZoneQueryVolume\": {\r\n        \"accountName\": \"{{subaccounts_accountName}}\",\r\n        \"reportStartDate\": \"{{reports_startDate}}\",\r\n        \"reportEndDate\": \"{{reports_endDate}}\",\r\n        \"wrap\": true\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reports/dns_resolution/query_volume/zone/no_queries",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reports",
+								"dns_resolution",
+								"query_volume",
+								"zone",
+								"no_queries"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "These are the APIs for reporting. In a fashion similar-to-but-different-than tasks, the reports will return an ID. However, the ID, in this instance, is in the JSON body of the response. You use the \"requests\" endpoint along with your ID to get the result.\n\nAfter you create a report, it's ID automatically gets saved to a collection variable which will then get passed to the requests endpoint. Note that generating a new report writes over this value."
+		},
+		{
+			"name": "Webhook",
+			"item": [
+				{
+					"name": "Verify",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"username\", \"webhook_telemetryId\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/accounts/{{username}}/telemetryWebhook/test/{{webhook_telemetryId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"accounts",
+								"{{username}}",
+								"telemetryWebhook",
+								"test",
+								"{{webhook_telemetryId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Endpoint",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"username\", \"webhook_endpointUrl\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response body",
+									"let resp = pm.response.json();",
+									"",
+									"// Check if \"telemetryEventId\" exists in the response",
+									"if (resp.hasOwnProperty(\"telemetryEventId\")) {",
+									"    // Set the \"webhook_telemetryId\" collection variable",
+									"    pm.environment.set(\"webhook_telemetryId\", resp.telemetryEventId);",
+									"    console.log(`Telemetry ID saved: ${resp.telemetryEventId}`);",
+									"} else {",
+									"    console.error(\"Error: 'telemetryEventId' not found in the response body.\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\": \"{{webhook_endpointUrl}}\",\r\n    \"type\": \"TEST_TELEMETRY_WEBHOOK\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/accounts/{{username}}/telemetryWebhook/test",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"accounts",
+								"{{username}}",
+								"telemetryWebhook",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"username\", \"webhook_endpointUrl\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"webhooks\": [\r\n        {\r\n            \"enable\": true,\r\n            \"url\": \"{{webhook_endpointUrl}}\",\r\n            \"include\": {\r\n                \"ALL_CHANGES\": true\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/accounts/{{username}}/settings/PUSH_NOTIFICATIONS",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"accounts",
+								"{{username}}",
+								"settings",
+								"PUSH_NOTIFICATIONS"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "These requests pertain to UDNS's push notification feature. The test endpoint will poll your webhook with a telemetry event for testing. The verify endpoint validates the success of said request, using the event ID. The \"create\" request will create the push notification config. Note that, unlike the UI, you don't _have to_ validate your webhook functionality before creating it, though, realistically, you should.\n\nThe telemetry event ID will get stored automatically as a collection variable when performing the test."
+		},
+		{
+			"name": "Subaccounts",
+			"item": [
+				{
+					"name": "List Subaccounts",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/subaccounts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"subaccounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Subaccounts Zones",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/subaccounts/zones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"subaccounts",
+								"zones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Subaccount Authorization",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const requiredVariables = [\"subaccounts_accountName\"];  ",
+									"utils.checkVars(requiredVariables, true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/subaccounts/{{subaccounts_accountName}}/token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"subaccounts",
+								"{{subaccounts_accountName}}",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints specifically for accounts that have subaccounts (resellers, mostly). You can list the accounts and all their zones directly using the primary account's credentials.\n\nFor more granular subaccount operations, the primary account owner has the ability to \"masquerade\" as a subaccount user using the subaccount auth endpoint. This generates a set of bearer and refresh tokens with access to the subaccount.\n\nThis particular functionality of the collection could be more robust, admittedly. I don't have subaccounts in my test account and don't particularly care to set one up for testing, at least not at this time."
+		},
+		{
+			"name": "DNSSEC Multi-Signer",
+			"item": [
+				{
+					"name": "Initialize DNSSEC Settings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dnssecSettings\": {\r\n        \"dnskeyTtl\": {{dnssec_dnskey_ttl}},\r\n        \"rrsigValidity\": {{dnssec_rrsig_validity}} \r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/accounts/{{username}}/settings/DNSSEC_SETTINGS",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"accounts",
+								"{{username}}",
+								"settings",
+								"DNSSEC_SETTINGS"
+							]
+						},
+						"description": "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds, used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800 seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover, and resigning action on every zone in the account.\n\nNOTE: If you have previously set these values with a call to this API then you will need to use the Update (PUT) API call to update them and the Remove (DELETE) API call to delete them."
+					},
+					"response": []
+				},
+				{
+					"name": "Update DNSSEC Settings Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dnssecSettings\": {\r\n        \"dnskeyTtl\": {{dnssec_dnskey_ttl}},\r\n        \"rrsigValidity\": {{dnssec_rrsig_validity}} \r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/accounts/{{username}}/settings/DNSSEC_SETTINGS",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"accounts",
+								"{{username}}",
+								"settings",
+								"DNSSEC_SETTINGS"
+							]
+						},
+						"description": "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds, used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800 seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover, and resigning action on every zone in the account.\n\nNOTE: Use the Initialize (POST) API call to initially set these values and the Remove (DELETE) API call to delete them."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove DNSSEC Settings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/accounts/{{username}}/settings/DNSSEC_SETTINGS",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"accounts",
+								"{{username}}",
+								"settings",
+								"DNSSEC_SETTINGS"
+							]
+						},
+						"description": "UltraDNS allows the configuration of some default values to be used when signing a zone. These  \nconfigurations are then set for DNSSEC signing of every zone in the account:\n\n- DNSKEY TTL - The Time to Live (TTL) in seconds, used for the DNSKEY resource record set. Default value is 86400 (1 day) with valid values in the range of 300-172800 seconds (5 minutes - 2 days).\n    \n- RRSIG Validity Period - Sets the RRSIG validity interval, in days when signing responses. Default value of 14 (2 weeks), with valid values in the range of 5-30 (days).\n    \n\nThese default value preferences can be set using the API as shown below. Once set, these values will be used for every zone signing, rollover, and resigning action on every zone in the account.\n\nNOTE: Use the Initialize (POST) API call to initially set these values and the Update (PUT) API call to update them."
+					},
+					"response": []
+				},
+				{
+					"name": "DNSSEC Sign Zone",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{zones_zoneName}}",
+								"dnssec"
+							]
+						},
+						"description": "This API is used to DNSSEC sign a zone on UltraDNS and can be used on both primary and secondary zones.\n\nIf you have external signer DNSKEY information you can include that as an _externalKeys_ element in the JSON payload (see [Update External Signer](https://go.postman.co/workspace/My-Workspace~44d8667f-697e-43dd-8c23-aea1d7afb89c/documentation/269716-96acc28c-c730-4484-9a15-43f2bb753d3a?entity=request-09c10a66-1e56-4e2f-8504-9f15c8dd7766)), otherwise the payload is empty."
+					},
+					"response": []
+				},
+				{
+					"name": "DNSSEC Un-Sign Zone",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{zones_zoneName}}",
+								"dnssec"
+							]
+						},
+						"description": "This API call will unsign a DNSSEC signed zone, removing all DNSKEY information (including external keys)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get DS Records",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{zones_zoneName}}",
+								"dnssec"
+							]
+						},
+						"description": "Provides detailed information regarding the current DNSSEC status of a zone. This API call can be used to get the DS (Designated Signer) records for the zone that can be used by the parent zone to establish a chain-of-trust for the zone."
+					},
+					"response": []
+				},
+				{
+					"name": "Update External Signer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"externalKeys\":[\r\n        {\r\n            \"ksk\":[\"{{dnssec_extkey_ksk}}\"],\r\n            \"zsk\":[\"{{dnssec_extkey_zsk}}\"]\r\n        }\r\n    ]\r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{zones_zoneName}}",
+								"dnssec"
+							]
+						},
+						"description": "Configure external signer keys (KSK and ZSK) for a DNSSEC signed zone. KSK and ZSK DNSKEY records are formatted as follows:\n\n```\n<FLAGS> <PROTOCOL_VALUE> <ALGORITHM> <BASE64_ENCODED_PUBLIC_KEY>\n\n ```\n\nNOTE: For an unsigned zone you can change the method to POST and set the value of _externalKeys_ to both DNSSEC sign a zone and install the DNSKEY records from an external provider."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove External Signer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"externalKeys\":[]\r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"zones",
+								"{{zones_zoneName}}",
+								"dnssec"
+							]
+						},
+						"description": "Remove DNSKEY records for external signer from a DNSSEC signed zone.\n\nNOTE: External keys will not show up in the UltraDNS portal. Run a _dig_ command against the zone for DNSKEY records to verify the external keys were added. For example:\n\n_\\>> dig @udns1.ultradns.com example.com DNSKEY_"
+					},
+					"response": []
+				}
+			],
+			"description": "UltraDNS API endpoints that support [multi-signer DNSSEC](https://ultra-portalstatic.ultradns.com/static/console/docs/DNSSEC-Multi_Signer-Guide.pdf).\n\nUltraDNS DNSSEC uses _online_ (also known as _on-the-fly_) signing in generating signed responses to queries. UltraDNS supports DNSSEC algorithm 13 only for this process. Implementers of multi-signer can add DNSKEY details for external signers using other algorithms as needed, but all UltraDNS generated key information uses algorithm 13 (ECDSA).\n\nAdditionally, UltraDNS signers generate a unique KSK and ZSK for every zone. This approach gives flexibility for zone owners to roll their KSK without impacting other zones that share the KSK information and allows the ZSK to be automatically rolled at regular intervals. The implementation of multi-signer follows the methods described in [RFC 8901 model 2](https://www.rfc-editor.org/rfc/rfc8901.html#name-model-2-unique-ksk-set-and-) where each signer maintains its own unique KSK and ZSK.\n\nSupport of DNSSEC Multi-Signer is derived from, and supports portions of the following RFCs:\n\n- [RFC 8901](https://www.rfc-editor.org/rfc/rfc8901.html) - Multi-Signer DNSSEC Models.\n    \n- [RFC 7344](https://www.rfc-editor.org/rfc/rfc7344) - Automating DNSSEC Delegation Trust Maintenance.\n    \n- [RFC 8078](https://www.rfc-editor.org/rfc/rfc8078) - Managing DS Records from the Parent via CDS/CDNSKEY.\n    \n- [RFC 6781](https://www.rfc-editor.org/rfc/rfc6781.html) - DNSSEC Operational Practices, Version 2."
+		},
+		{
+			"name": "Traffic Management",
+			"item": [
+				{
+					"name": "SiteBacker",
+					"item": [
+						{
+							"name": "Record Priority Update",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json-patch+json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "// This PATCH command is intended for a SiteBacker pool consisting of two records and the use case is\r\n// to allow for switching the priority of the two records.  The PATCH command 'path' value is used to\r\n// determine which record the update is applied.  A path with '0' in it is referring to the first\r\n// record listed in the UI and will be the record with the lowest priority.  A path with '1' in it is\r\n// referring to the second record listed in the UI and will be the record with next lowest priority.\r\n//\r\n// For a simple use case where you're switching the priority of two records you can run the request\r\n// without adjusting any values.  But, in a use case where you have multiple records, you'll need to \r\n// account for the change in relative record order from previous priority record adjustments.\r\n//\r\n// NOTE: This assumes the first record has a priority value of 1 and the other record has priority\r\n// value of 101.\r\n[\r\n    // JSON DTO (pool record with lowest value for priority field.\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/0/priority\",\r\n        \"value\": \"101\"\r\n    },\r\n    // JSON DTO (pool record with the next highest value for priority field.\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/1/priority\",\r\n        \"value\": \"1\"\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/zones/{{zones_zoneName}}/rrsets/{{sb_rrType}}/{{sb_ownerName}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"zones",
+										"{{zones_zoneName}}",
+										"rrsets",
+										"{{sb_rrType}}",
+										"{{sb_ownerName}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create SiteBacker Pool",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "// NOTE: Update the body below as follows: \r\n// - Add an entry to rdata array for each IP that will be part of the pool\r\n// - For each IP entered, add an object to the rdataInfo array that includes:\r\n// -- state: NORMAL, Force Active, Force Fail\r\n// -- runProbes: true, false\r\n// -- priority: Positive Integer\r\n// -- failoverDelay: 0, or Positive Integer\r\n// -- threshold: Positive Integer\r\n// -- availableToServe: true, false\r\n// - Add an entry to the backupRecords array that includes:\r\n// -- rdata: String (IP address)\r\n// -- failoverDelay: 0 or Positive Integer\r\n{\r\n    \"ttl\": 300,\r\n    \"rdata\": [\r\n        \"1.1.1.1\",\r\n        \"2.2.2.2\",\r\n        \"3.3.3.3\",\r\n        \"4.4.4.4\"\r\n    ],\r\n    \"profile\": {\r\n        \"@context\": \"http://schemas.ultradns.com/SBPool.jsonschema\",\r\n        \"description\": \"Test SiteBacker Pool\",\r\n        \"runProbes\": true,\r\n        \"actOnProbes\": true,\r\n        \"order\": \"FIXED\",\r\n        \"maxActive\": 1,\r\n        \"failureThreshold\": 0,\r\n        \"maxServed\": 1,\r\n        \"rdataInfo\": [{\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }],\r\n        \"backupRecords\": [{\r\n            \"rdata\": \"9.9.9.9\",\r\n            \"failoverDelay\":0\r\n        }]\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/zones/{{zones_zoneName}}/rrsets/{{sb_rrType}}/{{sb_ownerName}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"zones",
+										"{{zones_zoneName}}",
+										"rrsets",
+										"{{sb_rrType}}",
+										"{{sb_ownerName}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"if (!pm.environment.name) {",
+					"    throw new Error(\"MissingEnvironment: No environment selected. Please select an environment before running the request.\");",
+					"}",
+					"",
+					"utils = {",
+					"  isNotSet: function(val) {",
+					"    const empty = [null, undefined, \"\", \"null\", \"undefined\"];",
+					"    const placeholders = [\"HASH\", \"PASSWORD\", \"UNIX_TIMESTAMP\", \"GUID\"];",
+					"    return empty.includes(val) || placeholders.includes(val);",
+					"  },",
+					"  checkVars: function(values, checkEnv=false) {",
+					"    values.forEach((varName) => {",
+					"        let value, errorType;",
+					"        if (checkEnv) {",
+					"            value = pm.environment.get(varName);",
+					"            errorType = \"MissingEnvironmentVariable\";",
+					"        } else {",
+					"            value = pm.collectionVariables.get(varName);",
+					"            errorType = \"MissingCollectionVariable\";",
+					"        }",
+					"        if (utils.isNotSet(value)) {",
+					"            throw new Error(`${errorType}: The variable \"${varName}\" is not set or is null. Please set a valid value before proceeding.`);",
+					"        }",
+					"    });",
+					"  },",
+					"  lastXDays: function(days) {",
+					"    if (days > 30) {",
+					"      throw new Error(`You specified ${days.toString()} days but the max is 30.`);",
+					"    }",
+					"    const yesterday = new Date();",
+					"    yesterday.setDate(yesterday.getDate() - 1);",
+					"    const startDate = new Date();",
+					"    startDate.setDate(yesterday.getDate() - days);",
+					"    return {",
+					"      \"start\": startDate.toISOString().split('T')[0],",
+					"      \"end\": yesterday.toISOString().split('T')[0]",
+					"    }",
+					"  }",
+					"};",
+					"",
+					"utils.checkVars([\"username\", \"password\"], true);",
+					"",
+					"const username = pm.environment.get(\"username\");",
+					"const password = pm.environment.get(\"password\");",
+					"",
+					"utils.checkVars([\"baseUrl\"]);",
+					"const baseUrl = pm.collectionVariables.get('baseUrl');",
+					"",
+					"const currentAccessToken = pm.environment.get('accessToken');",
+					"const currentRefreshToken = pm.environment.get('refreshToken');",
+					"const tokenTimestamp = pm.environment.get('tokenTimestamp');",
+					"",
+					"function setTokens(accessToken, refreshToken) {",
+					"    const now = Date.now();",
+					"    pm.environment.set('accessToken', accessToken);",
+					"    pm.environment.set('refreshToken', refreshToken);",
+					"    pm.environment.set('tokenTimestamp', now.toString());",
+					"}",
+					"",
+					"function getNewTokens(un, pw) {",
+					"    const payload = {",
+					"        grant_type: 'password',",
+					"        username: un,",
+					"        password: pw",
+					"    };",
+					"",
+					"    pm.sendRequest({",
+					"        url: `${baseUrl}/authorization/token`,",
+					"        method: 'POST',",
+					"        header: 'Content-Type:application/x-www-form-urlencoded',",
+					"        body: {",
+					"            mode: 'urlencoded',",
+					"            urlencoded: Object.keys(payload).map(key => ({key, value: payload[key]}))",
+					"        }",
+					"    }, (err, res) => {",
+					"        if (err) {",
+					"            console.error(`AuthFailed: ${err}`);",
+					"        } else {",
+					"            setTokens(res.json().accessToken, res.json().refreshToken);",
+					"        }",
+					"    });",
+					"}",
+					"",
+					"if (utils.isNotSet(currentAccessToken) || utils.isNotSet(tokenTimestamp)) {",
+					"    getNewTokens(username, password);",
+					"} else {",
+					"    const fiftyFiveMinutes = 55 * 60 * 1000;  // milliseconds",
+					"    const now = Date.now();",
+					"    const timePassed = now - parseInt(tokenTimestamp, 10);",
+					"",
+					"    // If more than 55min has passed, we try to refresh the token",
+					"    if (timePassed > fiftyFiveMinutes) {",
+					"        if (currentRefreshToken) {",
+					"            const payload = {",
+					"                grant_type: 'refresh_token',",
+					"                refresh_token: currentRefreshToken",
+					"            };",
+					"",
+					"            pm.sendRequest({",
+					"                url: `${baseUrl}/authorization/token`,",
+					"                method: 'POST',",
+					"                header: 'Content-Type:application/x-www-form-urlencoded',",
+					"                body: {",
+					"                    mode: 'urlencoded',",
+					"                    urlencoded: Object.keys(payload).map(key => ({key, value: payload[key]}))",
+					"                }",
+					"            }, (err, res) => {",
+					"                if (err || res.code !== 200) {",
+					"                    // If there's an error or the refresh token is stale",
+					"                    console.log(`RefreshFailed: Bad refresh token, re-authenticating: ${err}`)",
+					"                    getNewTokens(username, password);",
+					"                } else {",
+					"                    setTokens(res.json().accessToken, res.json().refreshToken);",
+					"                }",
+					"            });",
+					"        } else {",
+					"            getNewTokens(username, password);",
+					"        }",
+					"    }",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Check if the x-task-id header is present in the response",
+					"let taskId = pm.response.headers.get(\"x-task-id\");",
+					"",
+					"if (taskId) {",
+					"    pm.environment.set(\"currentTask\", taskId);",
+					"    console.log(`Saved x-task-id: ${taskId} to currentTask collection variable.`);",
+					"}",
+					"",
+					"// Check if there's a response body and if the response can be parsed as JSON",
+					"if (pm.response.text() && pm.response.headers.get('Content-Type').includes('application/json')) {",
+					"    try {",
+					"        let resp = pm.response.json();",
+					"        ",
+					"        // Check if \"requestId\" exists in the response",
+					"        if (resp.hasOwnProperty(\"requestId\")) {",
+					"            // Set the \"requestId\" collection variable",
+					"            pm.environment.set(\"reports_requestId\", resp.requestId);",
+					"            console.log(`Request ID saved: ${resp.requestId}`);",
+					"        }",
+					"    } catch (e) {",
+					"        // This will catch any errors in parsing the JSON, but do nothing",
+					"        // Just in case, so it doesn't somehow cause non-JSON responses to error",
+					"    }",
+					"}",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.ultradns.com",
+			"type": "string"
+		}
+	]
 }

@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - GitHub Actions workflow to trigger a release when a new tag is pushed
+- GET endpoint for SOA record
+
+### Changed
+- `sanitize_postman.py` should strip out versions in the repo, this gets appended buy the `publish-postman.yml` workflow
+- Environment is now named "Sample Environment"
+
+### Fixed
+- Incorrect URI in GET CNAME endpoint
 
 ## [0.1.1] - 2025-06-11
 
