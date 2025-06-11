@@ -3,8 +3,10 @@
 import json
 import os
 import sys
+import requests
 from pathlib import Path
 from typing import Dict, List, Set
+from jsonschema import validate
 
 # Properties to remove from Postman files
 METADATA_PROPERTIES = {
@@ -21,7 +23,36 @@ METADATA_PROPERTIES = {
 
 # Required schema versions for Postman files
 COLLECTION_SCHEMA = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-ENVIRONMENT_SCHEMA = "https://schema.getpostman.com/json/environment/v1.0.0/environment.json"
+
+def fetch_schema(url: str) -> dict:
+    """Fetch a JSON schema from a URL."""
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Warning: Could not fetch schema from {url}: {str(e)}", file=sys.stderr)
+        return None
+
+def validate_environment(data: dict) -> bool:
+    """Validate a Postman environment file has the required fields."""
+    if not isinstance(data, dict):
+        print("Error: Environment file must be a JSON object", file=sys.stderr)
+        return False
+    
+    if 'name' not in data:
+        print("Error: Environment file must have a 'name' field", file=sys.stderr)
+        return False
+    
+    if 'values' not in data:
+        print("Error: Environment file must have a 'values' field", file=sys.stderr)
+        return False
+    
+    if not isinstance(data['values'], list):
+        print("Error: Environment 'values' field must be an array", file=sys.stderr)
+        return False
+    
+    return True
 
 def remove_metadata(data: Dict, properties: Set[str]) -> Dict:
     """Recursively remove specified properties from a dictionary."""
@@ -47,6 +78,18 @@ def sanitize_file(file_path: Path) -> bool:
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
+        
+        # Validate the file before sanitizing
+        if file_path.name.endswith('.postman_collection.json'):
+            schema = fetch_schema(COLLECTION_SCHEMA)
+            if schema:
+                validate(instance=data, schema=schema)
+        elif file_path.name.endswith('.postman_environment.json'):
+            if not validate_environment(data):
+                return False
+        else:
+            print(f"Unknown file type: {file_path}", file=sys.stderr)
+            return False
         
         # Preserve the original schema
         original_schema = data.get('info', {}).get('schema') if 'info' in data else data.get('schema')
@@ -93,8 +136,13 @@ def main():
         print(f"Directory {directory} does not exist", file=sys.stderr)
         sys.exit(1)
     
+    files = find_postman_files(directory)
+    if not files:
+        print("No Postman files found to sanitize")
+        sys.exit(0)
+    
     modified_files = []
-    for file_path in find_postman_files(directory):
+    for file_path in files:
         if sanitize_file(file_path):
             modified_files.append(str(file_path))
     
@@ -102,10 +150,10 @@ def main():
         print("Modified files:")
         for file in modified_files:
             print(f"- {file}")
-        sys.exit(0)
     else:
         print("No files were modified")
-        sys.exit(0)
+    
+    sys.exit(0)
 
 if __name__ == '__main__':
     main() 
