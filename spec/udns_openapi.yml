@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: UDNS
+  title: API Documentation v0.1.1
   description: "This collection contains requests for the UDNS API. The folders mostly represent the different base resources,
     i.e. \"zones\" which contains all the various zone operations and \"reports\" which has the reporting operations.\n\n\
     At the collection level, there is a pre-request script which handles your authentication and has some basic utility functions.
@@ -272,6 +272,24 @@ paths:
       required: true
       schema:
         type: string
+  /zones/{records_zoneName}/rrsets/A:
+    get:
+      tags:
+      - Records
+      summary: List A Records
+      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
+        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
+        name of the domain whose RRsets you want to return.
+      operationId: listARecords
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: records_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
   /zones/{records_zoneName}/rrsets/{records_type}/{records_ownerName}:
     put:
       tags:
@@ -336,94 +354,6 @@ paths:
       schema:
         type: string
     - name: records_ownerName
-      in: path
-      required: true
-      schema:
-        type: string
-  /zones/{zones_zoneName}/rrsets/{sb_rrType}/{sb_ownerName}:
-    post:
-      tags:
-      - Traffic Management
-      - SiteBacker
-      summary: Create SiteBacker Pool
-      description: Create SiteBacker Pool
-      operationId: createSitebackerPool
-      requestBody:
-        content:
-          application/json:
-            examples:
-              Create SiteBacker Pool:
-                value: "// NOTE: Update the body below as follows: \r\n// - Add an entry to rdata array for each IP that will
-                  be part of the pool\r\n// - For each IP entered, add an object to the rdataInfo array that includes:\r\n\
-                  // -- state: NORMAL, Force Active, Force Fail\r\n// -- runProbes: true, false\r\n// -- priority: Positive
-                  Integer\r\n// -- failoverDelay: 0, or Positive Integer\r\n// -- threshold: Positive Integer\r\n// -- availableToServe:
-                  true, false\r\n// - Add an entry to the backupRecords array that includes:\r\n// -- rdata: String (IP address)\r\
-                  \n// -- failoverDelay: 0 or Positive Integer\r\n{\r\n    \"ttl\": 300,\r\n    \"rdata\": [\r\n        \"\
-                  1.1.1.1\",\r\n        \"2.2.2.2\",\r\n        \"3.3.3.3\",\r\n        \"4.4.4.4\"\r\n    ],\r\n    \"profile\"\
-                  : {\r\n        \"@context\": \"http://schemas.ultradns.com/SBPool.jsonschema\",\r\n        \"description\"\
-                  : \"Test SiteBacker Pool\",\r\n        \"runProbes\": true,\r\n        \"actOnProbes\": true,\r\n      \
-                  \  \"order\": \"FIXED\",\r\n        \"maxActive\": 1,\r\n        \"failureThreshold\": 0,\r\n        \"\
-                  maxServed\": 1,\r\n        \"rdataInfo\": [{\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\"\
-                  : true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\"\
-                  : 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n\
-                  \            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\
-                  \n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n          \
-                  \  \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n      \
-                  \      \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\
-                  \n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n           \
-                  \ \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n           \
-                  \ \"availableToServe\": true\r\n        }],\r\n        \"backupRecords\": [{\r\n            \"rdata\": \"\
-                  9.9.9.9\",\r\n            \"failoverDelay\":0\r\n        }]\r\n    }\r\n}"
-            schema:
-              type: object
-              additionalProperties: true
-      responses:
-        '200':
-          description: ''
-    patch:
-      tags:
-      - Traffic Management
-      - SiteBacker
-      summary: Record Priority Update
-      description: Record Priority Update
-      operationId: recordPriorityUpdate
-      requestBody:
-        content:
-          application/json:
-            examples:
-              Record Priority Update:
-                value: "// This PATCH command is intended for a SiteBacker pool consisting of two records and the use case
-                  is\r\n// to allow for switching the priority of the two records.  The PATCH command 'path' value is used
-                  to\r\n// determine which record the update is applied.  A path with '0' in it is referring to the first\r\
-                  \n// record listed in the UI and will be the record with the lowest priority.  A path with '1' in it is\r\
-                  \n// referring to the second record listed in the UI and will be the record with next lowest priority.\r\
-                  \n//\r\n// For a simple use case where you're switching the priority of two records you can run the request\r\
-                  \n// without adjusting any values.  But, in a use case where you have multiple records, you'll need to \r\
-                  \n// account for the change in relative record order from previous priority record adjustments.\r\n//\r\n\
-                  // NOTE: This assumes the first record has a priority value of 1 and the other record has priority\r\n//
-                  value of 101.\r\n[\r\n    // JSON DTO (pool record with lowest value for priority field.\r\n    {\r\n  \
-                  \      \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/0/priority\",\r\n        \"value\"\
-                  : \"101\"\r\n    },\r\n    // JSON DTO (pool record with the next highest value for priority field.\r\n\
-                  \    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/1/priority\",\r\n     \
-                  \   \"value\": \"1\"\r\n    }\r\n]"
-            schema:
-              type: object
-              additionalProperties: true
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: zones_zoneName
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: sb_rrType
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: sb_ownerName
       in: path
       required: true
       schema:
@@ -879,6 +809,94 @@ paths:
       required: true
       schema:
         type: string
+  /zones/{zones_zoneName}/rrsets/{sb_rrType}/{sb_ownerName}:
+    post:
+      tags:
+      - Traffic Management
+      - SiteBacker
+      summary: Create SiteBacker Pool
+      description: Create SiteBacker Pool
+      operationId: createSitebackerPool
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Create SiteBacker Pool:
+                value: "// NOTE: Update the body below as follows: \r\n// - Add an entry to rdata array for each IP that will
+                  be part of the pool\r\n// - For each IP entered, add an object to the rdataInfo array that includes:\r\n\
+                  // -- state: NORMAL, Force Active, Force Fail\r\n// -- runProbes: true, false\r\n// -- priority: Positive
+                  Integer\r\n// -- failoverDelay: 0, or Positive Integer\r\n// -- threshold: Positive Integer\r\n// -- availableToServe:
+                  true, false\r\n// - Add an entry to the backupRecords array that includes:\r\n// -- rdata: String (IP address)\r\
+                  \n// -- failoverDelay: 0 or Positive Integer\r\n{\r\n    \"ttl\": 300,\r\n    \"rdata\": [\r\n        \"\
+                  1.1.1.1\",\r\n        \"2.2.2.2\",\r\n        \"3.3.3.3\",\r\n        \"4.4.4.4\"\r\n    ],\r\n    \"profile\"\
+                  : {\r\n        \"@context\": \"http://schemas.ultradns.com/SBPool.jsonschema\",\r\n        \"description\"\
+                  : \"Test SiteBacker Pool\",\r\n        \"runProbes\": true,\r\n        \"actOnProbes\": true,\r\n      \
+                  \  \"order\": \"FIXED\",\r\n        \"maxActive\": 1,\r\n        \"failureThreshold\": 0,\r\n        \"\
+                  maxServed\": 1,\r\n        \"rdataInfo\": [{\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\"\
+                  : true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\"\
+                  : 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n\
+                  \            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\
+                  \n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n          \
+                  \  \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n      \
+                  \      \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\
+                  \n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n           \
+                  \ \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n           \
+                  \ \"availableToServe\": true\r\n        }],\r\n        \"backupRecords\": [{\r\n            \"rdata\": \"\
+                  9.9.9.9\",\r\n            \"failoverDelay\":0\r\n        }]\r\n    }\r\n}"
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    patch:
+      tags:
+      - Traffic Management
+      - SiteBacker
+      summary: Record Priority Update
+      description: Record Priority Update
+      operationId: recordPriorityUpdate
+      requestBody:
+        content:
+          application/json:
+            examples:
+              Record Priority Update:
+                value: "// This PATCH command is intended for a SiteBacker pool consisting of two records and the use case
+                  is\r\n// to allow for switching the priority of the two records.  The PATCH command 'path' value is used
+                  to\r\n// determine which record the update is applied.  A path with '0' in it is referring to the first\r\
+                  \n// record listed in the UI and will be the record with the lowest priority.  A path with '1' in it is\r\
+                  \n// referring to the second record listed in the UI and will be the record with next lowest priority.\r\
+                  \n//\r\n// For a simple use case where you're switching the priority of two records you can run the request\r\
+                  \n// without adjusting any values.  But, in a use case where you have multiple records, you'll need to \r\
+                  \n// account for the change in relative record order from previous priority record adjustments.\r\n//\r\n\
+                  // NOTE: This assumes the first record has a priority value of 1 and the other record has priority\r\n//
+                  value of 101.\r\n[\r\n    // JSON DTO (pool record with lowest value for priority field.\r\n    {\r\n  \
+                  \      \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/0/priority\",\r\n        \"value\"\
+                  : \"101\"\r\n    },\r\n    // JSON DTO (pool record with the next highest value for priority field.\r\n\
+                  \    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/1/priority\",\r\n     \
+                  \   \"value\": \"1\"\r\n    }\r\n]"
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: sb_rrType
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: sb_ownerName
+      in: path
+      required: true
+      schema:
+        type: string
 components:
   securitySchemes:
     bearerAuth:
@@ -899,8 +917,6 @@ tags:
     contents map to the data supplied in the BIND presentation format for a resource record.\n\nIn order to simplify configuration
     of environment variables, the API calls in this folder contain pre-request scripts that can be used to modify variables/parameters
     used in the API call. Please use these scripts to setup variables and the environment before making calls."
-- name: Traffic Management
-- name: SiteBacker
 - name: Tasks
   description: "Some endpoints return background tasks. The zone snapshot and export zone file endpoints, for example. In
     this instance, the API responds with a status code 202 ('Accepted') and the headers will contain an x-task-id value. You
@@ -938,3 +954,5 @@ tags:
     \    \n- [RFC 7344](https://www.rfc-editor.org/rfc/rfc7344) - Automating DNSSEC Delegation Trust Maintenance.\n    \n\
     - [RFC 8078](https://www.rfc-editor.org/rfc/rfc8078) - Managing DS Records from the Parent via CDS/CDNSKEY.\n    \n- [RFC
     6781](https://www.rfc-editor.org/rfc/rfc6781.html) - DNSSEC Operational Practices, Version 2."
+- name: Traffic Management
+- name: SiteBacker
