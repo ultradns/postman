@@ -31,6 +31,21 @@ jobs:
           # Write back to file
           echo "$UPDATED_COLLECTION" > src/UDNS.postman_collection.json
 
+      - name: Update environment version
+        run: |
+          # Read the environment file
+          ENVIRONMENT=$(cat src/UDNS.postman_environment.json)
+          
+          # Get the current name and append version
+          CURRENT_NAME=$(echo "$ENVIRONMENT" | jq -r '.name')
+          NEW_NAME="${CURRENT_NAME} v${GITHUB_REF#refs/tags/}"
+          
+          # Update the name
+          UPDATED_ENVIRONMENT=$(echo "$ENVIRONMENT" | jq --arg name "$NEW_NAME" '.name = $name')
+          
+          # Write back to file
+          echo "$UPDATED_ENVIRONMENT" > src/UDNS.postman_environment.json
+
       - name: Publish collection to Postman
         run: |
           # Read the collection file
