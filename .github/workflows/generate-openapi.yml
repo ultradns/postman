@@ -26,9 +26,8 @@ jobs:
 
       - name: Wait for Postman collection update
         run: |
-          # Get the current tag without the 'v' prefix
-          TAG=${GITHUB_REF#refs/tags/}
-          TAG=${TAG#v}
+          # Get the tag from the triggering workflow
+          TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | sed 's/^v//')
           echo "Current tag: $TAG"
           
           # Function to check if collection is updated
