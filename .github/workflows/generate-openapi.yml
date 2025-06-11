@@ -26,8 +26,9 @@ jobs:
 
       - name: Wait for Postman collection update
         run: |
-          # Get the tag from the triggering workflow
-          TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | sed 's/^v//')
+          # Get the latest release tag from the repository
+          TAG=$(curl -s -H "Authorization: Bearer ${{ github.token }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
           echo "Current tag: $TAG"
           
           # Function to check if collection is updated
@@ -79,7 +80,8 @@ jobs:
 
       - name: Commit and push OpenAPI spec
         run: |
-          TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | sed 's/^v//')
+          TAG=$(curl -s -H "Authorization: Bearer ${{ github.token }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r '.tag_name' | sed 's/^v//')
           git add spec/udns_openapi.yml
           git commit -m "chore: update OpenAPI spec for version $TAG"
           git push 
