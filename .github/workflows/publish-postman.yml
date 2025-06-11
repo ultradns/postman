@@ -32,15 +32,15 @@ jobs:
           # Read the collection file
           COLLECTION=$(cat src/UDNS.postman_collection.json)
           
-          # Add workspace ID to the collection
-          COLLECTION_WITH_WORKSPACE=$(echo "$COLLECTION" | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" '. + {workspace: $workspace}')
+          # Create the request body with the correct structure
+          REQUEST_BODY=$(echo '{}' | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --argjson collection "$COLLECTION" '. + {workspace: $workspace, collection: $collection}')
           
           # Send to Postman API
           RESPONSE=$(curl -s -w "\n%{http_code}" \
             -X PUT \
             -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d "$COLLECTION_WITH_WORKSPACE" \
+            -d "$REQUEST_BODY" \
             "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}")
           
           # Split response into body and status code
@@ -62,15 +62,15 @@ jobs:
           # Read the environment file
           ENVIRONMENT=$(cat src/UDNS.postman_environment.json)
           
-          # Add workspace ID to the environment
-          ENVIRONMENT_WITH_WORKSPACE=$(echo "$ENVIRONMENT" | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" '. + {workspace: $workspace}')
+          # Create the request body with the correct structure
+          REQUEST_BODY=$(echo '{}' | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --argjson environment "$ENVIRONMENT" '. + {workspace: $workspace, environment: $environment}')
           
           # Send to Postman API
           RESPONSE=$(curl -s -w "\n%{http_code}" \
             -X PUT \
             -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d "$ENVIRONMENT_WITH_WORKSPACE" \
+            -d "$REQUEST_BODY" \
             "https://api.getpostman.com/environments/${{ secrets.POSTMAN_ENVIRONMENT_ID }}")
           
           # Split response into body and status code
