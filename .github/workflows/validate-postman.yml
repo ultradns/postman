@@ -1,0 +1,49 @@
+name: Validate Postman Files
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/*.postman_collection.json'
+      - '**/*.postman_environment.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install jsonschema requests
+
+    - name: Validate Postman files
+      id: validate
+      run: |
+        python scripts/validate_postman.py .
+        echo "validation_status=$?" >> $GITHUB_OUTPUT
+
+    - name: Create Pull Request Comment
+      if: always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const validationStatus = process.env.VALIDATION_STATUS;
+          const comment = validationStatus === '0' 
+            ? '## ✅ Postman Files Validation\n\nAll Postman files are valid and ready for sanitization.'
+            : '## ❌ Postman Files Validation Failed\n\nPlease ensure your Postman files are valid and follow the correct schema before merging.';
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+      env:
+        VALIDATION_STATUS: ${{ steps.validate.outputs.validation_status }} 
