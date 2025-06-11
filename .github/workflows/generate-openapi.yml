@@ -66,6 +66,9 @@ jobs:
           exit 1
 
       - name: Generate OpenAPI spec
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+          POSTMAN_COLLECTION_ID: ${{ secrets.POSTMAN_COLLECTION_ID }}
         run: |
           python scripts/ptoa_postprocess.py
 
