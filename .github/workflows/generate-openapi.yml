@@ -1,0 +1,74 @@
+name: Generate OpenAPI Spec
+
+on:
+  workflow_run:
+    workflows: ["Publish Postman Collection & Environment"]
+    types:
+      - completed
+
+jobs:
+  generate-openapi:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pyyaml
+
+      - name: Wait for Postman collection update
+        run: |
+          # Get the current tag without the 'v' prefix
+          TAG=${GITHUB_REF#refs/tags/}
+          TAG=${TAG#v}
+          
+          # Function to check if collection is updated
+          check_collection() {
+            RESPONSE=$(curl -s -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
+              "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}")
+            
+            COLLECTION_NAME=$(echo "$RESPONSE" | jq -r '.collection.info.name')
+            VERSION=$(echo "$COLLECTION_NAME" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | cut -d'v' -f2)
+            
+            if [ "$VERSION" = "$TAG" ]; then
+              return 0
+            else
+              return 1
+            fi
+          }
+          
+          # Try up to 10 times with 5 second delay between attempts
+          for i in {1..10}; do
+            if check_collection; then
+              echo "Collection version matches tag $TAG"
+              exit 0
+            fi
+            echo "Collection not yet updated, attempt $i of 10"
+            sleep 5
+          done
+          
+          echo "Failed to verify collection version after 10 attempts"
+          exit 1
+
+      - name: Generate OpenAPI spec
+        run: |
+          python scripts/ptoa_postprocess.py
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Commit and push OpenAPI spec
+        run: |
+          git add openapi.yaml
+          git commit -m "Update OpenAPI spec for version ${GITHUB_REF#refs/tags/}"
+          git push 
