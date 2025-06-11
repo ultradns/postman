@@ -21,8 +21,12 @@ jobs:
           # Read the collection file
           COLLECTION=$(cat src/UDNS.postman_collection.json)
           
-          # Update the version in the info object
-          UPDATED_COLLECTION=$(echo "$COLLECTION" | jq --arg version "${{ github.event.release.tag_name }}" '.info.version = $version')
+          # Get the current name and append version
+          CURRENT_NAME=$(echo "$COLLECTION" | jq -r '.info.name')
+          NEW_NAME="${CURRENT_NAME} v${GITHUB_REF#refs/tags/}"
+          
+          # Update the name in the info object
+          UPDATED_COLLECTION=$(echo "$COLLECTION" | jq --arg name "$NEW_NAME" '.info.name = $name')
           
           # Write back to file
           echo "$UPDATED_COLLECTION" > src/UDNS.postman_collection.json
