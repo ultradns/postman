@@ -45,7 +45,7 @@ jobs:
       if: steps.sanitize.outputs.modified_files != ''
       run: |
         git add .
-        git commit -m "chore: sanitize Postman files [skip ci]"
+        git commit -m "chore: sanitize Postman files"
         git push
 
     - name: Create Pull Request Comment
