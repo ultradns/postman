@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.2] - 2025-06-11
-
 ### Added
 - GitHub Actions workflow to trigger a release when a new tag is pushed
 - GET endpoint for SOA record

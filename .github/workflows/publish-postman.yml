@@ -3,10 +3,17 @@ name: Publish Postman Collection & Environment
 on:
   release:
     types: [published]
+  workflow_run:
+    workflows: ["Generate a Release from a Tag"]
+    types:
+      - completed
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'release' || 
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,12 +25,19 @@ jobs:
 
       - name: Update collection version
         run: |
+          # Get version from either release event or workflow run
+          if [ "${{ github.event_name }}" == "release" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+          else
+            VERSION="${{ github.event.workflow_run.head_branch }}"
+          fi
+          
           # Read the collection file
           COLLECTION=$(cat src/UDNS.postman_collection.json)
           
           # Get the current name and append version
           CURRENT_NAME=$(echo "$COLLECTION" | jq -r '.info.name')
-          NEW_NAME="${CURRENT_NAME} v${GITHUB_REF#refs/tags/}"
+          NEW_NAME="${CURRENT_NAME} v${VERSION#v}"
           
           # Update the name in the info object
           UPDATED_COLLECTION=$(echo "$COLLECTION" | jq --arg name "$NEW_NAME" '.info.name = $name')
@@ -33,12 +47,19 @@ jobs:
 
       - name: Update environment version
         run: |
+          # Get version from either release event or workflow run
+          if [ "${{ github.event_name }}" == "release" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+          else
+            VERSION="${{ github.event.workflow_run.head_branch }}"
+          fi
+          
           # Read the environment file
           ENVIRONMENT=$(cat src/UDNS.postman_environment.json)
           
           # Get the current name and append version
           CURRENT_NAME=$(echo "$ENVIRONMENT" | jq -r '.name')
-          NEW_NAME="${CURRENT_NAME} v${GITHUB_REF#refs/tags/}"
+          NEW_NAME="${CURRENT_NAME} v${VERSION#v}"
           
           # Update the name
           UPDATED_ENVIRONMENT=$(echo "$ENVIRONMENT" | jq --arg name "$NEW_NAME" '.name = $name')

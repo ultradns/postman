@@ -1,4 +1,4 @@
-name: Release
+name: Generate a Release from a Tag
 
 on:
   push:
