@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2025-06-11
+
+### Added
+- GitHub Actions workflow to convert Postman collection to OpenAPI schema after publish
+
+### Changed
+- Appending version to the collection and environment names
+
+### Fixed
+- Issue with the `HASH` placeholder value needing to be blanked out of environment before collection could be used
+
 ## [0.1.0] - 2025-06-10
 
 ### Added
