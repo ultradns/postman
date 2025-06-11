@@ -29,6 +29,7 @@ jobs:
           # Get the current tag without the 'v' prefix
           TAG=${GITHUB_REF#refs/tags/}
           TAG=${TAG#v}
+          echo "Current tag: $TAG"
           
           # Function to check if collection is updated
           check_collection() {
@@ -36,11 +37,18 @@ jobs:
               "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}")
             
             COLLECTION_NAME=$(echo "$RESPONSE" | jq -r '.collection.info.name')
-            VERSION=$(echo "$COLLECTION_NAME" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | cut -d'v' -f2)
+            echo "Collection name: $COLLECTION_NAME"
+            
+            # Extract version using a more robust pattern
+            VERSION=$(echo "$COLLECTION_NAME" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | sed 's/v//')
+            echo "Extracted version: $VERSION"
+            echo "Expected version: $TAG"
             
             if [ "$VERSION" = "$TAG" ]; then
+              echo "Versions match!"
               return 0
             else
+              echo "Versions don't match"
               return 1
             fi
           }
