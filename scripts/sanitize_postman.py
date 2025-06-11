@@ -7,6 +7,7 @@ import requests
 from pathlib import Path
 from typing import Dict, List, Set
 from jsonschema import validate
+import re
 
 # Properties to remove from Postman files
 METADATA_PROPERTIES = {
@@ -23,6 +24,11 @@ METADATA_PROPERTIES = {
 
 # Required schema versions for Postman files
 COLLECTION_SCHEMA = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+
+def strip_version_from_name(name: str) -> str:
+    """Strip version number (v*.*.*) from a name and clean up whitespace."""
+    # Remove version pattern and clean up whitespace
+    return re.sub(r'\s+v\d+\.\d+\.\d+', '', name).strip()
 
 def fetch_schema(url: str) -> dict:
     """Fetch a JSON schema from a URL."""
@@ -84,9 +90,15 @@ def sanitize_file(file_path: Path) -> bool:
             schema = fetch_schema(COLLECTION_SCHEMA)
             if schema:
                 validate(instance=data, schema=schema)
+            # Strip version from collection name
+            if 'info' in data and 'name' in data['info']:
+                data['info']['name'] = strip_version_from_name(data['info']['name'])
         elif file_path.name.endswith('.postman_environment.json'):
             if not validate_environment(data):
                 return False
+            # Strip version from environment name
+            if 'name' in data:
+                data['name'] = strip_version_from_name(data['name'])
         else:
             print(f"Unknown file type: {file_path}", file=sys.stderr)
             return False
