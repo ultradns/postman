@@ -34,7 +34,7 @@ The collection is organized into folders, each representing a base resource (ex:
 
 - **Reports**: After you request a report, retrieve it from the `results` endpoint using the report ID. This ID is stored in the post-request script, similar to tasks.
 
-- **Webhook**: A set of 3 requests related to UDNS’s push notification feature.
+- **Webhook**: A set of 3 requests related to UDNS's push notification feature.
 
 - **Subaccounts**: APIs exclusive to accounts that contain child accounts. If you don't have access to this feature, they'll produce an error.
 
@@ -47,6 +47,8 @@ To manually provide your Bearer token, go to the "Authorization" tab of the coll
 ## Collaboration
 
 This collection isn't meant to be definitive but is designed to be easily extensible. Contributions to expand the collection and implement more endpoints are welcomed and encouraged. The goal is for this collection to evolve as a collaborative tool.
+
+Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to this project.
 
 ## License
 
