@@ -1,18 +1,32 @@
-# ultradns-postman
+# Postman
 
-This repository contains a set of sample requests for the UDNS API, built from hands-on experience. The aim is to provide a foundational framework that takes care of authentication and automates tasks and report retrievals using pre/post-request scripts.
+This repository serves as the source of truth for the UltraDNS API collections and environments in the public Postman workspace located at:
 
-## JSON File
+https://www.postman.com/digicertultradns/ultradns-public-workspace/overview
 
-The collection export can be found under src/UDNS.postman_collection.json. Similarly, there's an example environment under src/UDNS.postman_environment.json. Import these to Postman:
+## Repository Structure
 
-1. Go to **File**
+- `src/`: Contains the Postman collection and environment JSON files
+- `scripts/`: Contains scripts used by workflows for validating and transforming collection JSON
+- `spec/`: Contains the OpenAPI YAML specification, which is automatically generated from the Postman collection during releases
+
+## Getting Started
+
+To use these collections:
+
+1. Visit our [public workspace](https://www.postman.com/digicertultradns/ultradns-public-workspace/overview)
+2. Fork the collection to your own workspace
+3. Create an environment and set up your credentials
+
+Alternatively, you can import the files directly from this repository:
+
+1. Go to **File** in Postman
 2. Select **Import**
-3. Drag the files to the application
+3. Drag the files from `src/` to the application
 
 ## Authentication and Utilities
 
-The collection-level pre-request script manages authentication and has some helper functions.
+The collection-level pre-request script manages authentication and provides helper functions.
 
 Since `utils` is defined globally by not using a declaration keyword, it is accessible to request-level scripts. This allows for the definition of reusable functions for our requests. Utility functions can be invoked like so:
 
@@ -38,17 +52,15 @@ The collection is organized into folders, each representing a base resource (ex:
 
 - **Subaccounts**: APIs exclusive to accounts that contain child accounts. If you don't have access to this feature, they'll produce an error.
 
-- **Records**: APIs for adding/updating/deleting RRsets for a zone.  These APIs use RRset DTO definitions and pre-request/post-request scripts for managing environment variables and POST body content.
+- **Records**: APIs for adding/updating/deleting RRsets for a zone. These APIs use RRset DTO definitions and pre-request/post-request scripts for managing environment variables and POST body content.
 
 ## Bypassing Automated Authentication
 
 To manually provide your Bearer token, go to the "Authorization" tab of the collection and modify the value. This would be necessary, as an example, to use a token produced by the subaccount authorization endpoint. Remember to revert it to the `{{accessToken}}` variable after you're done.
 
-## Collaboration
+## Contributing
 
-This collection isn't meant to be definitive but is designed to be easily extensible. Contributions to expand the collection and implement more endpoints are welcomed and encouraged. The goal is for this collection to evolve as a collaborative tool.
-
-Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to this project.
+We welcome contributions to expand the collection and implement more endpoints. Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to this project.
 
 ## License
 
