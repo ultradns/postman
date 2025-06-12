@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: API Documentation v0.1.4
+  title: API Documentation v0.1.5
   description: "This collection contains requests for the UDNS API. The folders mostly represent the different base resources,
     i.e. \"zones\" which contains all the various zone operations and \"reports\" which has the reporting operations.\n\n\
     At the collection level, there is a pre-request script which handles your authentication and has some basic utility functions.
@@ -321,6 +321,24 @@ paths:
         of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
         name of the domain whose RRsets you want to return.
       operationId: listNsRecords
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: records_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
+  /zones/{records_zoneName}/rrsets/MX:
+    get:
+      tags:
+      - Records
+      summary: List MX Records
+      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
+        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
+        name of the domain whose RRsets you want to return.
+      operationId: listMxRecords
       responses:
         '200':
           description: ''
