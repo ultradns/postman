@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Documentation for all endpoints with no overview
+
+### Changed
+- Documentation refresh
+  - Updated all root level folder descriptions
+  - Moved documentation for SiteBacker endpoints from payload to overview
+- Collapsed all list record by type endpoints into a single endpoint with a type parameter
+- Moved "List Pools" to the Records folder
+- Deleted redundant "List Zone RRSets" request from Zones folder
+- Renamed "Request Report" to "Retrieve Report"
+- Made "Zero Query Report" default to last 30 days when no date range specified
+- Added "Documentation" section to CHANGELOG.md
+
+### Fixed
+- Commented out a couple lines to fix the pre-request script in "Create RRSet"
+
 ## [0.1.5] - 2025-06-12
 
 ### Added

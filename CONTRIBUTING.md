@@ -76,6 +76,37 @@ To maintain consistency and quality, all contributions should follow the steps o
      - Description of bug fixes
      ```
 
+## Documentation
+
+To keep our Postman collection clear and self‑documenting, every folder and endpoint must include meaningful overviews and descriptions:
+
+1. **Folder Overviews**
+
+   * Add or update the **folder description** to explain its purpose and contents at a high level.
+   * Describe which resource or feature the folder covers (e.g. “Zone management,” “Traffic‑management pools,” “Push‑notification webhooks”).
+
+2. **Endpoint Summaries**
+
+   * Ensure each request has a **summary** (the “Name” field) that concisely states its action (e.g. “List RRSets,” “Create SiteBacker pool”).
+   * In the description pane, provide:
+
+     * A succinct overview of what the call does
+     * Required variables or headers
+     * Any special notes (async behavior, destructive action, defaults provided by scripts)
+
+3. **Parameter & Body Documentation**
+
+   * For path/query/header variables, add a brief note on purpose and format (and default behavior if scripts supply values).
+
+4. **Response Notes**
+
+   * For non‑obvious status codes (202 Accepted, 204 No Content, etc.), add a sentence in the description explaining what to expect.
+   * If the response includes IDs or tokens that feed into other calls, note which collection variable they get saved to.
+
+5. **Consistency & Validation**
+
+   * Follow existing style and tone. Match terminology across descriptions.
+
 ## Submitting Changes
 
 1. **Commit Your Changes**
