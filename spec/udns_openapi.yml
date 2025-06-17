@@ -1,63 +1,29 @@
 openapi: 3.0.3
 info:
-  title: API Documentation v0.1.5
-  description: "This collection contains requests for the UDNS API. The folders mostly represent the different base resources,
-    i.e. \"zones\" which contains all the various zone operations and \"reports\" which has the reporting operations.\n\n\
-    At the collection level, there is a pre-request script which handles your authentication and has some basic utility functions.
-    The script will generate a bearer token and, when it expires, refresh it.\n\nThe utilities are an object defined globalls
-    in the scope of the pre-request script, which makes it available to the individual requests. Simply call:\n\n``` javascript\n\
-    utils.functionName()\n\n ```\n\nThe username and password variables must be set in your environment for the collection
-    pre-request to run."
+  title: API Documentation v1.0.0
+  description: "This Postman collection provides a sample interface to the UltraDNS (UDNS) REST API. It’s organized around
+    resource‑focused folders:\n\n- **Zones**: create, read, update, and delete DNS zones and records\n    \n- **Reports**:
+    retrieve usage statistics and analytics\n    \n- **…other resources**: each top‑level or subfolder groups related endpoints\n\
+    \    \n\nA global pre‑request script handles authentication and common helpers:\n\n1. **Reads** your `username` and `password`
+    from the selected environment\n    \n2. **Requests** a bearer token and saves it to `{{bearerToken}}`\n    \n3. **Automatically
+    refreshes** the token when it expires\n    \n4. **Exposes** utility functions on the `utils` object\n    \n\n**Setup before
+    running:**\n\n1. Select the appropriate Postman environment.\n    \n2. Define `username` and `password` as environment
+    variables.\n    \n\n**Using helpers:**\n\n``` js\n// call any helper in scripts or tests\nutils.functionName(arg1, arg2)\n\
+    \n ```\n\nWith this in place, every folder and request can focus on its specific API logic, while authentication and shared
+    utilities stay centralized."
   version: 1.0.0
   contact: {}
 servers:
 - url: https://api.ultradns.com
   description: Primary UltraDNS API
 paths:
-  /v3/zones/{zones_zoneName}:
-    get:
-      tags:
-      - Zones
-      summary: List Zone Properties
-      description: List Zone Properties
-      operationId: listZoneProperties
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: zones_zoneName
-      in: path
-      required: true
-      schema:
-        type: string
-  /v3/zones/{zones_zoneName}/rrsets:
-    get:
-      tags:
-      - Zones
-      summary: List Zone Pools
-      description: List Zone Pools
-      operationId: listZonePools
-      parameters:
-      - name: q
-        in: query
-        schema:
-          type: string
-          example: kind:POOLS
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: zones_zoneName
-      in: path
-      required: true
-      schema:
-        type: string
   /v3/zones:
     get:
       tags:
       - Zones
       summary: List Zones
-      description: List Zones
+      description: Retrieves all DNS zones in your account. The response returns an array of zone objects, each 
+        including details such as zone name, status, default TTL, and name servers.
       operationId: listZones
       responses:
         '200':
@@ -66,7 +32,11 @@ paths:
       tags:
       - Zones
       summary: Create Zone
-      description: Create Zone
+      description: "Creates a new DNS zone. The request body must include:\n\n- **properties.name**: zones_zoneName (the name
+        of the new zone)\n    \n- **properties.accountName**: username (your UltraDNS account)\n    \n- **properties.type**:
+        PRIMARY\n    \n- **primaryCreateInfo.forceImport**: true or false\n    \n- **primaryCreateInfo.createType**: NEW or
+        IMPORT\n    \n- **changeComment**: free‑form text describing why the zone is being created\n    \n\nMake sure the
+        environment variables zones_zoneName and username are set before running this request."
       operationId: createZone
       requestBody:
         content:
@@ -112,12 +82,32 @@ paths:
       responses:
         '200':
           description: ''
+  /v3/zones/{zones_zoneName}:
+    get:
+      tags:
+      - Zones
+      summary: List Zone Properties
+      description: Retrieves metadata for a specific DNS zone, including record count, name servers, status, type, and 
+        other zone‑level properties. Requires the `zones_zoneName` path variable.
+      operationId: listZoneProperties
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: zones_zoneName
+      in: path
+      required: true
+      schema:
+        type: string
   /v3/zones/{zones_zoneName}/webforwards:
     get:
       tags:
       - Zones
       summary: List Zone Web Forwards
-      description: List Zone Web Forwards
+      description: "Retrieves all web‑forward rules configured for a specific DNS zone. Requires the `zone_zoneName` environment
+        variable. The response returns an array of web‑forward objects, each including fields such as:\n\n- `guid` (the forward’s
+        unique ID)\n    \n- `requestTo` (the hostname being forwarded)\n    \n- `defaultRedirectTo` (the target URL)\n   \
+        \ \n- `defaultForwardType` (301, 302, etc.)"
       operationId: listZoneWebForwards
       responses:
         '200':
@@ -133,7 +123,9 @@ paths:
       tags:
       - Zones
       summary: Initiate Zone(s) Export
-      description: Initiate Zone(s) Export
+      description: "Initiates an export job for the specified DNS zone. Requires the `zones_zoneName` environment variable.\n\
+        \nOn success, returns **202 Accepted** with an `x-task-id` header containing the export job ID. Use the Task endpoints
+        to poll for status and retrieve the exported zone file."
       operationId: initiateZoneSExport
       requestBody:
         content:
@@ -161,7 +153,10 @@ paths:
       tags:
       - Zones
       summary: Create Snapshot
-      description: Create Snapshot
+      description: "Creates a point‑in‑time snapshot of the specified DNS zone, replacing any existing snapshot. Requires
+        the `zones_zoneName` environment variable.\n\n- On success, returns **202 Accepted** with an `x-task-id` header containing
+        the snapshot job ID\n    \n- Use the Task endpoints to poll for status and confirm completion before attempting to
+        restore or export the snapshot"
       operationId: createSnapshot
       requestBody:
         content:
@@ -186,7 +181,10 @@ paths:
       tags:
       - Zones
       summary: Restore Snapshot
-      description: Restore Snapshot
+      description: "Restores the specified DNS zone to its most recent snapshot, overwriting the current configuration. This
+        action is **destructive and irreversible**. Requires the `zones_zoneName` environment variable.\n\nOn success, returns
+        **202 Accepted** with an `x-task-id` header containing the restore job ID. Use the Task endpoints to poll for status
+        and confirm completion."
       operationId: restoreSnapshot
       requestBody:
         content:
@@ -211,7 +209,9 @@ paths:
       tags:
       - Zones
       summary: Request Zone Transfer
-      description: Request Zone Transfer
+      description: "Requests a synchronization of the specified secondary DNS zone. Requires the `zones_zoneName` environment
+        variable.\n\nOn success, returns **200 OK**. You can verify the transfer by fetching the zone details and checking
+        the serial or record changes."
       operationId: requestZoneTransfer
       responses:
         '200':
@@ -226,11 +226,11 @@ paths:
     get:
       tags:
       - Records
-      summary: List RRset
-      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
-        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
-        name of the domain whose RRsets you want to return.
-      operationId: listRrset
+      summary: List RRsets
+      description: "Retrieves all resource record sets (RRSets) in the specified DNS zone. Requires the `records_zoneName`
+        environment variable.\n\nSupports optional query parameters to filter results (for example, by record type, ownerName,
+        TTL) or paginate the list."
+      operationId: listRrsets
       responses:
         '200':
           description: ''
@@ -240,15 +240,16 @@ paths:
       required: true
       schema:
         type: string
-  /zones/{records_zoneName}/rrsets/A:
+  /zones/{records_zoneName}/rrsets/{records_type}:
     get:
       tags:
       - Records
-      summary: List A Records
-      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
-        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
-        name of the domain whose RRsets you want to return.
-      operationId: listARecords
+      summary: List Records by Type
+      description: Retrieves all resource record sets (RRSets) of a specific type within the specified DNS zone. 
+        Requires the `records_zoneName` and `records_type` environment variables. Set `records_type` to the desired 
+        record type (e.g., A, CNAME, TXT) to filter the results. The response returns an array of matching RRSet 
+        objects.
+      operationId: listRecordsByType
       responses:
         '200':
           description: ''
@@ -258,87 +259,26 @@ paths:
       required: true
       schema:
         type: string
-  /zones/{records_zoneName}/rrsets/CNAME:
-    get:
-      tags:
-      - Records
-      summary: List CNAME Records
-      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
-        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
-        name of the domain whose RRsets you want to return.
-      operationId: listCnameRecords
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: records_zoneName
+    - name: records_type
       in: path
       required: true
       schema:
         type: string
-  /zones/{records_zoneName}/rrsets/SOA:
+  /v3/zones/{records_zoneName}/rrsets:
     get:
       tags:
       - Records
-      summary: List SOA Record
-      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
-        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
-        name of the domain whose RRsets you want to return.
-      operationId: listSoaRecord
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: records_zoneName
-      in: path
-      required: true
-      schema:
-        type: string
-  /zones/{records_zoneName}/rrsets/TXT:
-    get:
-      tags:
-      - Records
-      summary: List TXT Records
-      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
-        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
-        name of the domain whose RRsets you want to return.
-      operationId: listTxtRecords
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: records_zoneName
-      in: path
-      required: true
-      schema:
-        type: string
-  /zones/{records_zoneName}/rrsets/NS:
-    get:
-      tags:
-      - Records
-      summary: List NS Records
-      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
-        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
-        name of the domain whose RRsets you want to return.
-      operationId: listNsRecords
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: records_zoneName
-      in: path
-      required: true
-      schema:
-        type: string
-  /zones/{records_zoneName}/rrsets/MX:
-    get:
-      tags:
-      - Records
-      summary: List MX Records
-      description: This call provides a list of all RRSets in a zone, or if specific query parameters are used, a list 
-        of the RRSets in a zone that match the provided criteria. The {zoneName} identified in the call should be the 
-        name of the domain whose RRsets you want to return.
-      operationId: listMxRecords
+      summary: List Pools
+      description: Retrieves all traffic‑management pools (RRSets configured for advanced DNS features) in the specified
+        DNS zone. Requires the `records_zoneName` environment variable. The response returns an array of pool RRSet 
+        objects, each including its pool-specific metadata.
+      operationId: listPools
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+          example: kind:POOLS
       responses:
         '200':
           description: ''
@@ -353,10 +293,12 @@ paths:
       tags:
       - Records
       summary: Update RRset
-      description: "This call allows you to update a set of resource records of a particular type (an RRSet) for a  \nspecified
-        domain owner. Be sure to specify the TTL and ALL the record information. Any resource records not included will be
-        removed from the RRSet, and the TTL value specified at the account level for the record type (or global TTL value)
-        will be used."
+      description: "Updates an existing resource record set (RRSet) in the specified DNS zone.\n\n- **Required variables:**\n\
+        \    \n    - records_zoneName – the DNS zone containing the RRSet\n        \n    - records_ownerName – the owner name
+        (record label) of the RRSet\n        \n    - records_type – the record type (A, CNAME, MX, etc.)\n        \n- **Body
+        construction:**\n    \n    A pre-request script builds the `requestBody` object with your `recordTtl` and `recordRdata`,
+        stringifies it, and sets it to the `requestBody` environment variable. Any records not included in this body will
+        be removed from the RRSet."
       operationId: updateRrset
       requestBody:
         content:
@@ -374,9 +316,12 @@ paths:
       tags:
       - Records
       summary: Create RRset
-      description: "The Create RRSet for an Owner call requires you to send an RRSet DTO with the call. However, the  \nownerName
-        and rrtype fields are not required because they are specified in the URI. If the DTO you  \nsend does include them,
-        they will be ignored."
+      description: "Creates a new resource record set (RRSet) in the specified DNS zone.\n\n- **Required variables:**\n  \
+        \  \n    - `records_zoneName` – target DNS zone\n        \n    - `records_ownerName` – owner name (record label)\n\
+        \        \n    - `records_type` – record type (A, CNAME, MX, etc.)\n        \n- **Body construction:**  \n    A pre‑request
+        script reads these environment vars plus:\n    \n    - `recordTtl` (default “300”)\n        \n    - `recordRdata`
+        (e.g. “1.1.1.1” for A records)  \n        It builds an object (`{ ttl: recordTtl, rdata: [ recordRdata ] }`), stringifies
+        it, and sets it to the `requestBody` environment variable."
       operationId: createRrset
       requestBody:
         content:
@@ -394,8 +339,9 @@ paths:
       tags:
       - Records
       summary: Delete RRset
-      description: "This call allows you to delete all resource records of a particular type (an RRSet) for a specified  \n\
-        domain owner."
+      description: "Deletes the specified resource record set (RRSet) from the given DNS zone.\n\n- **Required variables:**\n\
+        \    \n    - records_zoneName – the DNS zone containing the RRSet\n        \n    - records_ownerName – the owner name
+        (record label) of the RRSet\n        \n    - records_type – the record type (A, CNAME, TXT, etc.)"
       operationId: deleteRrset
       responses:
         '200':
@@ -421,7 +367,8 @@ paths:
       tags:
       - Tasks
       summary: Check Task
-      description: Check Task
+      description: Checks the status of a background task. Requires the `currentTask` variable, which the collection 
+        automatically populates from the x-task-id header of previous async operations.
       operationId: checkTask
       responses:
         '200':
@@ -437,7 +384,9 @@ paths:
       tags:
       - Tasks
       summary: Task Result
-      description: Task Result
+      description: Retrieves the final result of a completed background task. Requires the `currentTask` variable, which
+        the collection automatically populates from the x-task-id header of prior async requests. Returns the task’s 
+        result payload when finished.
       operationId: taskResult
       responses:
         '200':
@@ -448,28 +397,22 @@ paths:
       required: true
       schema:
         type: string
-  /v1/requests/{reports_requestId}:
-    get:
-      tags:
-      - Reports
-      summary: Request Report
-      description: Request Report
-      operationId: requestReport
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: reports_requestId
-      in: path
-      required: true
-      schema:
-        type: string
   /v1/reports/dns_resolution/query_volume/host:
     post:
       tags:
       - Reports
       summary: Create NXDomain Report
-      description: Create NXDomain Report
+      description: "Retrieves an advanced NXDOMAIN report, breaking down “no-such-domain” responses by host over a specified
+        date range. This call is asynchronous and returns a JSON payload containing a `requestId` (saved automatically to
+        `reports_requestId`). If you don’t set `reports_startDate` or `reports_endDate`, a pre-request script defaults them
+        to the last 30 days.\n\n**Required variables**\n\n- `reports_startDate` – report start date (YYYY-MM-DD)\n    \n-
+        `reports_endDate` – report end date (YYYY-MM-DD)\n    \n- `zones_zoneName` – DNS zone to include in the report\n \
+        \   \n\n**Query parameters**\n\n- `advance=true` – enable advanced reporting mode\n    \n- `reportType=ADVANCED_NXDOMAINS`
+        – select the NXDOMAIN breakdown report\n    \n- `limit` (optional) – maximum number of host entries to return\n  \
+        \  \n\n**Request body**\n\n- `hostQueryVolume`: object with `startDate`, `endDate`, and a `zoneNames` array\n    \n\
+        - `sortFields`: maps field names (e.g., `nxdomainCount`) to `\"ASC\"` (ascending) or `\"DESC\"` (descending) to control
+        result order\n    \n\nOnce invoked, note that the response’s `requestId` is stored in `reports_requestId`. Use that
+        ID with the Reports “Retrieve Report” endpoint to poll for status and retrieve the completed data."
       operationId: createNxdomainReport
       parameters:
       - name: advance
@@ -533,7 +476,14 @@ paths:
       tags:
       - Reports
       summary: Zero Query Report
-      description: Zero Query Report
+      description: "Retrieves a Zero‑Query report listing all zones under a specified account that received no DNS queries
+        in the given date range. This call is asynchronous and returns a JSON payload containing a `requestId`, which is saved
+        to `reports_requestId` by the collection. If you omit `reports_startDate` or `reports_endDate`, they default to the
+        last 30 days.\n\n**Required variables**\n\n- `accountName` – the account to report on (e.g., use `subaccounts_accountName`
+        or any accessible account)\n    \n- `reports_startDate` – report start date (YYYY-MM-DD)\n    \n- `reports_endDate`
+        – report end date (YYYY-MM-DD)\n    \n- `wrap` – boolean (true to wrap results in an envelope)\n    \n\nOnce invoked,
+        pass the returned `requestId` to the Reports “Retrieve Report” endpoint to poll for completion and retrieve the final
+        data."
       operationId: zeroQueryReport
       requestBody:
         content:
@@ -567,23 +517,20 @@ paths:
       responses:
         '200':
           description: ''
-  /accounts/{username}/telemetryWebhook/test/{webhook_telemetryId}:
+  /v1/requests/{reports_requestId}:
     get:
       tags:
-      - Webhook
-      summary: Verify
-      description: Verify
-      operationId: verify
+      - Reports
+      summary: Retrieve Report
+      description: Retrieves the results of a previously generated report. Requires the `reports_requestId` variable, 
+        which the collection automatically populates from the report creation response. Returns the report data payload 
+        once complete, or status and error details if still processing or failed.
+      operationId: retrieveReport
       responses:
         '200':
           description: ''
     parameters:
-    - name: username
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: webhook_telemetryId
+    - name: reports_requestId
       in: path
       required: true
       schema:
@@ -593,7 +540,11 @@ paths:
       tags:
       - Webhook
       summary: Test Endpoint
-      description: Test Endpoint
+      description: "Creates a test telemetry event against your configured webhook to verify connectivity.\n\n**Required variables**\n\
+        \n- `username` – the UltraDNS account name (may differ from your login username)\n    \n- `webhook_endpointUrl` –
+        the URL to receive the test event\n    \n\nA post‑request script automatically extracts `telemetryEventId` from the
+        JSON response and saves it to the `webhook_telemetryId` environment variable. Use that value with the Verify endpoint
+        to confirm delivery."
       operationId: testEndpoint
       requestBody:
         content:
@@ -621,12 +572,38 @@ paths:
       required: true
       schema:
         type: string
+  /accounts/{username}/telemetryWebhook/test/{webhook_telemetryId}:
+    get:
+      tags:
+      - Webhook
+      summary: Verify
+      description: Verifies delivery of a test telemetry event to your webhook. Requires the `username` (account name) 
+        and `webhook_telemetryId` (saved by the Test endpoint’s script). Returns a JSON payload indicating success or 
+        error details.
+      operationId: verify
+      responses:
+        '200':
+          description: ''
+    parameters:
+    - name: username
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: webhook_telemetryId
+      in: path
+      required: true
+      schema:
+        type: string
   /accounts/{username}/settings/PUSH_NOTIFICATIONS:
     post:
       tags:
       - Webhook
       summary: Create
-      description: Create
+      description: "Creates a push‑notification webhook configuration that delivers telemetry events for all account changes.\n\
+        \n**Requires:**\n\n- `username` – the UltraDNS account name\n    \n- `webhook_endpointUrl` – the URL to receive live
+        notifications\n    \n\nBy default, this enables notifications for `ALL_CHANGES`. On success, returns the created webhook
+        configuration in the response payload."
       operationId: create
       requestBody:
         content:
@@ -678,7 +655,7 @@ paths:
       tags:
       - Subaccounts
       summary: List Subaccounts
-      description: List Subaccounts
+      description: Retrieves all subaccounts under your primary UltraDNS account.
       operationId: listSubaccounts
       responses:
         '200':
@@ -688,7 +665,7 @@ paths:
       tags:
       - Subaccounts
       summary: List Subaccounts Zones
-      description: List Subaccounts Zones
+      description: Retrieves all DNS zones across every subaccount under your primary account.
       operationId: listSubaccountsZones
       responses:
         '200':
@@ -698,7 +675,9 @@ paths:
       tags:
       - Subaccounts
       summary: Subaccount Authorization
-      description: Subaccount Authorization
+      description: Generates a bearer token for masquerading as the specified subaccount. Requires 
+        the `subaccounts_accountName` variable. Returns a JSON payload with new `bearerToken` and `refreshToken` scoped 
+        to that subaccount, which you can then use for subsequent subaccount‑scoped requests.
       operationId: subaccountAuthorization
       responses:
         '200':
@@ -873,37 +852,168 @@ paths:
       - Traffic Management
       - SiteBacker
       summary: Create SiteBacker Pool
-      description: Create SiteBacker Pool
+      description: "**Overview**  \n  \nCreates a new SiteBacker pool under the specified zone and record owner. The request
+        body must include:\n\n- **rdata**: an array of IP addresses to include in the pool\n    \n- **rdataInfo**: one object
+        per IP with:\n    \n    - `state` (NORMAL, FORCE_ACTIVE, FORCE_FAIL)\n        \n    - `runProbes` (true / false)\n\
+        \        \n    - `priority` (positive integer)\n        \n    - `failoverDelay` (0 or positive integer)\n        \n\
+        \    - `threshold` (positive integer)\n        \n    - `availableToServe` (true / false)\n        \n- **backupRecords**:
+        an array of fallback records, each with:\n    \n    - `rdata` (IP address)\n        \n    - `failoverDelay` (0 or
+        positive integer)"
       operationId: createSitebackerPool
       requestBody:
         content:
           application/json:
-            examples:
-              Create SiteBacker Pool:
-                value: "// NOTE: Update the body below as follows: \r\n// - Add an entry to rdata array for each IP that will
-                  be part of the pool\r\n// - For each IP entered, add an object to the rdataInfo array that includes:\r\n\
-                  // -- state: NORMAL, Force Active, Force Fail\r\n// -- runProbes: true, false\r\n// -- priority: Positive
-                  Integer\r\n// -- failoverDelay: 0, or Positive Integer\r\n// -- threshold: Positive Integer\r\n// -- availableToServe:
-                  true, false\r\n// - Add an entry to the backupRecords array that includes:\r\n// -- rdata: String (IP address)\r\
-                  \n// -- failoverDelay: 0 or Positive Integer\r\n{\r\n    \"ttl\": 300,\r\n    \"rdata\": [\r\n        \"\
-                  1.1.1.1\",\r\n        \"2.2.2.2\",\r\n        \"3.3.3.3\",\r\n        \"4.4.4.4\"\r\n    ],\r\n    \"profile\"\
-                  : {\r\n        \"@context\": \"http://schemas.ultradns.com/SBPool.jsonschema\",\r\n        \"description\"\
-                  : \"Test SiteBacker Pool\",\r\n        \"runProbes\": true,\r\n        \"actOnProbes\": true,\r\n      \
-                  \  \"order\": \"FIXED\",\r\n        \"maxActive\": 1,\r\n        \"failureThreshold\": 0,\r\n        \"\
-                  maxServed\": 1,\r\n        \"rdataInfo\": [{\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\"\
-                  : true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\"\
-                  : 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n            \"state\": \"NORMAL\",\r\n\
-                  \            \"runProbes\": true,\r\n            \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\
-                  \n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\n        }, {\r\n          \
-                  \  \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n            \"priority\": 1,\r\n      \
-                  \      \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n            \"availableToServe\": true\r\
-                  \n        }, {\r\n            \"state\": \"NORMAL\",\r\n            \"runProbes\": true,\r\n           \
-                  \ \"priority\": 1,\r\n            \"failoverDelay\": 0,\r\n            \"threshold\": 1,\r\n           \
-                  \ \"availableToServe\": true\r\n        }],\r\n        \"backupRecords\": [{\r\n            \"rdata\": \"\
-                  9.9.9.9\",\r\n            \"failoverDelay\":0\r\n        }]\r\n    }\r\n}"
             schema:
               type: object
-              additionalProperties: true
+              properties:
+                profile:
+                  type: object
+                  properties:
+                    '@context':
+                      type: string
+                      example: http://schemas.ultradns.com/SBPool.jsonschema
+                    actOnProbes:
+                      type: boolean
+                      example: true
+                    backupRecords:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          failoverDelay:
+                            type: number
+                            example: 0
+                          rdata:
+                            type: string
+                            example: 9.9.9.9
+                      example:
+                      - failoverDelay: 0
+                        rdata: 9.9.9.9
+                    description:
+                      type: string
+                      example: Test SiteBacker Pool
+                    failureThreshold:
+                      type: number
+                      example: 0
+                    maxActive:
+                      type: number
+                      example: 1
+                    maxServed:
+                      type: number
+                      example: 1
+                    order:
+                      type: string
+                      example: FIXED
+                    rdataInfo:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          availableToServe:
+                            type: boolean
+                            example: true
+                          failoverDelay:
+                            type: number
+                            example: 0
+                          priority:
+                            type: number
+                            example: 1
+                          runProbes:
+                            type: boolean
+                            example: true
+                          state:
+                            type: string
+                            example: NORMAL
+                          threshold:
+                            type: number
+                            example: 1
+                      example:
+                      - availableToServe: true
+                        failoverDelay: 0
+                        priority: 1
+                        runProbes: true
+                        state: NORMAL
+                        threshold: 1
+                      - availableToServe: true
+                        failoverDelay: 0
+                        priority: 1
+                        runProbes: true
+                        state: NORMAL
+                        threshold: 1
+                      - availableToServe: true
+                        failoverDelay: 0
+                        priority: 1
+                        runProbes: true
+                        state: NORMAL
+                        threshold: 1
+                      - availableToServe: true
+                        failoverDelay: 0
+                        priority: 1
+                        runProbes: true
+                        state: NORMAL
+                        threshold: 1
+                    runProbes:
+                      type: boolean
+                      example: true
+                rdata:
+                  type: array
+                  items:
+                    type: string
+                    example: 1.1.1.1
+                  example:
+                  - 1.1.1.1
+                  - 2.2.2.2
+                  - 3.3.3.3
+                  - 4.4.4.4
+                ttl:
+                  type: number
+                  example: 300
+            examples:
+              Create SiteBacker Pool:
+                value:
+                  profile:
+                    '@context': http://schemas.ultradns.com/SBPool.jsonschema
+                    actOnProbes: true
+                    backupRecords:
+                    - failoverDelay: 0
+                      rdata: 9.9.9.9
+                    description: Test SiteBacker Pool
+                    failureThreshold: 0
+                    maxActive: 1
+                    maxServed: 1
+                    order: FIXED
+                    rdataInfo:
+                    - availableToServe: true
+                      failoverDelay: 0
+                      priority: 1
+                      runProbes: true
+                      state: NORMAL
+                      threshold: 1
+                    - availableToServe: true
+                      failoverDelay: 0
+                      priority: 1
+                      runProbes: true
+                      state: NORMAL
+                      threshold: 1
+                    - availableToServe: true
+                      failoverDelay: 0
+                      priority: 1
+                      runProbes: true
+                      state: NORMAL
+                      threshold: 1
+                    - availableToServe: true
+                      failoverDelay: 0
+                      priority: 1
+                      runProbes: true
+                      state: NORMAL
+                      threshold: 1
+                    runProbes: true
+                  rdata:
+                  - 1.1.1.1
+                  - 2.2.2.2
+                  - 3.3.3.3
+                  - 4.4.4.4
+                  ttl: 300
       responses:
         '200':
           description: ''
@@ -912,27 +1022,24 @@ paths:
       - Traffic Management
       - SiteBacker
       summary: Record Priority Update
-      description: Record Priority Update
+      description: "**Overview**  \n  \nUpdates the failover/load‑order priority of a single member in a SiteBacker pool.
+        The member is selected by its index in the pool’s member list (the “path” parameter):\n\n- **Index 0** targets the
+        first (lowest‑priority) record\n    \n- **Index 1** targets the second record\n    \n- And so on for larger pools\n\
+        \    \n\nChanging the member’s `priority` value determines its position in the failover or load‑balancing sequence.\n\
+        \n**Usage Notes**\n\n- In a simple two‑member pool (e.g. priorities 1 and 101), you can swap their roles by PATCHing
+        each index without altering the request body.\n    \n- For pools with more than two members, adjust each member’s
+        `priority` to reflect the exact ordering you need."
       operationId: recordPriorityUpdate
       requestBody:
         content:
           application/json:
             examples:
               Record Priority Update:
-                value: "// This PATCH command is intended for a SiteBacker pool consisting of two records and the use case
-                  is\r\n// to allow for switching the priority of the two records.  The PATCH command 'path' value is used
-                  to\r\n// determine which record the update is applied.  A path with '0' in it is referring to the first\r\
-                  \n// record listed in the UI and will be the record with the lowest priority.  A path with '1' in it is\r\
-                  \n// referring to the second record listed in the UI and will be the record with next lowest priority.\r\
-                  \n//\r\n// For a simple use case where you're switching the priority of two records you can run the request\r\
-                  \n// without adjusting any values.  But, in a use case where you have multiple records, you'll need to \r\
-                  \n// account for the change in relative record order from previous priority record adjustments.\r\n//\r\n\
-                  // NOTE: This assumes the first record has a priority value of 1 and the other record has priority\r\n//
-                  value of 101.\r\n[\r\n    // JSON DTO (pool record with lowest value for priority field.\r\n    {\r\n  \
-                  \      \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/0/priority\",\r\n        \"value\"\
-                  : \"101\"\r\n    },\r\n    // JSON DTO (pool record with the next highest value for priority field.\r\n\
-                  \    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/1/priority\",\r\n     \
-                  \   \"value\": \"1\"\r\n    }\r\n]"
+                value: "[\r\n    // JSON DTO (pool record with lowest value for priority field.\r\n    {\r\n        \"op\"\
+                  : \"replace\",\r\n        \"path\": \"/profile/rdataInfo/0/priority\",\r\n        \"value\": \"101\"\r\n\
+                  \    },\r\n    // JSON DTO (pool record with the next highest value for priority field.\r\n    {\r\n   \
+                  \     \"op\": \"replace\",\r\n        \"path\": \"/profile/rdataInfo/1/priority\",\r\n        \"value\"\
+                  : \"1\"\r\n    }\r\n]"
             schema:
               type: object
               additionalProperties: true
@@ -964,41 +1071,49 @@ security:
 - bearerAuth: []
 tags:
 - name: Zones
-  description: "In this folder are operations pertaining to the zones (DNS configuration).\n\nAt the time which I'm writing
-    this, the v3 endpoint has the latest zone resources, though not every resource is available in the v3 endpoint. Some aren't
-    even available in v2. The snapshot/restore functionality only works with v1, for instance."
+  description: "This folder contains all operations for managing the lifecycle and metadata of your DNS zones. Use these endpoints
+    to:\n\n- **Create** new zones\n    \n- **Retrieve** zone details and metadata\n    \n- **Update** zone configuration\n\
+    \    \n- **Delete** existing zones\n    \n- **Export** zone files\n    \n- **Capture** zone snapshots\n    \n\nEverything
+    here is focused on DNS zone management and its associated metadata."
 - name: Records
-  description: "In this folder are operations pertaining to the records of a zone.\n\nThe basic unit for resource record manipulation
-    in the REST API is the RRSet. An RRSet contains  \nthe data for all resource records present at the same owner name (label),
-    and with the same type  \nand class (all records in UltraDNS have IN class). Rather than trying to specify a custom structure
-    for each different resource record type, the data for all resource records is represented by an _rdata_ field. This field's
-    contents map to the data supplied in the BIND presentation format for a resource record.\n\nIn order to simplify configuration
-    of environment variables, the API calls in this folder contain pre-request scripts that can be used to modify variables/parameters
-    used in the API call. Please use these scripts to setup variables and the environment before making calls."
+  description: "This folder includes all endpoints for managing resource record sets (RRSets) within a DNS zone. Each RRSet
+    groups records sharing the same owner name, type, and class (always IN). Record data is handled via the `rdata` array,
+    which follows the BIND presentation format.\n\nUse these endpoints to:\n\n- **List** all RRSets in a zone\n    \n- **Retrieve**
+    a specific RRSet by owner name and type\n    \n- **Create/Update** RRSets by supplying `rdata` entries and TTL\n    \n\
+    - **Delete** RRSets\n    \n\nPre‑request scripts in this folder help initialize variables like `zoneName`, `ownerName`,
+    and `recordType`. Run these scripts or set the corresponding environment variables before making calls."
 - name: Tasks
-  description: "Some endpoints return background tasks. The zone snapshot and export zone file endpoints, for example. In
-    this instance, the API responds with a status code 202 ('Accepted') and the headers will contain an x-task-id value. You
-    use the task ID to check on the status and result of your operation.\n\nThe endpoints that I've added to this collection
-    which return tasks IDs will store it under the \"currentTask\" collection variable. The endpoints in this folder will
-    use that variable, by default. Note that running another request that generates a new task will overwrite this value."
+  description: "This folder contains endpoints for monitoring asynchronous background tasks (e.g., zone snapshots or exports):\n\
+    \n- When you invoke an operation that returns **202 Accepted**, the response headers include an `x-task-id`.\n    \n-
+    The collection’s pre‑request scripts save that ID to the `{{currentTask}}` variable.\n    \n- Use these endpoints to:\n\
+    \    \n    - **Check status** of the task referenced by `{{currentTask}}`\n        \n    - **Retrieve results** once the
+    task completes\n        \n- Running any new task‑generating request will overwrite `{{currentTask}}`, so poll status before
+    kicking off another job."
 - name: Reports
-  description: "These are the APIs for reporting. In a fashion similar-to-but-different-than tasks, the reports will return
-    an ID. However, the ID, in this instance, is in the JSON body of the response. You use the \"requests\" endpoint along
-    with your ID to get the result.\n\nAfter you create a report, it's ID automatically gets saved to a collection variable
-    which will then get passed to the requests endpoint. Note that generating a new report writes over this value."
+  description: "This folder contains all endpoints for generating and fetching DNS analytics reports:\n\n- **Create a report**\n\
+    \    \n    - `POST /reports` (or similar)\n        \n    - Response body includes a JSON `id` for your report\n      \
+    \  \n    - That `id` is saved automatically to `{{currentReport}}`\n        \n- **Check report status & retrieve results**\n\
+    \    \n    - `GET /reports/requests/{{currentReport}}`\n        \n    - Returns the current state (pending, complete,
+    failed) and, once ready, the report data\n        \n- **Notes**\n    \n    - The report ID lives in the `{{currentReport}}`
+    variable by default\n        \n    - Running any new “create report” request will overwrite `{{currentReport}}`—poll or
+    store it elsewhere if you need multiple reports in flight simultaneously"
 - name: Webhook
-  description: "These requests pertain to UDNS's push notification feature. The test endpoint will poll your webhook with
-    a telemetry event for testing. The verify endpoint validates the success of said request, using the event ID. The \"create\"\
-    \ request will create the push notification config. Note that, unlike the UI, you don't _have to_ validate your webhook
-    functionality before creating it, though, realistically, you should.\n\nThe telemetry event ID will get stored automatically
-    as a collection variable when performing the test."
+  description: "This folder contains all endpoints for managing UDNS push‑notification webhooks:\n\n- **Create Webhook** \
+    \ \n      \n    Sends your `url`, `headers`, and event filters to UDNS. (No prior validation required, but you’ll typically
+    want to test first.)\n    \n- **Test Webhook**  \n      \n    Triggers a sample telemetry event to your configured endpoint.\n\
+    \    \n    - On success, the response body returns an `eventId`\n        \n    - That `eventId` is saved to `{{currentWebhookEventId}}`\n\
+    \        \n- **Verify Webhook Event**  \n      \n    Polls `/webhooks/events/{{currentWebhookEventId}}` to confirm delivery
+    status and any response details.\n    \n\n**Notes:**\n\n- Replace or set `webhookUrl` and any auth headers in your environment
+    before calling **Create Webhook**.\n    \n- Running **Test Webhook** will overwrite `{{currentWebhookEventId}}`. Poll
+    or store it elsewhere if you need to verify multiple events."
 - name: Subaccounts
-  description: "Endpoints specifically for accounts that have subaccounts (resellers, mostly). You can list the accounts and
-    all their zones directly using the primary account's credentials.\n\nFor more granular subaccount operations, the primary
-    account owner has the ability to \"masquerade\" as a subaccount user using the subaccount auth endpoint. This generates
-    a set of bearer and refresh tokens with access to the subaccount.\n\nThis particular functionality of the collection could
-    be more robust, admittedly. I don't have subaccounts in my test account and don't particularly care to set one up for
-    testing, at least not at this time."
+  description: "This folder contains endpoints for managing reseller‑style subaccounts under your primary UltraDNS account:\n\
+    \n- **List Subaccounts & Zones**\n    \n    - `GET /subaccounts`\n        \n    - Returns all subaccounts and, optionally,
+    their zones in one call using your primary account credentials\n        \n- **Masquerade as Subaccount**\n    \n    -
+    `POST /subaccounts/{subaccountId}/auth`\n        \n    - Generates a bearer token and refresh token scoped to the specified
+    subaccount\n        \n    - Use these tokens in subsequent calls to act on behalf of that subaccount\n        \n\n**Usage
+    Notes:**\n\n- All calls start with your primary account credentials.\n    \n- After masquerading, switch your `{{bearerToken}}`
+    variable to the new token to make subaccount‑scoped requests."
 - name: DNSSEC Multi-Signer
   description: "UltraDNS API endpoints that support [multi-signer DNSSEC](https://ultra-portalstatic.ultradns.com/static/console/docs/DNSSEC-Multi_Signer-Guide.pdf).\n\
     \nUltraDNS DNSSEC uses _online_ (also known as _on-the-fly_) signing in generating signed responses to queries. UltraDNS
@@ -1013,4 +1128,15 @@ tags:
     - [RFC 8078](https://www.rfc-editor.org/rfc/rfc8078) - Managing DS Records from the Parent via CDS/CDNSKEY.\n    \n- [RFC
     6781](https://www.rfc-editor.org/rfc/rfc6781.html) - DNSSEC Operational Practices, Version 2."
 - name: Traffic Management
+  description: "This folder groups UltraDNS’s advanced traffic‑management features, each in its own subfolder:\n\n- **SiteBacker**:
+    configure health‑check probes that monitor endpoints and automatically steer traffic away from failures\n    \n- **Direction**:
+    set up geography‑aware routing so queries resolve to the closest or best‑suited data center\n    \n- **Traffic Controller**:
+    create load‑balancing rules to distribute DNS traffic across multiple targets based on weight, priority, or custom logic\n\
+    \    \n- **\\[Other advanced services\\]**: each subfolder covers a specific traffic‑management API for steering, failover,
+    and performance optimization\n    \n\nUse these endpoints to build resilient, geo‑intelligent DNS strategies that adapt
+    in real time to health, location, and load."
 - name: SiteBacker
+  description: "This folder contains endpoints for managing SiteBacker pools—a traffic‑management feature that groups multiple
+    IPs under one DNS record and uses health‑check probes to steer queries based on endpoint health and defined priorities.\n\
+    \n- **Create Pool**: provision a new pool of endpoints for a given zone/record, complete with probe settings and failover
+    rules\n    \n- **Update Member Priority**: reorder pool members to control failover order"
