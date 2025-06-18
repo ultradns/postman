@@ -69,19 +69,27 @@ jobs:
 
       - name: Publish collection to Postman
         run: |
-          # Read the collection file
-          COLLECTION=$(cat src/UDNS.postman_collection.json)
+          # Create temporary files
+          TEMP_COLLECTION=$(mktemp)
+          TEMP_REQUEST=$(mktemp)
           
-          # Create the request body with the correct structure
-          REQUEST_BODY=$(echo '{}' | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --argjson collection "$COLLECTION" '. + {workspace: $workspace, collection: $collection}')
+          # Read the collection file into a temporary file
+          cp src/UDNS.postman_collection.json "$TEMP_COLLECTION"
+          
+          # Create the request body using temporary files
+          echo '{}' > "$TEMP_REQUEST"
+          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile collection "$TEMP_COLLECTION" '. + {workspace: $workspace, collection: $collection[0]}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
           
           # Send to Postman API
           RESPONSE=$(curl -s -w "\n%{http_code}" \
             -X PUT \
             -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d "$REQUEST_BODY" \
+            -d @"$TEMP_REQUEST" \
             "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}")
+          
+          # Clean up temporary files
+          rm -f "$TEMP_COLLECTION" "$TEMP_REQUEST"
           
           # Split response into body and status code
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
@@ -99,19 +107,27 @@ jobs:
 
       - name: Publish environment to Postman
         run: |
-          # Read the environment file
-          ENVIRONMENT=$(cat src/UDNS.postman_environment.json)
+          # Create temporary files
+          TEMP_ENV=$(mktemp)
+          TEMP_REQUEST=$(mktemp)
           
-          # Create the request body with the correct structure
-          REQUEST_BODY=$(echo '{}' | jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --argjson environment "$ENVIRONMENT" '. + {workspace: $workspace, environment: $environment}')
+          # Read the environment file into a temporary file
+          cp src/UDNS.postman_environment.json "$TEMP_ENV"
+          
+          # Create the request body using temporary files
+          echo '{}' > "$TEMP_REQUEST"
+          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile environment "$TEMP_ENV" '. + {workspace: $workspace, environment: $environment[0]}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
           
           # Send to Postman API
           RESPONSE=$(curl -s -w "\n%{http_code}" \
             -X PUT \
             -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d "$REQUEST_BODY" \
+            -d @"$TEMP_REQUEST" \
             "https://api.getpostman.com/environments/${{ secrets.POSTMAN_ENVIRONMENT_ID }}")
+          
+          # Clean up temporary files
+          rm -f "$TEMP_ENV" "$TEMP_REQUEST"
           
           # Split response into body and status code
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
