@@ -30,10 +30,10 @@ def publish_to_postman(file_path, workspace_id, api_key, is_collection=True):
     }
     
     if is_collection:
-        endpoint = f"{POSTMAN_API_BASE}/collections"
+        endpoint = f"{POSTMAN_API_BASE}/collections/{os.getenv('POSTMAN_COLLECTION_ID')}"
         payload["collection"] = data
     else:
-        endpoint = f"{POSTMAN_API_BASE}/environments"
+        endpoint = f"{POSTMAN_API_BASE}/environments/{os.getenv('POSTMAN_ENVIRONMENT_ID')}"
         payload["environment"] = data
 
     headers = {
@@ -42,7 +42,7 @@ def publish_to_postman(file_path, workspace_id, api_key, is_collection=True):
     }
 
     try:
-        response = requests.post(endpoint, json=payload, headers=headers)
+        response = requests.put(endpoint, json=payload, headers=headers)
         response.raise_for_status()
         print(f"Successfully published {'collection' if is_collection else 'environment'}: {file_path}")
         return response.json()
@@ -56,9 +56,11 @@ def main():
     # Check for required environment variables
     api_key = os.getenv('POSTMAN_API_KEY')
     workspace_id = os.getenv('POSTMAN_WORKSPACE_ID')
+    collection_id = os.getenv('POSTMAN_COLLECTION_ID')
+    environment_id = os.getenv('POSTMAN_ENVIRONMENT_ID')
     
-    if not api_key or not workspace_id:
-        print("Error: POSTMAN_API_KEY and POSTMAN_WORKSPACE_ID environment variables must be set")
+    if not all([api_key, workspace_id, collection_id, environment_id]):
+        print("Error: POSTMAN_API_KEY, POSTMAN_WORKSPACE_ID, POSTMAN_COLLECTION_ID, and POSTMAN_ENVIRONMENT_ID environment variables must be set")
         sys.exit(1)
 
     # Get the directory containing the Postman files
