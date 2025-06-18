@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Response examples for all endpoints
+
+### Fixed
+- Pre-request script for rrset delete
+
+### Removed
+- Subaccount section
+  - Will create as a separate collection in the future
+
 ## [1.0.0] - 2025-06-17
 
 ### Added
