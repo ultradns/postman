@@ -23,6 +23,16 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
       - name: Update collection version
         run: |
           # Get version from either release event or workflow run
@@ -67,78 +77,11 @@ jobs:
           # Write back to file
           echo "$UPDATED_ENVIRONMENT" > src/UDNS.postman_environment.json
 
-      - name: Publish collection to Postman
+      - name: Publish to Postman
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+          POSTMAN_WORKSPACE_ID: ${{ secrets.POSTMAN_WORKSPACE_ID }}
+          POSTMAN_COLLECTION_ID: ${{ secrets.POSTMAN_COLLECTION_ID }}
+          POSTMAN_ENVIRONMENT_ID: ${{ secrets.POSTMAN_ENVIRONMENT_ID }}
         run: |
-          # Create temporary files
-          TEMP_COLLECTION=$(mktemp)
-          TEMP_REQUEST=$(mktemp)
-          
-          # Read the collection file into a temporary file
-          cp src/UDNS.postman_collection.json "$TEMP_COLLECTION"
-          
-          # Create the request body using temporary files with proper encapsulation
-          echo '{}' > "$TEMP_REQUEST"
-          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile collection "$TEMP_COLLECTION" '. + {workspace: $workspace, collection: {collection: $collection[0]}}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
-          
-          # Send to Postman API
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X PUT \
-            -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d @"$TEMP_REQUEST" \
-            "https://api.getpostman.com/collections/${{ secrets.POSTMAN_COLLECTION_ID }}")
-          
-          # Clean up temporary files
-          rm -f "$TEMP_COLLECTION" "$TEMP_REQUEST"
-          
-          # Split response into body and status code
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-          BODY=$(echo "$RESPONSE" | sed '$d')
-          
-          # Check if the request was successful
-          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
-            echo "Collection published successfully"
-            echo "Response: $BODY"
-          else
-            echo "Failed to publish collection. Status code: $HTTP_CODE"
-            echo "Response: $BODY"
-            exit 1
-          fi
-
-      - name: Publish environment to Postman
-        run: |
-          # Create temporary files
-          TEMP_ENV=$(mktemp)
-          TEMP_REQUEST=$(mktemp)
-          
-          # Read the environment file into a temporary file
-          cp src/UDNS.postman_environment.json "$TEMP_ENV"
-          
-          # Create the request body using temporary files with proper encapsulation
-          echo '{}' > "$TEMP_REQUEST"
-          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile environment "$TEMP_ENV" '. + {workspace: $workspace, environment: {environment: $environment[0]}}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
-          
-          # Send to Postman API
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            -X PUT \
-            -H "X-API-Key: ${{ secrets.POSTMAN_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d @"$TEMP_REQUEST" \
-            "https://api.getpostman.com/environments/${{ secrets.POSTMAN_ENVIRONMENT_ID }}")
-          
-          # Clean up temporary files
-          rm -f "$TEMP_ENV" "$TEMP_REQUEST"
-          
-          # Split response into body and status code
-          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-          BODY=$(echo "$RESPONSE" | sed '$d')
-          
-          # Check if the request was successful
-          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
-            echo "Environment published successfully"
-            echo "Response: $BODY"
-          else
-            echo "Failed to publish environment. Status code: $HTTP_CODE"
-            echo "Response: $BODY"
-            exit 1
-          fi 
+          python scripts/publish_postman.py src/ 
