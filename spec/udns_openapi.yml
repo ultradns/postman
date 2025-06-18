@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: API Documentation v1.0.0
+  title: API Documentation v1.0.1
   description: "This Postman collection provides a sample interface to the UltraDNS (UDNS) REST API. It’s organized around
     resource‑focused folders:\n\n- **Zones**: create, read, update, and delete DNS zones and records\n    \n- **Reports**:
     retrieve usage statistics and analytics\n    \n- **…other resources**: each top‑level or subfolder groups related endpoints\n\
@@ -27,7 +27,186 @@ paths:
       operationId: listZones
       responses:
         '200':
-          description: ''
+          description: List Zones
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '270'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:49:15 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cursorInfo:
+                    type: object
+                    properties: {}
+                  queryInfo:
+                    type: object
+                    properties:
+                      limit:
+                        type: number
+                        example: 100
+                      q:
+                        type: string
+                        example: ''
+                      reverse:
+                        type: boolean
+                        example: false
+                      sort:
+                        type: string
+                        example: name
+                  zones:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        properties:
+                          type: object
+                          properties:
+                            accountName:
+                              type: string
+                              example: postman-example
+                            dnssecStatus:
+                              type: string
+                              example: UNSIGNED
+                            lastModifiedDateTime:
+                              type: string
+                              example: 2025-06-17T23:48Z
+                            name:
+                              type: string
+                              example: domain.com.
+                            owner:
+                              type: string
+                              example: postman-example
+                            resourceRecordCount:
+                              type: number
+                              example: 7
+                            status:
+                              type: string
+                              example: ACTIVE
+                            type:
+                              type: string
+                              example: PRIMARY
+                            ultra2:
+                              type: boolean
+                              example: false
+                    example:
+                    - properties:
+                        accountName: postman-example
+                        dnssecStatus: UNSIGNED
+                        lastModifiedDateTime: 2025-06-17T23:48Z
+                        name: domain.com.
+                        owner: postman-example
+                        resourceRecordCount: 7
+                        status: ACTIVE
+                        type: PRIMARY
+                        ultra2: false
+                    - properties:
+                        accountName: postman-example
+                        dnssecStatus: UNSIGNED
+                        lastModifiedDateTime: 2025-06-17T23:43Z
+                        name: postman-example.xyz.
+                        owner: postman-example
+                        resourceRecordCount: 7
+                        status: ACTIVE
+                        type: PRIMARY
+                        ultra2: false
+              examples:
+                List Zones:
+                  value:
+                    cursorInfo: {}
+                    queryInfo:
+                      limit: 100
+                      q: ''
+                      reverse: false
+                      sort: name
+                    zones:
+                    - properties:
+                        accountName: postman-example
+                        dnssecStatus: UNSIGNED
+                        lastModifiedDateTime: 2025-06-17T23:48Z
+                        name: domain.com.
+                        owner: postman-example
+                        resourceRecordCount: 7
+                        status: ACTIVE
+                        type: PRIMARY
+                        ultra2: false
+                    - properties:
+                        accountName: postman-example
+                        dnssecStatus: UNSIGNED
+                        lastModifiedDateTime: 2025-06-17T23:43Z
+                        name: postman-example.xyz.
+                        owner: postman-example
+                        resourceRecordCount: 7
+                        status: ACTIVE
+                        type: PRIMARY
+                        ultra2: false
     post:
       tags:
       - Zones
@@ -80,8 +259,94 @@ paths:
                     name: '{{zones_zoneName}}'
                     type: PRIMARY
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Create Zone
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '42'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:48:11 GMT
+            Location:
+              schema:
+                type: string
+                example: http://api.ultradns.com/v3/zones/domain.com.
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Create Zone:
+                  value:
+                    message: Successful
   /v3/zones/{zones_zoneName}:
     get:
       tags:
@@ -92,7 +357,152 @@ paths:
       operationId: listZoneProperties
       responses:
         '200':
-          description: ''
+          description: List Zone Properties
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:48:57 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  inherit:
+                    type: string
+                    example: ALL
+                  properties:
+                    type: object
+                    properties:
+                      accountName:
+                        type: string
+                        example: postman-example
+                      dnssecStatus:
+                        type: string
+                        example: UNSIGNED
+                      lastModifiedDateTime:
+                        type: string
+                        example: 2025-06-17T23:48Z
+                      name:
+                        type: string
+                        example: domain.com.
+                      owner:
+                        type: string
+                        example: postman-example
+                      resourceRecordCount:
+                        type: number
+                        example: 7
+                      status:
+                        type: string
+                        example: ACTIVE
+                      type:
+                        type: string
+                        example: PRIMARY
+                  registrarInfo:
+                    type: object
+                    properties:
+                      nameServers:
+                        type: object
+                        properties:
+                          missing:
+                            type: array
+                            items:
+                              type: string
+                              example: pdns1.ultradns.net.
+                            example:
+                            - pdns1.ultradns.net.
+                            - pdns2.ultradns.net.
+                            - pdns3.ultradns.org.
+                            - pdns4.ultradns.org.
+                            - pdns5.ultradns.info.
+                            - pdns6.ultradns.co.uk.
+              examples:
+                List Zone Properties:
+                  value:
+                    inherit: ALL
+                    properties:
+                      accountName: postman-example
+                      dnssecStatus: UNSIGNED
+                      lastModifiedDateTime: 2025-06-17T23:48Z
+                      name: domain.com.
+                      owner: postman-example
+                      resourceRecordCount: 7
+                      status: ACTIVE
+                      type: PRIMARY
+                    registrarInfo:
+                      nameServers:
+                        missing:
+                        - pdns1.ultradns.net.
+                        - pdns2.ultradns.net.
+                        - pdns3.ultradns.org.
+                        - pdns4.ultradns.org.
+                        - pdns5.ultradns.info.
+                        - pdns6.ultradns.co.uk.
     parameters:
     - name: zones_zoneName
       in: path
@@ -111,7 +521,144 @@ paths:
       operationId: listZoneWebForwards
       responses:
         '200':
-          description: ''
+          description: List Zone Web Forwards
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '228'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:50:27 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queryInfo:
+                    type: object
+                    properties:
+                      limit:
+                        type: number
+                        example: 100
+                      reverse:
+                        type: boolean
+                        example: false
+                      sort:
+                        type: string
+                        example: REQUEST_TO
+                  resultInfo:
+                    type: object
+                    properties:
+                      offset:
+                        type: number
+                        example: 0
+                      returnedCount:
+                        type: number
+                        example: 1
+                      totalCount:
+                        type: number
+                        example: 1
+                  webForwards:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        defaultForwardType:
+                          type: string
+                          example: HTTP_301_REDIRECT
+                        defaultRedirectTo:
+                          type: string
+                          example: https://www.example.com
+                        guid:
+                          type: string
+                          example: 9034F201636B98D9
+                        requestTo:
+                          type: string
+                          example: www.domain.com
+                    example:
+                    - defaultForwardType: HTTP_301_REDIRECT
+                      defaultRedirectTo: https://www.example.com
+                      guid: 9034F201636B98D9
+                      requestTo: www.domain.com
+              examples:
+                List Zone Web Forwards:
+                  value:
+                    queryInfo:
+                      limit: 100
+                      reverse: false
+                      sort: REQUEST_TO
+                    resultInfo:
+                      offset: 0
+                      returnedCount: 1
+                      totalCount: 1
+                    webForwards:
+                    - defaultForwardType: HTTP_301_REDIRECT
+                      defaultRedirectTo: https://www.example.com
+                      guid: 9034F201636B98D9
+                      requestTo: www.domain.com
     parameters:
     - name: zones_zoneName
       in: path
@@ -146,8 +693,94 @@ paths:
                   zoneNames:
                   - '{{zones_zoneName}}'
       responses:
-        '200':
-          description: ''
+        '202':
+          description: Initiate Zone(s) Export
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:50:35 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Task-Id:
+              schema:
+                type: string
+                example: 7c59fe98-1451-4f4a-8195-ed6690792a90
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pending
+              examples:
+                Initiate Zone(s) Export:
+                  value:
+                    message: Pending
   /v1/zones/{zones_zoneName}/snapshot:
     post:
       tags:
@@ -168,8 +801,79 @@ paths:
               Create Snapshot:
                 value: {}
       responses:
-        '200':
-          description: ''
+        '202':
+          description: Create Snapshot
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '0'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:50:49 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Task-Id:
+              schema:
+                type: string
+                example: 2df0aa54-cc3a-4724-943d-eb33c302cf2a
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content: {}
     parameters:
     - name: zones_zoneName
       in: path
@@ -196,8 +900,79 @@ paths:
               Restore Snapshot:
                 value: {}
       responses:
-        '200':
-          description: ''
+        '202':
+          description: Restore Snapshot
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '0'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:51:03 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Task-Id:
+              schema:
+                type: string
+                example: 7418858e-f915-44cb-ae54-a56cb37cb99b
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content: {}
     parameters:
     - name: zones_zoneName
       in: path
@@ -215,7 +990,89 @@ paths:
       operationId: requestZoneTransfer
       responses:
         '200':
-          description: ''
+          description: Request Zone Transfer
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:47:34 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Request Zone Transfer:
+                  value:
+                    message: Successful
     parameters:
     - name: zones_zoneName
       in: path
@@ -233,7 +1090,189 @@ paths:
       operationId: listRrsets
       responses:
         '200':
-          description: ''
+          description: List RRsets
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '301'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:52:04 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queryInfo:
+                    type: object
+                    properties:
+                      limit:
+                        type: number
+                        example: 100
+                      reverse:
+                        type: boolean
+                        example: false
+                      sort:
+                        type: string
+                        example: OWNER
+                  resultInfo:
+                    type: object
+                    properties:
+                      offset:
+                        type: number
+                        example: 0
+                      returnedCount:
+                        type: number
+                        example: 3
+                      totalCount:
+                        type: number
+                        example: 3
+                  rrSets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ownerName:
+                          type: string
+                          example: domain.com.
+                        rdata:
+                          type: array
+                          items:
+                            type: string
+                            example: pdns1.ultradns.net.
+                          example:
+                          - pdns1.ultradns.net.
+                          - pdns2.ultradns.net.
+                          - pdns3.ultradns.org.
+                          - pdns4.ultradns.org.
+                          - pdns5.ultradns.info.
+                          - pdns6.ultradns.co.uk.
+                        rrtype:
+                          type: string
+                          example: NS (2)
+                        ttl:
+                          type: number
+                          example: 86400
+                    example:
+                    - ownerName: domain.com.
+                      rdata:
+                      - pdns1.ultradns.net.
+                      - pdns2.ultradns.net.
+                      - pdns3.ultradns.org.
+                      - pdns4.ultradns.org.
+                      - pdns5.ultradns.info.
+                      - pdns6.ultradns.co.uk.
+                      rrtype: NS (2)
+                      ttl: 86400
+                    - ownerName: domain.com.
+                      rdata:
+                      - pdns1.ultradns.net. shane\.barbetta.digicert.com. 2025061702 86400 86400 86400 86400
+                      rrtype: SOA (6)
+                      ttl: 86400
+                    - ownerName: www.domain.com.
+                      rdata:
+                      - 204.74.99.100
+                      rrtype: A (1)
+                      ttl: 300
+                  zoneName:
+                    type: string
+                    example: domain.com
+              examples:
+                List RRsets:
+                  value:
+                    queryInfo:
+                      limit: 100
+                      reverse: false
+                      sort: OWNER
+                    resultInfo:
+                      offset: 0
+                      returnedCount: 3
+                      totalCount: 3
+                    rrSets:
+                    - ownerName: domain.com.
+                      rdata:
+                      - pdns1.ultradns.net.
+                      - pdns2.ultradns.net.
+                      - pdns3.ultradns.org.
+                      - pdns4.ultradns.org.
+                      - pdns5.ultradns.info.
+                      - pdns6.ultradns.co.uk.
+                      rrtype: NS (2)
+                      ttl: 86400
+                    - ownerName: domain.com.
+                      rdata:
+                      - pdns1.ultradns.net. shane\.barbetta.digicert.com. 2025061702 86400 86400 86400 86400
+                      rrtype: SOA (6)
+                      ttl: 86400
+                    - ownerName: www.domain.com.
+                      rdata:
+                      - 204.74.99.100
+                      rrtype: A (1)
+                      ttl: 300
+                    zoneName: domain.com
     parameters:
     - name: records_zoneName
       in: path
@@ -252,7 +1291,154 @@ paths:
       operationId: listRecordsByType
       responses:
         '200':
-          description: ''
+          description: List Records by Type
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:52:27 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queryInfo:
+                    type: object
+                    properties:
+                      limit:
+                        type: number
+                        example: 100
+                      reverse:
+                        type: boolean
+                        example: false
+                      sort:
+                        type: string
+                        example: OWNER
+                  resultInfo:
+                    type: object
+                    properties:
+                      offset:
+                        type: number
+                        example: 0
+                      returnedCount:
+                        type: number
+                        example: 1
+                      totalCount:
+                        type: number
+                        example: 1
+                  rrSets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ownerName:
+                          type: string
+                          example: www.domain.com.
+                        rdata:
+                          type: array
+                          items:
+                            type: string
+                            example: 204.74.99.100
+                          example:
+                          - 204.74.99.100
+                        rrtype:
+                          type: string
+                          example: A (1)
+                        ttl:
+                          type: number
+                          example: 300
+                    example:
+                    - ownerName: www.domain.com.
+                      rdata:
+                      - 204.74.99.100
+                      rrtype: A (1)
+                      ttl: 300
+                  zoneName:
+                    type: string
+                    example: domain.com
+              examples:
+                List Records by Type:
+                  value:
+                    queryInfo:
+                      limit: 100
+                      reverse: false
+                      sort: OWNER
+                    resultInfo:
+                      offset: 0
+                      returnedCount: 1
+                      totalCount: 1
+                    rrSets:
+                    - ownerName: www.domain.com.
+                      rdata:
+                      - 204.74.99.100
+                      rrtype: A (1)
+                      ttl: 300
+                    zoneName: domain.com
     parameters:
     - name: records_zoneName
       in: path
@@ -281,7 +1467,194 @@ paths:
           example: kind:POOLS
       responses:
         '200':
-          description: ''
+          description: List Pools
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:53:55 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  queryInfo:
+                    type: object
+                    properties:
+                      limit:
+                        type: number
+                        example: 100
+                      q:
+                        type: string
+                        example: kind:POOLS
+                      reverse:
+                        type: boolean
+                        example: false
+                      sort:
+                        type: string
+                        example: OWNER
+                  resultInfo:
+                    type: object
+                    properties:
+                      offset:
+                        type: number
+                        example: 0
+                      returnedCount:
+                        type: number
+                        example: 1
+                      totalCount:
+                        type: number
+                        example: 1
+                  rrSets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ownerName:
+                          type: string
+                          example: pool.domain.com.
+                        profile:
+                          type: object
+                          properties:
+                            '@context':
+                              type: string
+                              example: http://schemas.ultradns.com/DirPool.jsonschema
+                            description:
+                              type: string
+                              example: pool
+                            rdataInfo:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  allNonConfigured:
+                                    type: boolean
+                                    example: true
+                                  ttl:
+                                    type: number
+                                    example: 86400
+                                  type:
+                                    type: string
+                                    example: A
+                              example:
+                              - allNonConfigured: true
+                                ttl: 86400
+                                type: A
+                        rdata:
+                          type: array
+                          items:
+                            type: string
+                            example: 192.168.1.1
+                          example:
+                          - 192.168.1.1
+                        rrtype:
+                          type: string
+                          example: A (1)
+                    example:
+                    - ownerName: pool.domain.com.
+                      profile:
+                        '@context': http://schemas.ultradns.com/DirPool.jsonschema
+                        description: pool
+                        rdataInfo:
+                        - allNonConfigured: true
+                          ttl: 86400
+                          type: A
+                      rdata:
+                      - 192.168.1.1
+                      rrtype: A (1)
+                  zoneName:
+                    type: string
+                    example: domain.com
+              examples:
+                List Pools:
+                  value:
+                    queryInfo:
+                      limit: 100
+                      q: kind:POOLS
+                      reverse: false
+                      sort: OWNER
+                    resultInfo:
+                      offset: 0
+                      returnedCount: 1
+                      totalCount: 1
+                    rrSets:
+                    - ownerName: pool.domain.com.
+                      profile:
+                        '@context': http://schemas.ultradns.com/DirPool.jsonschema
+                        description: pool
+                        rdataInfo:
+                        - allNonConfigured: true
+                          ttl: 86400
+                          type: A
+                      rdata:
+                      - 192.168.1.1
+                      rrtype: A (1)
+                    zoneName: domain.com
     parameters:
     - name: records_zoneName
       in: path
@@ -311,7 +1684,89 @@ paths:
               additionalProperties: true
       responses:
         '200':
-          description: ''
+          description: Update RRset
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:54:50 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Update RRset:
+                  value:
+                    message: Successful
     post:
       tags:
       - Records
@@ -333,8 +1788,94 @@ paths:
               type: object
               additionalProperties: true
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Create RRset
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:54:23 GMT
+            Location:
+              schema:
+                type: string
+                example: http://api.ultradns.com/zones/domain.com/rrsets/A/rrset-create
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Create RRset:
+                  value:
+                    message: Successful
     delete:
       tags:
       - Records
@@ -344,8 +1885,71 @@ paths:
         (record label) of the RRSet\n        \n    - records_type – the record type (A, CNAME, TXT, etc.)"
       operationId: deleteRrset
       responses:
-        '200':
-          description: ''
+        '204':
+          description: Delete RRset
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:56:08 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content: {}
     parameters:
     - name: records_zoneName
       in: path
@@ -372,7 +1976,105 @@ paths:
       operationId: checkTask
       responses:
         '200':
-          description: ''
+          description: Check Task
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:57:42 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: COMPLETE
+                  hasData:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: domain.com. export completed.
+                  resultUri:
+                    type: string
+                    example: /tasks/605b23e4-edb9-4f23-ae2d-33fe24d6033f/result
+                  taskId:
+                    type: string
+                    example: 605b23e4-edb9-4f23-ae2d-33fe24d6033f
+              examples:
+                Check Task:
+                  value:
+                    code: COMPLETE
+                    hasData: true
+                    message: domain.com. export completed.
+                    resultUri: /tasks/605b23e4-edb9-4f23-ae2d-33fe24d6033f/result
+                    taskId: 605b23e4-edb9-4f23-ae2d-33fe24d6033f
     parameters:
     - name: currentTask
       in: path
@@ -390,7 +2092,95 @@ paths:
       operationId: taskResult
       responses:
         '200':
-          description: ''
+          description: Task Result
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: Content-Disposition
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Disposition:
+              schema:
+                type: string
+                example: inline;filename="605b23e4-edb9-4f23-ae2d-33fe24d6033f.txt"
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '258'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:57:51 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            text/plain:
+              examples:
+                Task Result:
+                  value: ";File created: 06/17/2025 23:57\r\n;Record count: 8\r\n$ORIGIN domain.com.\r\n@\t86400\tIN\tSOA
+                    pdns1.ultradns.net. shane\\.barbetta.digicert.com. (\r\n\t\t\t2025061707\t;Serial\r\n\t\t\t86400\t\t;Refresh\r\
+                    \n\t\t\t86400\t\t;Retry\r\n\t\t\t86400\t\t;Expire\r\n\t\t\t86400\t\t;Minimum\r\n\t\t)\r\n@\t86400\tIN\t\
+                    NS\tpdns1.ultradns.net.\r\n@\t86400\tIN\tNS\tpdns2.ultradns.net.\r\n@\t86400\tIN\tNS\tpdns3.ultradns.org.\r\
+                    \n@\t86400\tIN\tNS\tpdns4.ultradns.org.\r\n@\t86400\tIN\tNS\tpdns5.ultradns.info.\r\n@\t86400\tIN\tNS\t\
+                    pdns6.ultradns.co.uk.\r\nwww\t300\tIN\tA\t204.74.99.100\r\n"
     parameters:
     - name: currentTask
       in: path
@@ -469,8 +2259,90 @@ paths:
                   sortFields:
                     nxdomainCount: DESC
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Create NXDomain Report
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '60'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:48:01 GMT
+            Location:
+              schema:
+                type: string
+                example: https://api.ultradns.com/v1/requests/HQV_NXD-f8a26553-33f3-4305-af81-ecbedd010a96
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    type: string
+                    example: HQV_NXD-f8a26553-33f3-4305-af81-ecbedd010a96
+              examples:
+                Create NXDomain Report:
+                  value:
+                    requestId: HQV_NXD-f8a26553-33f3-4305-af81-ecbedd010a96
   /reports/dns_resolution/query_volume/zone/no_queries:
     post:
       tags:
@@ -515,8 +2387,90 @@ paths:
                     reportStartDate: '{{reports_startDate}}'
                     wrap: true
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Zero Query Report
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '62'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:59:01 GMT
+            Location:
+              schema:
+                type: string
+                example: https://api.ultradns.com/requests/ZQZV_WRAP-e8f4485d-060c-446e-8fe1-f3a83cf52b33
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    type: string
+                    example: ZQZV_WRAP-e8f4485d-060c-446e-8fe1-f3a83cf52b33
+              examples:
+                Zero Query Report:
+                  value:
+                    requestId: ZQZV_WRAP-e8f4485d-060c-446e-8fe1-f3a83cf52b33
   /v1/requests/{reports_requestId}:
     get:
       tags:
@@ -528,7 +2482,78 @@ paths:
       operationId: retrieveReport
       responses:
         '200':
-          description: ''
+          description: Retrieve Report
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '23'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Jun 2025 23:59:17 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            text/plain:
+              examples:
+                Retrieve Report:
+                  value: "Zone Name,Account Name\n"
     parameters:
     - name: reports_requestId
       in: path
@@ -564,8 +2589,102 @@ paths:
                   type: TEST_TELEMETRY_WEBHOOK
                   url: '{{webhook_endpointUrl}}'
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Test Endpoint
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:00:12 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accountName:
+                    type: string
+                    example: postman-example
+                  environment:
+                    type: string
+                    example: ''
+                  telemetryEventId:
+                    type: string
+                    example: a7dc9223-cdff-4435-acfd-0f8df342f844
+                  telemetryEventTime:
+                    type: string
+                    example: '2025-06-18 12:00:13.224'
+                  telemetryEventType:
+                    type: string
+                    example: TEST_TELEMETRY_WEBHOOK
+              examples:
+                Test Endpoint:
+                  value:
+                    accountName: postman-example
+                    environment: ''
+                    telemetryEventId: a7dc9223-cdff-4435-acfd-0f8df342f844
+                    telemetryEventTime: '2025-06-18 12:00:13.224'
+                    telemetryEventType: TEST_TELEMETRY_WEBHOOK
     parameters:
     - name: username
       in: path
@@ -583,7 +2702,85 @@ paths:
       operationId: verify
       responses:
         '200':
-          description: ''
+          description: Verify
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '20'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:00:29 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Unknown
+              examples:
+                Verify:
+                  value:
+                    status: Unknown
     parameters:
     - name: username
       in: path
@@ -642,48 +2839,88 @@ paths:
                       ALL_CHANGES: true
                     url: '{{webhook_endpointUrl}}'
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Create
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '24'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:00:47 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Create:
+                  value:
+                    message: Successful
     parameters:
     - name: username
-      in: path
-      required: true
-      schema:
-        type: string
-  /subaccounts:
-    get:
-      tags:
-      - Subaccounts
-      summary: List Subaccounts
-      description: Retrieves all subaccounts under your primary UltraDNS account.
-      operationId: listSubaccounts
-      responses:
-        '200':
-          description: ''
-  /subaccounts/zones:
-    get:
-      tags:
-      - Subaccounts
-      summary: List Subaccounts Zones
-      description: Retrieves all DNS zones across every subaccount under your primary account.
-      operationId: listSubaccountsZones
-      responses:
-        '200':
-          description: ''
-  /subaccounts/{subaccounts_accountName}/token:
-    post:
-      tags:
-      - Subaccounts
-      summary: Subaccount Authorization
-      description: Generates a bearer token for masquerading as the specified subaccount. Requires 
-        the `subaccounts_accountName` variable. Returns a JSON payload with new `bearerToken` and `refreshToken` scoped 
-        to that subaccount, which you can then use for subsequent subaccount‑scoped requests.
-      operationId: subaccountAuthorization
-      responses:
-        '200':
-          description: ''
-    parameters:
-    - name: subaccounts_accountName
       in: path
       required: true
       schema:
@@ -714,7 +2951,85 @@ paths:
               additionalProperties: true
       responses:
         '200':
-          description: ''
+          description: Update DNSSEC Settings Copy
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '24'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:02:15 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Update DNSSEC Settings Copy:
+                  value:
+                    message: Successful
     post:
       tags:
       - DNSSEC Multi-Signer
@@ -740,8 +3055,86 @@ paths:
               type: object
               additionalProperties: true
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Initialize DNSSEC Settings
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Length:
+              schema:
+                type: string
+                example: '24'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:01:57 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Initialize DNSSEC Settings:
+                  value:
+                    message: Successful
     delete:
       tags:
       - DNSSEC Multi-Signer
@@ -756,8 +3149,71 @@ paths:
         values and the Update (PUT) API call to update them."
       operationId: removeDnssecSettings
       responses:
-        '200':
-          description: ''
+        '204':
+          description: Remove DNSSEC Settings
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:16:35 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content: {}
     parameters:
     - name: username
       in: path
@@ -775,7 +3231,243 @@ paths:
       operationId: getDsRecords
       responses:
         '200':
-          description: ''
+          description: Get DS Records
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: Close
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:02:47 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  keys:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        bitLength:
+                          type: number
+                          example: 256
+                        created:
+                          type: string
+                          example: '2025-06-18T00:02:34Z'
+                        dnsKeyRecord:
+                          type: string
+                          example: domain.com. 172800 IN DNSKEY 256 3 13 
+                            q5wE5b6RtDeR0vY553t+V6k3+T1jZ5UDiDfXhtKgkbrBQJvUd0yklPkTGqKzehg8OJRxLdCttM0uYn4PreB5Ng==
+                        dsRecords:
+                          type: array
+                          items:
+                            type: string
+                            example: 17461 13 1 63F11070CADCF0E36AA32561192A62C7F129531A
+                          example:
+                          - 17461 13 1 63F11070CADCF0E36AA32561192A62C7F129531A
+                          - 17461 13 2 56F7230A6F4B4C2113AB46F134C5FDDDAF551FAD82DD2607ECDCF9BF7C94AF33
+                        keyId:
+                          type: number
+                          example: 53083
+                        keyRolloverFrequency:
+                          type: number
+                          example: 30
+                        nextRoll:
+                          type: string
+                          example: '2025-07-18T00:02:34Z'
+                        publicKey:
+                          type: string
+                          example: 
+                            q5wE5b6RtDeR0vY553t+V6k3+T1jZ5UDiDfXhtKgkbrBQJvUd0yklPkTGqKzehg8OJRxLdCttM0uYn4PreB5Ng==
+                        status:
+                          type: string
+                          example: CURRENT
+                        type:
+                          type: string
+                          example: ZSK
+                    example:
+                    - bitLength: 256
+                      created: '2025-06-18T00:02:34Z'
+                      dnsKeyRecord: domain.com. 172800 IN DNSKEY 256 3 13 
+                        q5wE5b6RtDeR0vY553t+V6k3+T1jZ5UDiDfXhtKgkbrBQJvUd0yklPkTGqKzehg8OJRxLdCttM0uYn4PreB5Ng==
+                      keyId: 53083
+                      keyRolloverFrequency: 30
+                      nextRoll: '2025-07-18T00:02:34Z'
+                      publicKey: 
+                        q5wE5b6RtDeR0vY553t+V6k3+T1jZ5UDiDfXhtKgkbrBQJvUd0yklPkTGqKzehg8OJRxLdCttM0uYn4PreB5Ng==
+                      status: CURRENT
+                      type: ZSK
+                    - bitLength: 256
+                      created: '2025-06-18T00:02:34Z'
+                      dnsKeyRecord: domain.com. 172800 IN DNSKEY 257 3 13 
+                        zcF4e9AjcvGpBD3q4wvObit/Zg7P2+PGkXDoCrECz5n6kgVxoptvxIQHaFC39lEo8Q1mQM3t6uMna/v0/SSmog==
+                      dsRecords:
+                      - 17461 13 1 63F11070CADCF0E36AA32561192A62C7F129531A
+                      - 17461 13 2 56F7230A6F4B4C2113AB46F134C5FDDDAF551FAD82DD2607ECDCF9BF7C94AF33
+                      keyId: 17461
+                      keyRolloverFrequency: 365
+                      nextRoll: '2026-06-18T00:02:34Z'
+                      publicKey: 
+                        zcF4e9AjcvGpBD3q4wvObit/Zg7P2+PGkXDoCrECz5n6kgVxoptvxIQHaFC39lEo8Q1mQM3t6uMna/v0/SSmog==
+                      status: CURRENT
+                      type: KSK
+                  lastModifiedDateTime:
+                    type: string
+                    example: '2025-06-18T00:02:34Z'
+                  lastModifiedZoneDateTime:
+                    type: string
+                    example: '2025-06-18T00:02:34Z'
+                  policy:
+                    type: object
+                    properties:
+                      algorithm:
+                        type: string
+                        example: ECDSAP256SHA256
+                      dnskeyTtl:
+                        type: number
+                        example: 172800
+                      keyPolicy:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            bitLength:
+                              type: number
+                              example: 256
+                            keyRolloverFrequency:
+                              type: number
+                              example: 30
+                            type:
+                              type: string
+                              example: ZSK
+                        example:
+                        - bitLength: 256
+                          keyRolloverFrequency: 30
+                          type: ZSK
+                        - bitLength: 256
+                          keyRolloverFrequency: 365
+                          type: KSK
+                      rrsigSignatureDuration:
+                        type: number
+                        example: 30
+                      securityType:
+                        type: string
+                        example: NSEC_ON_THE_FLY
+                  resignNeeded:
+                    type: boolean
+                    example: false
+                  status:
+                    type: string
+                    example: SIGNED
+              examples:
+                Get DS Records:
+                  value:
+                    keys:
+                    - bitLength: 256
+                      created: '2025-06-18T00:02:34Z'
+                      dnsKeyRecord: domain.com. 172800 IN DNSKEY 256 3 13 
+                        q5wE5b6RtDeR0vY553t+V6k3+T1jZ5UDiDfXhtKgkbrBQJvUd0yklPkTGqKzehg8OJRxLdCttM0uYn4PreB5Ng==
+                      keyId: 53083
+                      keyRolloverFrequency: 30
+                      nextRoll: '2025-07-18T00:02:34Z'
+                      publicKey: 
+                        q5wE5b6RtDeR0vY553t+V6k3+T1jZ5UDiDfXhtKgkbrBQJvUd0yklPkTGqKzehg8OJRxLdCttM0uYn4PreB5Ng==
+                      status: CURRENT
+                      type: ZSK
+                    - bitLength: 256
+                      created: '2025-06-18T00:02:34Z'
+                      dnsKeyRecord: domain.com. 172800 IN DNSKEY 257 3 13 
+                        zcF4e9AjcvGpBD3q4wvObit/Zg7P2+PGkXDoCrECz5n6kgVxoptvxIQHaFC39lEo8Q1mQM3t6uMna/v0/SSmog==
+                      dsRecords:
+                      - 17461 13 1 63F11070CADCF0E36AA32561192A62C7F129531A
+                      - 17461 13 2 56F7230A6F4B4C2113AB46F134C5FDDDAF551FAD82DD2607ECDCF9BF7C94AF33
+                      keyId: 17461
+                      keyRolloverFrequency: 365
+                      nextRoll: '2026-06-18T00:02:34Z'
+                      publicKey: 
+                        zcF4e9AjcvGpBD3q4wvObit/Zg7P2+PGkXDoCrECz5n6kgVxoptvxIQHaFC39lEo8Q1mQM3t6uMna/v0/SSmog==
+                      status: CURRENT
+                      type: KSK
+                    lastModifiedDateTime: '2025-06-18T00:02:34Z'
+                    lastModifiedZoneDateTime: '2025-06-18T00:02:34Z'
+                    policy:
+                      algorithm: ECDSAP256SHA256
+                      dnskeyTtl: 172800
+                      keyPolicy:
+                      - bitLength: 256
+                        keyRolloverFrequency: 30
+                        type: ZSK
+                      - bitLength: 256
+                        keyRolloverFrequency: 365
+                        type: KSK
+                      rrsigSignatureDuration: 30
+                      securityType: NSEC_ON_THE_FLY
+                    resignNeeded: false
+                    status: SIGNED
     put:
       tags:
       - DNSSEC Multi-Signer
@@ -808,7 +3500,92 @@ paths:
                     - '{{dnssec_extkey_zsk}}'
       responses:
         '200':
-          description: ''
+          description: Update External Signer / Remove External Signer
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '42'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:16:11 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Remove External Signer:
+                  value:
+                    message: Successful
+                Update External Signer:
+                  value:
+                    message: Successful
     post:
       tags:
       - DNSSEC Multi-Signer
@@ -828,8 +3605,90 @@ paths:
               DNSSEC Sign Zone:
                 value: {}
       responses:
-        '200':
-          description: ''
+        '201':
+          description: DNSSEC Sign Zone
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:02:33 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                DNSSEC Sign Zone:
+                  value:
+                    message: Successful
     delete:
       tags:
       - DNSSEC Multi-Signer
@@ -838,8 +3697,71 @@ paths:
         keys).
       operationId: dnssecUnSignZone
       responses:
-        '200':
-          description: ''
+        '204':
+          description: DNSSEC Un-Sign Zone
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:16:26 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Access-Control-Request-Headers
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content: {}
     parameters:
     - name: zones_zoneName
       in: path
@@ -1015,8 +3937,94 @@ paths:
                   - 4.4.4.4
                   ttl: 300
       responses:
-        '200':
-          description: ''
+        '201':
+          description: Create SiteBacker Pool
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:32:33 GMT
+            Location:
+              schema:
+                type: string
+                example: http://api.ultradns.com/zones/domain.com/rrsets/A/sitebacker
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Create SiteBacker Pool:
+                  value:
+                    message: Successful
     patch:
       tags:
       - Traffic Management
@@ -1045,7 +4053,89 @@ paths:
               additionalProperties: true
       responses:
         '200':
-          description: ''
+          description: Record Priority Update
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '42'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 18 Jun 2025 00:32:55 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+              examples:
+                Record Priority Update:
+                  value:
+                    message: Successful
     parameters:
     - name: zones_zoneName
       in: path
@@ -1106,14 +4196,6 @@ tags:
     status and any response details.\n    \n\n**Notes:**\n\n- Replace or set `webhookUrl` and any auth headers in your environment
     before calling **Create Webhook**.\n    \n- Running **Test Webhook** will overwrite `{{currentWebhookEventId}}`. Poll
     or store it elsewhere if you need to verify multiple events."
-- name: Subaccounts
-  description: "This folder contains endpoints for managing reseller‑style subaccounts under your primary UltraDNS account:\n\
-    \n- **List Subaccounts & Zones**\n    \n    - `GET /subaccounts`\n        \n    - Returns all subaccounts and, optionally,
-    their zones in one call using your primary account credentials\n        \n- **Masquerade as Subaccount**\n    \n    -
-    `POST /subaccounts/{subaccountId}/auth`\n        \n    - Generates a bearer token and refresh token scoped to the specified
-    subaccount\n        \n    - Use these tokens in subsequent calls to act on behalf of that subaccount\n        \n\n**Usage
-    Notes:**\n\n- All calls start with your primary account credentials.\n    \n- After masquerading, switch your `{{bearerToken}}`
-    variable to the new token to make subaccount‑scoped requests."
 - name: DNSSEC Multi-Signer
   description: "UltraDNS API endpoints that support [multi-signer DNSSEC](https://ultra-portalstatic.ultradns.com/static/console/docs/DNSSEC-Multi_Signer-Guide.pdf).\n\
     \nUltraDNS DNSSEC uses _online_ (also known as _on-the-fly_) signing in generating signed responses to queries. UltraDNS
