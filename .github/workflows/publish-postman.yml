@@ -76,9 +76,9 @@ jobs:
           # Read the collection file into a temporary file
           cp src/UDNS.postman_collection.json "$TEMP_COLLECTION"
           
-          # Create the request body using temporary files
+          # Create the request body using temporary files with proper encapsulation
           echo '{}' > "$TEMP_REQUEST"
-          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile collection "$TEMP_COLLECTION" '. + {workspace: $workspace, collection: $collection[0]}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
+          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile collection "$TEMP_COLLECTION" '. + {workspace: $workspace, collection: {collection: $collection[0]}}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
           
           # Send to Postman API
           RESPONSE=$(curl -s -w "\n%{http_code}" \
@@ -114,9 +114,9 @@ jobs:
           # Read the environment file into a temporary file
           cp src/UDNS.postman_environment.json "$TEMP_ENV"
           
-          # Create the request body using temporary files
+          # Create the request body using temporary files with proper encapsulation
           echo '{}' > "$TEMP_REQUEST"
-          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile environment "$TEMP_ENV" '. + {workspace: $workspace, environment: $environment[0]}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
+          jq --arg workspace "${{ secrets.POSTMAN_WORKSPACE_ID }}" --slurpfile environment "$TEMP_ENV" '. + {workspace: $workspace, environment: {environment: $environment[0]}}' "$TEMP_REQUEST" > "$TEMP_REQUEST"
           
           # Send to Postman API
           RESPONSE=$(curl -s -w "\n%{http_code}" \
