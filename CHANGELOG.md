@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.1] - 2025-06-18
-
 ### Added
 - Response examples for all endpoints
 
 ### Fixed
 - Pre-request script for rrset delete
+- Publish workflow
+  - The collection was causing arg limit errors with `jq`
 
 ### Removed
 - Subaccount section
