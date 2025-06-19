@@ -6,6 +6,7 @@ Thank you for your interest in contributing to the UltraDNS Postman collection! 
 - [Introduction & Scope](#introduction--scope)
 - [Getting Started](#getting-started)
 - [Making Changes](#making-changes)
+- [Documentation](#documentation)
 - [Submitting Changes](#submitting-changes)
 - [Review Process](#review-process)
 - [Release Process](#release-process)
