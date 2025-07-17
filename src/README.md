@@ -35,19 +35,18 @@ The easiest way to get started is to:
 After importing the collection, you'll need to:
 
 1. **Set your credentials**
-   Define the following environment variables:
+   - Define the following environment variables:
 
-   * `username` – your UDNS username
-   * `password` – your UDNS password
+     * `username` – your UDNS username
+     * `password` – your UDNS password
 
 2. **Manually obtain your token (first time)**
-   In Postman:
+   - In Postman:
 
-   * Open the **Authorization** tab at the collection level
-   * Ensure the type is set to **OAuth 2.0**
-   * Click **"Get New Access Token"**, then **"Use Token"**
+     * Open the **Authorization** tab at the collection level
+     * Click **"Get New Access Token"**, then **"Use Token"**
 
 3. **Token refresh**
-   After the initial token is retrieved, Postman will automatically refresh it when needed—provided the refresh token remains valid.
+   - After the initial token is retrieved, Postman will automatically refresh it when needed—provided the refresh token remains valid.
 
 For more detailed information about using the collection, please refer to the [main README](../README.md). 
