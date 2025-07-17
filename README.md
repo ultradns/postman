@@ -26,9 +26,26 @@ Alternatively, you can import the files directly from this repository:
 2. Select **Import**
 3. Drag the files from `src/` to the application
 
-## Authentication and Utilities
+### Authentication
 
-The collection-level pre-request script manages authentication and provides helper functions.
+1. **Set your credentials**
+   Define the following environment variables:
+
+   * `username` – your UDNS username
+   * `password` – your UDNS password
+
+2. **Manually obtain your token (first time)**
+   In Postman:
+
+   * Open the **Authorization** tab at the collection level
+   * Click **"Get New Access Token"**, then **"Use Token"**
+
+3. **Token refresh**
+   After the initial token is retrieved, Postman will automatically refresh it when needed—provided the refresh token remains valid.
+
+## Utilities
+
+The collection-level pre-request script provides helper functions.
 
 Since `utils` is defined globally by not using a declaration keyword, it is accessible to request-level scripts. This allows for the definition of reusable functions for our requests. Utility functions can be invoked like so:
 
@@ -36,29 +53,23 @@ Since `utils` is defined globally by not using a declaration keyword, it is acce
 utils.functionName()
 ```
 
-### Username/Password
-
-For the pre-request script to run, you must set `username` and `password` variables containing your UDNS credentials in an environment. UDNS uses OAuth2 to generate an access token. The access token and refresh token will also be stored in your environment along with a timestamp, so the script knows when to refresh.
-
 ## Resources
 
 The collection is organized into folders, each representing a base resource (ex: `zones`) or a specific functionality (ex: `push notifications`).
 
 - **Zones**: Contains the DNS configuration. Some resources are not available in the latest "version" of the API, hence why "snapshot/restore" use the "v1" endpoint.
 
+- **Records**: APIs for adding/updating/deleting RRsets for a zone. These APIs use RRset DTO definitions and pre-request/post-request scripts for managing environment variables and POST body content.
+
 - **Tasks**: Operations that produce background tasks will return a `202` status code and have an `x-task-id` header. This ID is stored under the `currentTask` variable in the environment.
 
 - **Reports**: After you request a report, retrieve it from the `results` endpoint using the report ID. This ID is stored in the post-request script, similar to tasks.
 
-- **Webhook**: A set of 3 requests related to UDNS's push notification feature.
+- **Webhook**: A set of 3 requests related to UDNS's push notification feature.\
 
-- **Subaccounts**: APIs exclusive to accounts that contain child accounts. If you don't have access to this feature, they'll produce an error.
+- **DNSSEC Multi-Signer**
 
-- **Records**: APIs for adding/updating/deleting RRsets for a zone. These APIs use RRset DTO definitions and pre-request/post-request scripts for managing environment variables and POST body content.
-
-## Bypassing Automated Authentication
-
-To manually provide your Bearer token, go to the "Authorization" tab of the collection and modify the value. This would be necessary, as an example, to use a token produced by the subaccount authorization endpoint. Remember to revert it to the `{{accessToken}}` variable after you're done.
+- **Traffic Management**
 
 ## Contributing
 

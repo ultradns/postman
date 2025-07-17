@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Once the initial token has been requested, Postman will handle auto-refresh (so long as the refresh token is not expired)
 - Cleaned up some of the in-collection documentation to make it more tool-agnostic for te OpenAPI spoec
   - The Postman-specific functionalities will be detailed in the public workspace docs
+- Updated `README`
 
 ## [1.0.1] - 2025-06-18
 
