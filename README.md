@@ -11,6 +11,7 @@ https://www.postman.com/digicertultradns/ultradns-public-workspace/overview
 - `src/`: Contains the Postman collection and environment JSON files
 - `scripts/`: Contains scripts used by workflows for validating and transforming collection JSON
 - `spec/`: Contains the OpenAPI YAML specification, which is automatically generated from the Postman collection during releases
+- `docs/`: Hosts a [live Swagger UI instance](https://ultradns.github.io/postman/) via GitHub Pages that loads the latest OpenAPI spec from the repository
 
 ## Getting Started
 

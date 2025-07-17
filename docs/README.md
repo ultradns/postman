@@ -6,7 +6,7 @@ The UI is configured to load the latest OpenAPI specification from the root `spe
 
 ## Live URL
 
-[![Swagger Logo](https://raw.githubusercontent.com/swagger-api/swagger.io/wordpress/images/assets/SW-logo-clr.png)](https://ultradns.github.io/postman/)
+[![Swagger Logo](./img/SW-logo-clr.svg)](https://ultradns.github.io/postman/)
 
 ## Do Not Modify Directly
 
