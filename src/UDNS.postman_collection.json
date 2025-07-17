@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "API Documentation",
-    "description": "This Postman collection provides a sample interface to the UltraDNS (UDNS) REST API. It\u2019s organized around resource\u2011focused folders:\n\n- **Zones**: create, read, update, and delete DNS zones and records\n    \n- **Reports**: retrieve usage statistics and analytics\n    \n- **\u2026other resources**: each top\u2011level or subfolder groups related endpoints\n    \n\nA global pre\u2011request script handles authentication and common helpers:\n\n1. **Reads** your `username` and `password` from the selected environment\n    \n2. **Requests** a bearer token and saves it to `{{bearerToken}}`\n    \n3. **Automatically refreshes** the token when it expires\n    \n4. **Exposes** utility functions on the `utils` object\n    \n\n**Setup before running:**\n\n1. Select the appropriate Postman environment.\n    \n2. Define `username` and `password` as environment variables.\n    \n\n**Using helpers:**\n\n``` js\n// call any helper in scripts or tests\nutils.functionName(arg1, arg2)\n\n ```\n\nWith this in place, every folder and request can focus on its specific API logic, while authentication and shared utilities stay centralized.",
+    "description": "This API specification provides an organized interface to the UltraDNS (UDNS) REST API. Endpoints are grouped by resource domain to support a logical, discoverable structure:\n\n- **Zones**: Manage DNS zones and resource records (create, read, update, delete)\n    \n- **Reports**: Retrieve analytics, usage, and query volume data\n    \n- **Other Resources**: Additional endpoints are grouped into relevant folders or sections based on functional area\n    \n\n## Authentication\n\nThis API uses OAuth 2.0 (Password Credentials Grant) for authentication. To authenticate:\n\n1. Obtain an access token by exchanging your username and password at the token endpoint.\n    \n2. Include the token in the `Authorization` header of each request as a Bearer token.\n    \n\n``` http\nAuthorization: Bearer <access_token>\n\n ```\n\n## Usage\n\nEach resource group contains a set of RESTful endpoints, designed to be self-contained and independently testable. When interacting with this API refer to resource-specific sections for details on supported operations",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -987,7 +987,7 @@
                 }
               ],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         },
@@ -1160,7 +1160,7 @@
                 }
               ],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         },
@@ -1301,7 +1301,7 @@
           ]
         }
       ],
-      "description": "This folder contains all operations for managing the lifecycle and metadata of your DNS zones. Use these endpoints to:\n\n- **Create** new zones\n    \n- **Retrieve** zone details and metadata\n    \n- **Update** zone configuration\n    \n- **Delete** existing zones\n    \n- **Export** zone files\n    \n- **Capture** zone snapshots\n    \n\nEverything here is focused on DNS zone management and its associated metadata.",
+      "description": "This endpoint contains all operations for managing the lifecycle and metadata of your DNS zones.\n\n- **Create** new zones\n    \n- **Retrieve** zone details and metadata\n    \n- **Update** zone configuration\n    \n- **Delete** existing zones\n    \n- **Export** zone files\n    \n- **Capture** zone snapshots\n    \n\nEverything here is focused on DNS zone management and its associated metadata.",
       "event": [
         {
           "listen": "prerequest",
@@ -2163,7 +2163,7 @@
                 }
               ],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         },
@@ -2386,7 +2386,7 @@
           ]
         }
       ],
-      "description": "This folder includes all endpoints for managing resource record sets (RRSets) within a DNS zone. Each RRSet groups records sharing the same owner name, type, and class (always IN). Record data is handled via the `rdata` array, which follows the BIND presentation format.\n\nUse these endpoints to:\n\n- **List** all RRSets in a zone\n    \n- **Retrieve** a specific RRSet by owner name and type\n    \n- **Create/Update** RRSets by supplying `rdata` entries and TTL\n    \n- **Delete** RRSets\n    \n\nPre\u2011request scripts in this folder help initialize variables like `zoneName`, `ownerName`, and `recordType`. Run these scripts or set the corresponding environment variables before making calls."
+      "description": "Endpoints for managing resource record sets (RRSets) within a DNS zone. Each RRSet groups records sharing the same owner name, type, and class (always IN). Record data is handled via the `rdata` array, which follows the BIND presentation format.\n\n- **List** all RRSets in a zone\n    \n- **Retrieve** a specific RRSet by owner name and type\n    \n- **Create/Update** RRSets by supplying `rdata` entries and TTL\n    \n- **Delete** RRSets"
     },
     {
       "name": "Tasks",
@@ -2702,7 +2702,7 @@
           ]
         }
       ],
-      "description": "This folder contains endpoints for monitoring asynchronous background tasks (e.g., zone snapshots or exports):\n\n- When you invoke an operation that returns **202 Accepted**, the response headers include an `x-task-id`.\n    \n- The collection\u2019s pre\u2011request scripts save that ID to the `{{currentTask}}` variable.\n    \n- Use these endpoints to:\n    \n    - **Check status** of the task referenced by `{{currentTask}}`\n        \n    - **Retrieve results** once the task completes\n        \n- Running any new task\u2011generating request will overwrite `{{currentTask}}`, so poll status before kicking off another job."
+      "description": "Endpoints for monitoring asynchronous background tasks (e.g., zone snapshots or exports):\n\n- When you invoke an operation that returns **202 Accepted**, the response headers include an `x-task-id`.\n    \n- Use these endpoints to:\n    \n    - **Check status** of the task referenced by `{{currentTask}}`\n        \n    - **Retrieve results** once the task completes"
     },
     {
       "name": "Reports",
@@ -3236,7 +3236,7 @@
           ]
         }
       ],
-      "description": "This folder contains all endpoints for generating and fetching DNS analytics reports:\n\n- **Create a report**\n    \n    - `POST /reports` (or similar)\n        \n    - Response body includes a JSON `id` for your report\n        \n    - That `id` is saved automatically to `{{currentReport}}`\n        \n- **Check report status & retrieve results**\n    \n    - `GET /reports/requests/{{currentReport}}`\n        \n    - Returns the current state (pending, complete, failed) and, once ready, the report data\n        \n- **Notes**\n    \n    - The report ID lives in the `{{currentReport}}` variable by default\n        \n    - Running any new \u201ccreate report\u201d request will overwrite `{{currentReport}}`\u2014poll or store it elsewhere if you need multiple reports in flight simultaneously"
+      "description": "Endpoints for generating and fetching DNS analytics reports:\n\n- **Create a report**\n    \n    - `POST /reports` (or similar)\n        \n    - Response body includes a JSON `id` for your report\n        \n- **Check report status & retrieve results**\n    \n    - `GET /reports/requests/{{currentReport}}`\n        \n    - Returns the current state (pending, complete, failed) and, once ready, the report data"
     },
     {
       "name": "Webhook",
@@ -3707,7 +3707,7 @@
           ]
         }
       ],
-      "description": "This folder contains all endpoints for managing UDNS push\u2011notification webhooks:\n\n- **Create Webhook**  \n      \n    Sends your `url`, `headers`, and event filters to UDNS. (No prior validation required, but you\u2019ll typically want to test first.)\n    \n- **Test Webhook**  \n      \n    Triggers a sample telemetry event to your configured endpoint.\n    \n    - On success, the response body returns an `eventId`\n        \n    - That `eventId` is saved to `{{currentWebhookEventId}}`\n        \n- **Verify Webhook Event**  \n      \n    Polls `/webhooks/events/{{currentWebhookEventId}}` to confirm delivery status and any response details.\n    \n\n**Notes:**\n\n- Replace or set `webhookUrl` and any auth headers in your environment before calling **Create Webhook**.\n    \n- Running **Test Webhook** will overwrite `{{currentWebhookEventId}}`. Poll or store it elsewhere if you need to verify multiple events."
+      "description": "Endpoints for managing UDNS push\u2011notification webhooks:\n\n- **Create Webhook**\n    \n    Sends your `url`, `headers`, and event filters to UDNS. (No prior validation required, but you\u2019ll typically want to test first.)\n    \n- **Test Webhook**\n    \n    Triggers a sample telemetry event to your configured endpoint.\n    \n    - On success, the response body returns an `eventId`\n        \n- **Verify Webhook Event**\n    \n    Polls `/webhooks/events/{{currentWebhookEventId}}` to confirm delivery status and any response details."
     },
     {
       "name": "DNSSEC Multi-Signer",
@@ -4162,7 +4162,7 @@
                 }
               ],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         },
@@ -4446,7 +4446,7 @@
                 }
               ],
               "cookie": [],
-              "body": null
+              "body": ""
             }
           ]
         },
@@ -4486,15 +4486,6 @@
               "originalRequest": {
                 "method": "GET",
                 "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
                 "url": {
                   "raw": "{{baseUrl}}/zones/{{zones_zoneName}}/dnssec",
                   "host": [
@@ -5239,18 +5230,66 @@
               ]
             }
           ],
-          "description": "This folder contains endpoints for managing SiteBacker pools\u2014a traffic\u2011management feature that groups multiple IPs under one DNS record and uses health\u2011check probes to steer queries based on endpoint health and defined priorities.\n\n- **Create Pool**: provision a new pool of endpoints for a given zone/record, complete with probe settings and failover rules\n    \n- **Update Member Priority**: reorder pool members to control failover order"
+          "description": "Endpoints for managing SiteBacker pools\u2014a traffic\u2011management feature that groups multiple IPs under one DNS record and uses health\u2011check probes to steer queries based on endpoint health and defined priorities.\n\n- **Create Pool**: Provision a new pool of endpoints for a given zone/record, complete with probe settings and failover rules\n    \n- **Update Member Priority**: Reorder pool members to control failover order"
         }
       ],
-      "description": "This folder groups UltraDNS\u2019s advanced traffic\u2011management features, each in its own subfolder:\n\n- **SiteBacker**: configure health\u2011check probes that monitor endpoints and automatically steer traffic away from failures\n    \n- **Direction**: set up geography\u2011aware routing so queries resolve to the closest or best\u2011suited data center\n    \n- **Traffic Controller**: create load\u2011balancing rules to distribute DNS traffic across multiple targets based on weight, priority, or custom logic\n    \n- **\\[Other advanced services\\]**: each subfolder covers a specific traffic\u2011management API for steering, failover, and performance optimization\n    \n\nUse these endpoints to build resilient, geo\u2011intelligent DNS strategies that adapt in real time to health, location, and load."
+      "description": "Endpoints supporting UltraDNS\u2019s advanced traffic\u2011management features.\n\n- **SiteBacker**: Configure health\u2011check probes that monitor endpoints and automatically steer traffic away from failures\n    \n- **Direction**: Cet up geography\u2011aware routing so queries resolve to the closest or best\u2011suited data center\n    \n- **Traffic Controller**: Create load\u2011balancing rules to distribute DNS traffic across multiple targets based on weight, priority, or custom logic"
     }
   ],
   "auth": {
-    "type": "bearer",
-    "bearer": [
+    "type": "oauth2",
+    "oauth2": [
       {
-        "key": "token",
-        "value": "{{accessToken}}",
+        "key": "tokenName",
+        "value": "UltraDNS-Auth-Token",
+        "type": "string"
+      },
+      {
+        "key": "refreshRequestParams",
+        "value": [],
+        "type": "any"
+      },
+      {
+        "key": "tokenRequestParams",
+        "value": [
+          {
+            "key": "username",
+            "value": "{{username}}",
+            "enabled": true,
+            "send_as": "request_body"
+          },
+          {
+            "key": "password",
+            "value": "{{password}}",
+            "enabled": true,
+            "send_as": "request_body"
+          }
+        ],
+        "type": "any"
+      },
+      {
+        "key": "username",
+        "value": "",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "body",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{baseUrl}}/authorization/token",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "password_credentials",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
         "type": "string"
       }
     ]
@@ -5307,80 +5346,7 @@
           "const password = pm.environment.get(\"password\");",
           "",
           "utils.checkVars([\"baseUrl\"]);",
-          "const baseUrl = pm.collectionVariables.get('baseUrl');",
-          "",
-          "const currentAccessToken = pm.environment.get('accessToken');",
-          "const currentRefreshToken = pm.environment.get('refreshToken');",
-          "const tokenTimestamp = pm.environment.get('tokenTimestamp');",
-          "",
-          "function setTokens(accessToken, refreshToken) {",
-          "    const now = Date.now();",
-          "    pm.environment.set('accessToken', accessToken);",
-          "    pm.environment.set('refreshToken', refreshToken);",
-          "    pm.environment.set('tokenTimestamp', now.toString());",
-          "}",
-          "",
-          "function getNewTokens(un, pw) {",
-          "    const payload = {",
-          "        grant_type: 'password',",
-          "        username: un,",
-          "        password: pw",
-          "    };",
-          "",
-          "    pm.sendRequest({",
-          "        url: `${baseUrl}/authorization/token`,",
-          "        method: 'POST',",
-          "        header: 'Content-Type:application/x-www-form-urlencoded',",
-          "        body: {",
-          "            mode: 'urlencoded',",
-          "            urlencoded: Object.keys(payload).map(key => ({key, value: payload[key]}))",
-          "        }",
-          "    }, (err, res) => {",
-          "        if (err) {",
-          "            console.error(`AuthFailed: ${err}`);",
-          "        } else {",
-          "            setTokens(res.json().accessToken, res.json().refreshToken);",
-          "        }",
-          "    });",
-          "}",
-          "",
-          "if (utils.isNotSet(currentAccessToken) || utils.isNotSet(tokenTimestamp)) {",
-          "    getNewTokens(username, password);",
-          "} else {",
-          "    const fiftyFiveMinutes = 55 * 60 * 1000;  // milliseconds",
-          "    const now = Date.now();",
-          "    const timePassed = now - parseInt(tokenTimestamp, 10);",
-          "",
-          "    // If more than 55min has passed, we try to refresh the token",
-          "    if (timePassed > fiftyFiveMinutes) {",
-          "        if (currentRefreshToken) {",
-          "            const payload = {",
-          "                grant_type: 'refresh_token',",
-          "                refresh_token: currentRefreshToken",
-          "            };",
-          "",
-          "            pm.sendRequest({",
-          "                url: `${baseUrl}/authorization/token`,",
-          "                method: 'POST',",
-          "                header: 'Content-Type:application/x-www-form-urlencoded',",
-          "                body: {",
-          "                    mode: 'urlencoded',",
-          "                    urlencoded: Object.keys(payload).map(key => ({key, value: payload[key]}))",
-          "                }",
-          "            }, (err, res) => {",
-          "                if (err || res.code !== 200) {",
-          "                    // If there's an error or the refresh token is stale",
-          "                    console.log(`RefreshFailed: Bad refresh token, re-authenticating: ${err}`)",
-          "                    getNewTokens(username, password);",
-          "                } else {",
-          "                    setTokens(res.json().accessToken, res.json().refreshToken);",
-          "                }",
-          "            });",
-          "        } else {",
-          "            getNewTokens(username, password);",
-          "        }",
-          "    }",
-          "}"
+          "const baseUrl = pm.collectionVariables.get('baseUrl');"
         ]
       }
     },
