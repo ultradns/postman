@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-07-17
+
+### Changed
+- Switched from a pre-request script Auth workflow to the baked in OAuth 2.0
+  - This is necessary for OpenAPI spec generation, for the YAML to be fully usable out-of-box in other tools
+  - In Postman, this necessitates an additional step when authentication
+    - Set the `username` and `password` in your environment (same as before)
+    - Go to the `Authorization` tab under the collection and click `Get New Access Token`
+    - Once the initial token has been requested, Postman will handle auto-refresh (so long as the refresh token is not expired)
+- Cleaned up some of the in-collection documentation to make it more tool-agnostic for te OpenAPI spoec
+  - The Postman-specific functionalities will be detailed in the public workspace docs
+- Updated `README`
+
 ## [1.0.1] - 2025-06-18
 
 ### Added

@@ -33,11 +33,20 @@ The easiest way to get started is to:
 ## Environment Setup
 
 After importing the collection, you'll need to:
-1. Create a new environment
-2. Set the following variables:
-   - `username`: Your UltraDNS account username
-   - `password`: Your UltraDNS account password
 
-The collection's pre-request script will automatically handle authentication using these credentials.
+1. **Set your credentials**
+   - Define the following environment variables:
+
+     * `username` – your UDNS username
+     * `password` – your UDNS password
+
+2. **Manually obtain your token (first time)**
+   - In Postman:
+
+     * Open the **Authorization** tab at the collection level
+     * Click **"Get New Access Token"**, then **"Use Token"**
+
+3. **Token refresh**
+   - After the initial token is retrieved, Postman will automatically refresh it when needed—provided the refresh token remains valid.
 
 For more detailed information about using the collection, please refer to the [main README](../README.md). 
