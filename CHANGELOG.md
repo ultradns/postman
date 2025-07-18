@@ -9,8 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2025-07-17
 
-## [1.1.0] - 2025-07-17
-
 ### Changed
 - Switched from a pre-request script Auth workflow to the baked in OAuth 2.0
   - This is necessary for OpenAPI spec generation, for the YAML to be fully usable out-of-box in other tools
