@@ -6,6 +6,51 @@
   },
   "item": [
     {
+      "name": "Platform",
+      "item": [
+        {
+          "name": "Get Version",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/version",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "version"
+              ]
+            },
+            "description": "The version call provides the version of the REST API currently in production.\n\nThis call does not require an Authorization header to be specified, which allows it to be used to verify that there are no networking issues between a client and the REST API server."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "status"
+              ]
+            },
+            "description": "The status call provides a simple way to determine if the REST API  \nis running, and to make sure you are connecting to the UltraDNS Portal  \nwith proper authorization."
+          },
+          "response": []
+        }
+      ],
+      "description": "This folder contains endpoints that provide information about the UltraDNS API platform itself.\n\n- Check API operational status and health\n    \n- Retrieve current API version information\n    \n- Validate connectivity to the service\n    \n\nThese endpoints are intended for integration health checks, monitoring, and ensuring compatibility with the current API version."
+    },
+    {
       "name": "Zones",
       "item": [
         {
