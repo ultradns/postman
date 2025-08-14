@@ -6,6 +6,364 @@
   },
   "item": [
     {
+      "name": "Authorization",
+      "item": [
+        {
+          "name": "Generate Auth Token",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{username}}",
+                  "description": "The username for your UltraDNS account.",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{password}}",
+                  "description": "The password for your UltraDNS account.",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "description": "Specifies the OAuth 2.0 grant type for the request. Use `password` to obtain a new access token by providing a valid username and password.",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/authorization/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "authorization",
+                "token"
+              ]
+            },
+            "description": "Generates a new authentication token using your UltraDNS API username and password via the Resource Owner Password Credentials (ROPC) grant. Use this token to authorize subsequent API requests until it expires."
+          },
+          "response": [
+            {
+              "name": "Generate Auth Token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "{{username}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/authorization/token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authorization",
+                    "token"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "POST, GET, OPTIONS, DELETE, PUT, PATCH"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Max-Age",
+                  "value": "3600"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src 'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 14 Aug 2025 19:24:43 GMT"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains; preload"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Access-Control-Request-Method"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Access-Control-Request-Headers"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding, User-Agent"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-Xss-Protection",
+                  "value": "1 ; mode=block"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "326"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"tokenType\": \"Bearer\",\n    \"refreshToken\": \"2b217543b15fdedffe95387ff0a383d47ab37615d7\",\n    \"accessToken\": \"eolraOeTINu6WHeS.zUc4sS1vUKjzmKe9QyJecMeG1XN1TqwI3eXGC0sRbco.3VjD74_dMLWk2ec3vUXPUcIb4zH3K4fS\",\n    \"expiresIn\": \"3600\",\n    \"username\": \"postman-example\",\n    \"refresh_token\": \"2b217543b15fdedffe95387ff0a383d47ab37615d7\",\n    \"access_token\": \"eolraOeTINu6WHeS.zUc4sS1vUKjzmKe9QyJecMeG1XN1TqwI3eXGC0sRbco.3VjD74_dMLWk2ec3vUXPUcIb4zH3K4fS\",\n    \"expires_in\": \"3600\",\n    \"token_type\": \"Bearer\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Auth Token",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "refresh_token",
+                  "value": "{{refreshToken}}",
+                  "description": "The refresh value token taken from the authorization API call.",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "description": "Specifies the OAuth 2.0 grant type for the request. Use `refresh_token` to obtain a new access token using a valid refresh token.",
+                  "type": "text"
+                },
+                {
+                  "key": "expire_in",
+                  "value": "1",
+                  "description": "(Optional) Set the duration, in seconds, in which the refresh token will expire.\nDefault value = 604800 (7 days)\nAllowed value = 1 - 604800",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/authorization/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "authorization",
+                "token"
+              ]
+            },
+            "description": "Generates a new authentication token using a valid refresh token. This request extends the session without requiring username and password, and should be used when the current access token is close to expiring or has expired."
+          },
+          "response": [
+            {
+              "name": "Refresh Auth Token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "refresh_token",
+                      "value": "{{refreshToken}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "refresh_token",
+                      "type": "text"
+                    },
+                    {
+                      "key": "expire_in",
+                      "value": "1",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/authorization/token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authorization",
+                    "token"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient"
+                },
+                {
+                  "key": "Access-Control-Allow-Methods",
+                  "value": "POST, GET, OPTIONS, DELETE, PUT, PATCH"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Max-Age",
+                  "value": "3600"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "gzip"
+                },
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src 'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Date",
+                  "value": "Thu, 14 Aug 2025 19:32:42 GMT"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains; preload"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Access-Control-Request-Method"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Access-Control-Request-Headers"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding, User-Agent"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-Xss-Protection",
+                  "value": "1 ; mode=block"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "337"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date"
+                }
+              ],
+              "body": "{\n    \"tokenType\": \"Bearer\",\n    \"refreshToken\": \"729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72\",\n    \"accessToken\": \"q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7\",\n    \"expiresIn\": \"3600\",\n    \"refreshTokenExpiresIn\": \"1\",\n    \"username\": \"postman-example\",\n    \"refresh_token\": \"729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72\",\n    \"access_token\": \"q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7\",\n    \"expires_in\": \"3600\",\n    \"refresh_token_expires_in\": \"1\",\n    \"token_type\": \"Bearer\"\n}"
+            }
+          ]
+        }
+      ],
+      "description": "This folder contains endpoints for obtaining and refreshing authentication tokens for the UltraDNS REST API using the Resource Owner Password Credentials (ROPC) grant, a legacy subset of OAuth 2.0. These requests require a valid UltraDNS API username and password.\n\nFailed login attempts may lock the account for a period of time; if this occurs, wait until the lockout expires or contact Customer Support. Users with \u201cAPI Only Access\u201d cannot log into the UltraDNS Portal but can authenticate to the API."
+    },
+    {
       "name": "Platform",
       "item": [
         {
