@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Platform folder for system-related calls
+  - `/version` request for testing API connectivity
+  - `/status` request for checking status and auth
+
 ## [1.1.0] - 2025-07-17
 
 ### Changed
