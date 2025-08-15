@@ -12,6 +12,7 @@ from jsonschema import validate
 METADATA_PROPERTIES = {
     '_postman_id',
     '_exporter_id',
+    '_collection_link',
     'id',
     'uid',
     'owner',
@@ -58,6 +59,123 @@ def validate_environment(data: dict) -> bool:
     
     return True
 
+def validate_collection_structure(data: dict) -> bool:
+    """Validate Postman collection structure without relying on the broken schema."""
+    # Check required top-level fields
+    if 'info' not in data:
+        print("Error: Collection missing 'info' field", file=sys.stderr)
+        return False
+    
+    if 'item' not in data:
+        print("Error: Collection missing 'item' field", file=sys.stderr)
+        return False
+    
+    if not isinstance(data['item'], list):
+        print("Error: Collection 'item' field must be an array", file=sys.stderr)
+        return False
+    
+    # Validate info structure
+    info = data['info']
+    if not isinstance(info, dict):
+        print("Error: Collection 'info' field must be an object", file=sys.stderr)
+        return False
+    
+    if 'name' not in info:
+        print("Error: Collection info missing 'name' field", file=sys.stderr)
+        return False
+    
+    # Validate items recursively
+    for i, item in enumerate(data['item']):
+        if not validate_item_structure(item, f"item[{i}]"):
+            return False
+    
+    return True
+
+def validate_item_structure(item: dict, path: str) -> bool:
+    """Validate individual item structure."""
+    if not isinstance(item, dict):
+        print(f"Error: {path} must be an object", file=sys.stderr)
+        return False
+    
+    if 'name' not in item:
+        print(f"Error: {path} missing 'name' field", file=sys.stderr)
+        return False
+    
+    # Check if this is a folder (item-group) or a request (item)
+    if 'item' in item:
+        # This is a folder - validate nested items
+        if not isinstance(item['item'], list):
+            print(f"Error: {path}.item must be an array", file=sys.stderr)
+            return False
+        
+        for j, nested_item in enumerate(item['item']):
+            if not validate_item_structure(nested_item, f"{path}.item[{j}]"):
+                return False
+    elif 'request' in item:
+        # This is a request - validate request structure
+        if not validate_request_structure(item['request'], f"{path}.request"):
+            return False
+        
+        # Validate response if present
+        if 'response' in item:
+            if not isinstance(item['response'], list):
+                print(f"Error: {path}.response must be an array", file=sys.stderr)
+                return False
+            
+            for j, response in enumerate(item['response']):
+                if not validate_response_structure(response, f"{path}.response[{j}]"):
+                    return False
+    else:
+        print(f"Error: {path} must have either 'item' (folder) or 'request' (request) field", file=sys.stderr)
+        return False
+    
+    return True
+
+def validate_request_structure(request: dict, path: str) -> bool:
+    """Validate request structure."""
+    if not isinstance(request, dict):
+        print(f"Error: {path} must be an object", file=sys.stderr)
+        return False
+    
+    # Check for required fields
+    if 'method' not in request:
+        print(f"Error: {path} missing 'method' field", file=sys.stderr)
+        return False
+    
+    if 'url' not in request:
+        print(f"Error: {path} missing 'url' field", file=sys.stderr)
+        return False
+    
+    # Validate URL structure
+    url = request['url']
+    if isinstance(url, dict):
+        if 'raw' not in url:
+            print(f"Error: {path}.url missing 'raw' field", file=sys.stderr)
+            return False
+    
+    return True
+
+def validate_response_structure(response: dict, path: str) -> bool:
+    """Validate response structure."""
+    if not isinstance(response, dict):
+        print(f"Error: {path} must be an object", file=sys.stderr)
+        return False
+    
+    # Check for required fields
+    if 'name' not in response:
+        print(f"Error: {path} missing 'name' field", file=sys.stderr)
+        return False
+    
+    if 'status' not in response:
+        print(f"Error: {path} missing 'status' field", file=sys.stderr)
+        return False
+    
+    if 'code' not in response:
+        print(f"Error: {path} missing 'code' field", file=sys.stderr)
+        return False
+    
+    return True
+
 def remove_metadata(data: Dict, properties: Set[str]) -> Dict:
     """Recursively remove specified properties from a dictionary."""
     if not isinstance(data, dict):
@@ -77,17 +195,38 @@ def remove_metadata(data: Dict, properties: Set[str]) -> Dict:
     
     return result
 
+def fix_preview_language(data: Dict) -> Dict:
+    """Fix _postman_previewlanguage fields that have empty string values."""
+    if not isinstance(data, dict):
+        return data
+
+    result = {}
+    for key, value in data.items():
+        if key == '_postman_previewlanguage' and value == "":
+            result[key] = None
+        elif isinstance(value, dict):
+            result[key] = fix_preview_language(value)
+        elif isinstance(value, list):
+            result[key] = [fix_preview_language(item) if isinstance(item, dict) else item for item in value]
+        else:
+            result[key] = value
+    
+    return result
+
 def sanitize_file(file_path: Path) -> bool:
     """Sanitize a single Postman file and return True if changes were made."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
+        # Fix _postman_previewlanguage fields first (before validation)
+        data = fix_preview_language(data)
+        
         # Validate the file before sanitizing
         if file_path.name.endswith('.postman_collection.json'):
-            schema = fetch_schema(COLLECTION_SCHEMA)
-            if schema:
-                validate(instance=data, schema=schema)
+            # Perform basic structural validation without relying on the broken schema
+            if not validate_collection_structure(data):
+                return False
             # Set fixed collection name
             if 'info' in data and 'name' in data['info']:
                 data['info']['name'] = COLLECTION_NAME

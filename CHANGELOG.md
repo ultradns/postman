@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Platform folder for system-related calls
   - `/version` request for testing API connectivity
   - `/status` request for checking status and auth
+- Authorization folder for auth endpoints
+  - Includes separate requests for new token and refresh
+  - `refreshToken` added to environment
 
 ## [1.1.0] - 2025-07-17
 
