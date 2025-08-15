@@ -12,6 +12,7 @@ from jsonschema import validate
 METADATA_PROPERTIES = {
     '_postman_id',
     '_exporter_id',
+    '_collection_link',
     'id',
     'uid',
     'owner',
