@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: API Documentation v1.1.0
+  title: API Documentation v1.1.1
   description: "This API specification provides an organized interface to the UltraDNS (UDNS) REST API. Endpoints are grouped
     by resource domain to support a logical, discoverable structure:\n\n- **Zones**: Manage DNS zones and resource records
     (create, read, update, delete)\n    \n- **Reports**: Retrieve analytics, usage, and query volume data\n    \n- **Other
@@ -16,6 +16,378 @@ servers:
 - url: https://api.ultradns.com
   description: Primary UltraDNS API
 paths:
+  /authorization/token:
+    post:
+      tags:
+      - Authorization
+      summary: Manage Auth Token
+      description: "Obtain or refresh an UltraDNS API access token using a single endpoint. This request supports two flows:\n\
+        \n- **Initial authentication:** exchange a valid username and password (password grant) for an access token.\n   \
+        \ \n- **Session continuation:** exchange a valid refresh token (refresh grant) for a new access token without re-supplying
+        credentials.\n    \n\nUse the returned access token to authorize subsequent API calls until it expires."
+      operationId: manageAuthToken
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                expire_in:
+                  type: string
+                  example: '86400'
+                grant_type:
+                  type: string
+                  example: password
+                password:
+                  type: string
+                  example: '{{password}}'
+                refresh_token:
+                  type: string
+                  example: '{{refreshToken}}'
+                username:
+                  type: string
+                  example: '{{username}}'
+            examples:
+              Manage Auth Token:
+                value:
+                  expire_in: '86400'
+                  grant_type: password
+                  password: '{{password}}'
+                  refresh_token: '{{refreshToken}}'
+                  username: '{{username}}'
+      responses:
+        '200':
+          description: Refresh Token / Generate Auth Token
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: '315'
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Fri, 15 Aug 2025 13:54:44 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: 
+                      q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7
+                  access_token:
+                    type: string
+                    example: 
+                      q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7
+                  expiresIn:
+                    type: string
+                    example: '3600'
+                  expires_in:
+                    type: string
+                    example: '3600'
+                  refreshToken:
+                    type: string
+                    example: 729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72
+                  refreshTokenExpiresIn:
+                    type: string
+                    example: '86400'
+                  refresh_token:
+                    type: string
+                    example: 729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72
+                  refresh_token_expires_in:
+                    type: string
+                    example: '86400'
+                  tokenType:
+                    type: string
+                    example: Bearer
+                  token_type:
+                    type: string
+                    example: Bearer
+                  username:
+                    type: string
+                    example: postman-example
+              examples:
+                Generate Auth Token:
+                  value:
+                    accessToken: 
+                      eolraOeTINu6WHeS.zUc4sS1vUKjzmKe9QyJecMeG1XN1TqwI3eXGC0sRbco.3VjD74_dMLWk2ec3vUXPUcIb4zH3K4fS
+                    access_token: 
+                      eolraOeTINu6WHeS.zUc4sS1vUKjzmKe9QyJecMeG1XN1TqwI3eXGC0sRbco.3VjD74_dMLWk2ec3vUXPUcIb4zH3K4fS
+                    expiresIn: '3600'
+                    expires_in: '3600'
+                    refreshToken: 2b217543b15fdedffe95387ff0a383d47ab37615d7
+                    refresh_token: 2b217543b15fdedffe95387ff0a383d47ab37615d7
+                    tokenType: Bearer
+                    token_type: Bearer
+                    username: postman-example
+                Refresh Token:
+                  value:
+                    accessToken: 
+                      q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7
+                    access_token: 
+                      q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7
+                    expiresIn: '3600'
+                    expires_in: '3600'
+                    refreshToken: 729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72
+                    refreshTokenExpiresIn: '86400'
+                    refresh_token: 729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72
+                    refresh_token_expires_in: '86400'
+                    tokenType: Bearer
+                    token_type: Bearer
+                    username: postman-example
+      security:
+      - {}
+  /version:
+    get:
+      tags:
+      - Platform
+      summary: Get Version
+      description: "The version call provides the version of the REST API currently in production.\n\nThis call does not require
+        an Authorization header to be specified, which allows it to be used to verify that there are no networking issues
+        between a client and the REST API server."
+      operationId: getVersion
+      responses:
+        '200':
+          description: Get Version
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 13 Aug 2025 19:17:07 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: 3.108.0-20250804151109.a1bbd8c
+              examples:
+                Get Version:
+                  value:
+                    version: 3.108.0-20250804151109.a1bbd8c
+      security:
+      - {}
+  /status:
+    get:
+      tags:
+      - Platform
+      summary: Get Status
+      description: "The status call provides a simple way to determine if the REST API  \nis running, and to make sure you
+        are connecting to the UltraDNS Portal  \nwith proper authorization."
+      operationId: getStatus
+      responses:
+        '200':
+          description: Get Status
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: Origin, X-Requested-With, Content-Type, Accept, Authorization, UltraClient
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: POST, GET, OPTIONS, DELETE, PUT, PATCH
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Access-Control-Max-Age:
+              schema:
+                type: string
+                example: '3600'
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Security-Policy:
+              schema:
+                type: string
+                example: "default-src 'self' https:; font-src 'self' https: data:; img-src 'self' https: data:; object-src
+                  'none'; script-src https:; style-src 'self' https: 'unsafe-inline'"
+            Date:
+              schema:
+                type: string
+                example: Wed, 13 Aug 2025 15:00:17 GMT
+            Referrer-Policy:
+              schema:
+                type: string
+                example: no-referrer
+            Strict-Transport-Security:
+              schema:
+                type: string
+                example: max-age=31536000; includeSubDomains; preload
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding, User-Agent
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            X-Download-Options:
+              schema:
+                type: string
+                example: noopen
+            X-Frame-Options:
+              schema:
+                type: string
+                example: DENY
+            X-Permitted-Cross-Domain-Policies:
+              schema:
+                type: string
+                example: none
+            X-Xss-Protection:
+              schema:
+                type: string
+                example: 1 ; mode=block
+            transfer-encoding:
+              schema:
+                type: string
+                example: chunked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Good
+              examples:
+                Get Status:
+                  value:
+                    message: Good
   /v3/zones:
     get:
       tags:
@@ -4182,6 +4554,17 @@ components:
 security:
 - oauth2: []
 tags:
+- name: Authorization
+  description: "This folder contains endpoints for obtaining and refreshing authentication tokens for the UltraDNS REST API
+    using the Resource Owner Password Credentials (ROPC) grant, a legacy subset of OAuth 2.0. These requests require a valid
+    UltraDNS API username and password.\n\nFailed login attempts may lock the account for a period of time; if this occurs,
+    wait until the lockout expires or contact Customer Support. Users with “API Only Access” cannot log into the UltraDNS
+    Portal but can authenticate to the API."
+- name: Platform
+  description: "This folder contains endpoints that provide information about the UltraDNS API platform itself.\n\n- Check
+    API operational status and health\n    \n- Retrieve current API version information\n    \n- Validate connectivity to
+    the service\n    \n\nThese endpoints are intended for integration health checks, monitoring, and ensuring compatibility
+    with the current API version."
 - name: Zones
   description: "This endpoint contains all operations for managing the lifecycle and metadata of your DNS zones.\n\n- **Create**
     new zones\n    \n- **Retrieve** zone details and metadata\n    \n- **Update** zone configuration\n    \n- **Delete** existing
