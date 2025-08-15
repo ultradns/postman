@@ -12,8 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `/version` request for testing API connectivity
   - `/status` request for checking status and auth
 - Authorization folder for auth endpoints
-  - Includes separate requests for new token and refresh
+  - Includes one request for new token and refresh
+    - Separate response examples for reference
   - `refreshToken` added to environment
+
+### Changed
+- Improved CI scripts for validation and sanity
 
 ## [1.1.0] - 2025-07-17
 
