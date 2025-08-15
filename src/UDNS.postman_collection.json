@@ -9,7 +9,7 @@
       "name": "Authorization",
       "item": [
         {
-          "name": "Generate Auth Token",
+          "name": "Manage Auth Token",
           "request": {
             "auth": {
               "type": "noauth"
@@ -34,8 +34,22 @@
                 {
                   "key": "grant_type",
                   "value": "password",
-                  "description": "Specifies the OAuth 2.0 grant type for the request. Use `password` to obtain a new access token by providing a valid username and password.",
+                  "description": "Specifies the OAuth 2.0 grant type for the request. Use `password` to obtain a new access token with a valid username and password, or `refresh_token` to obtain a new access token using a valid refresh token without re-supplying credentials.",
                   "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refreshToken}}",
+                  "description": "The refresh value token taken from the authorization API call.",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "expire_in",
+                  "value": "86400",
+                  "description": "(Optional) Set the duration, in seconds, in which the refresh token will expire.\nDefault value = 604800 (7 days)\nAllowed value = 1 - 604800",
+                  "type": "text",
+                  "disabled": true
                 }
               ]
             },
@@ -49,7 +63,7 @@
                 "token"
               ]
             },
-            "description": "Generates a new authentication token using your UltraDNS API username and password via the Resource Owner Password Credentials (ROPC) grant. Use this token to authorize subsequent API requests until it expires."
+            "description": "Obtain or refresh an UltraDNS API access token using a single endpoint. This request supports two flows:\n\n- **Initial authentication:** exchange a valid username and password (password grant) for an access token.\n    \n- **Session continuation:** exchange a valid refresh token (refresh grant) for a new access token without re-supplying credentials.\n    \n\nUse the returned access token to authorize subsequent API calls until it expires."
           },
           "response": [
             {
@@ -63,17 +77,34 @@
                     {
                       "key": "username",
                       "value": "{{username}}",
+                      "description": "The username for your UltraDNS account.",
                       "type": "text"
                     },
                     {
                       "key": "password",
                       "value": "{{password}}",
+                      "description": "The password for your UltraDNS account.",
                       "type": "text"
                     },
                     {
                       "key": "grant_type",
                       "value": "password",
+                      "description": "Specifies the OAuth 2.0 grant type for the request. Use `password` to obtain a new access token with a valid username and password, or `refresh_token` to obtain a new access token using a valid refresh token without re-supplying credentials.",
                       "type": "text"
+                    },
+                    {
+                      "key": "refresh_token",
+                      "value": "{{refreshToken}}",
+                      "description": "The refresh value token taken from the authorization API call.",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "expire_in",
+                      "value": "86400",
+                      "description": "(Optional) Set the duration, in seconds, in which the refresh token will expire.\nDefault value = 604800 (7 days)\nAllowed value = 1 - 604800",
+                      "type": "text",
+                      "disabled": true
                     }
                   ]
                 },
@@ -122,7 +153,7 @@
                 },
                 {
                   "key": "Date",
-                  "value": "Thu, 14 Aug 2025 19:24:43 GMT"
+                  "value": "Fri, 15 Aug 2025 13:54:44 GMT"
                 },
                 {
                   "key": "Referrer-Policy",
@@ -170,7 +201,7 @@
                 },
                 {
                   "key": "Content-Length",
-                  "value": "326"
+                  "value": "315"
                 },
                 {
                   "key": "Connection",
@@ -179,55 +210,9 @@
               ],
               "cookie": [],
               "body": "{\n    \"tokenType\": \"Bearer\",\n    \"refreshToken\": \"2b217543b15fdedffe95387ff0a383d47ab37615d7\",\n    \"accessToken\": \"eolraOeTINu6WHeS.zUc4sS1vUKjzmKe9QyJecMeG1XN1TqwI3eXGC0sRbco.3VjD74_dMLWk2ec3vUXPUcIb4zH3K4fS\",\n    \"expiresIn\": \"3600\",\n    \"username\": \"postman-example\",\n    \"refresh_token\": \"2b217543b15fdedffe95387ff0a383d47ab37615d7\",\n    \"access_token\": \"eolraOeTINu6WHeS.zUc4sS1vUKjzmKe9QyJecMeG1XN1TqwI3eXGC0sRbco.3VjD74_dMLWk2ec3vUXPUcIb4zH3K4fS\",\n    \"expires_in\": \"3600\",\n    \"token_type\": \"Bearer\"\n}"
-            }
-          ]
-        },
-        {
-          "name": "Refresh Auth Token",
-          "request": {
-            "auth": {
-              "type": "noauth"
             },
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [
-                {
-                  "key": "refresh_token",
-                  "value": "{{refreshToken}}",
-                  "description": "The refresh value token taken from the authorization API call.",
-                  "type": "text"
-                },
-                {
-                  "key": "grant_type",
-                  "value": "refresh_token",
-                  "description": "Specifies the OAuth 2.0 grant type for the request. Use `refresh_token` to obtain a new access token using a valid refresh token.",
-                  "type": "text"
-                },
-                {
-                  "key": "expire_in",
-                  "value": "1",
-                  "description": "(Optional) Set the duration, in seconds, in which the refresh token will expire.\nDefault value = 604800 (7 days)\nAllowed value = 1 - 604800",
-                  "type": "text"
-                }
-              ]
-            },
-            "url": {
-              "raw": "{{baseUrl}}/authorization/token",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "authorization",
-                "token"
-              ]
-            },
-            "description": "Generates a new authentication token using a valid refresh token. This request extends the session without requiring username and password, and should be used when the current access token is close to expiring or has expired."
-          },
-          "response": [
             {
-              "name": "Refresh Auth Token",
+              "name": "Refresh Token",
               "originalRequest": {
                 "method": "POST",
                 "header": [],
@@ -235,18 +220,35 @@
                   "mode": "urlencoded",
                   "urlencoded": [
                     {
-                      "key": "refresh_token",
-                      "value": "{{refreshToken}}",
-                      "type": "text"
+                      "key": "username",
+                      "value": "{{username}}",
+                      "description": "The username for your UltraDNS account.",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "description": "The password for your UltraDNS account.",
+                      "type": "text",
+                      "disabled": true
                     },
                     {
                       "key": "grant_type",
                       "value": "refresh_token",
+                      "description": "Specifies the OAuth 2.0 grant type for the request. Use `password` to obtain a new access token with a valid username and password, or `refresh_token` to obtain a new access token using a valid refresh token without re-supplying credentials.",
+                      "type": "text"
+                    },
+                    {
+                      "key": "refresh_token",
+                      "value": "{{refreshToken}}",
+                      "description": "The refresh value token taken from the authorization API call.",
                       "type": "text"
                     },
                     {
                       "key": "expire_in",
-                      "value": "1",
+                      "value": "86400",
+                      "description": "(Optional) Set the duration, in seconds, in which the refresh token will expire.\nDefault value = 604800 (7 days)\nAllowed value = 1 - 604800",
                       "type": "text"
                     }
                   ]
@@ -296,7 +298,7 @@
                 },
                 {
                   "key": "Date",
-                  "value": "Thu, 14 Aug 2025 19:32:42 GMT"
+                  "value": "Fri, 15 Aug 2025 13:58:16 GMT"
                 },
                 {
                   "key": "Referrer-Policy",
@@ -343,20 +345,16 @@
                   "value": "1 ; mode=block"
                 },
                 {
-                  "key": "Content-Length",
-                  "value": "337"
+                  "key": "transfer-encoding",
+                  "value": "chunked"
                 },
                 {
                   "key": "Connection",
                   "value": "keep-alive"
                 }
               ],
-              "cookie": [
-                {
-                  "expires": "Invalid Date"
-                }
-              ],
-              "body": "{\n    \"tokenType\": \"Bearer\",\n    \"refreshToken\": \"729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72\",\n    \"accessToken\": \"q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7\",\n    \"expiresIn\": \"3600\",\n    \"refreshTokenExpiresIn\": \"1\",\n    \"username\": \"postman-example\",\n    \"refresh_token\": \"729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72\",\n    \"access_token\": \"q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7\",\n    \"expires_in\": \"3600\",\n    \"refresh_token_expires_in\": \"1\",\n    \"token_type\": \"Bearer\"\n}"
+              "cookie": [],
+              "body": "{\n    \"tokenType\": \"Bearer\",\n    \"refreshToken\": \"729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72\",\n    \"accessToken\": \"q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7\",\n    \"expiresIn\": \"3600\",\n    \"refreshTokenExpiresIn\": \"86400\",\n    \"username\": \"postman-example\",\n    \"refresh_token\": \"729dd9ba9ddaeab58fcdb9615f50f5dadd715f4d72\",\n    \"access_token\": \"q3hpnHtaHHfLzTq_.HFBMZ45a99dt5H_jOh0tLqrmDVhyCvE7EHlOe7DZ2F8.YvogkldtGkb9fNJ_vihT2ORGQpM_kRU7\",\n    \"expires_in\": \"3600\",\n    \"refresh_token_expires_in\": \"86400\",\n    \"token_type\": \"Bearer\"\n}"
             }
           ]
         }
@@ -403,7 +401,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Access-Control-Allow-Headers",
@@ -529,7 +527,7 @@
               },
               "status": "OK",
               "code": 200,
-              "_postman_previewlanguage": null,
+              "_postman_previewlanguage": "Text",
               "header": [
                 {
                   "key": "Access-Control-Allow-Headers",
